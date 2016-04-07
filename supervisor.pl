@@ -6,15 +6,15 @@ use v5.10;
 use okzbx::Utils;
 
 
-our $arg_discover;
+our $arg_discovery;
 our $arg_check;
 our $arg_status;
 while (scalar @ARGV)
 {
 	my $arg = shift;
-	if ($arg =~ /^\-d|\-\-discover$/)
+	if ($arg =~ /^\-d|\-\-discovery$/)
 	{
-		$arg_discover = 1;
+		$arg_discovery = 1;
 	}
 	elsif ($arg =~ /^\-c|\-\-check$/)
 	{
@@ -30,7 +30,7 @@ while (scalar @ARGV)
 	}
 }
 die "There are missed argument(s)" if
-	not defined $arg_discover and
+	not defined $arg_discovery and
 	not defined $arg_check and
 	not defined $arg_status;
 	
@@ -46,17 +46,17 @@ sub getStatuses
 	return $result;
 }
 
-sub discover
+sub discovery
 {
 	my $statuses = getStatuses;
 	return 0 if not defined $statuses;
 	my @names = keys %$statuses;
-	printDiscoverHead;
+	printDiscoveryHead;
 	for (@names)
 	{
-		printDiscoverItem {'NAME' => $_};
+		printDiscoveryItem {'NAME' => $_};
 	}
-	printDiscoverEnd;
+	printDiscoveryEnd;
 	return 1;
 }
 
@@ -84,6 +84,6 @@ sub status
 	return 0;
 }
 
-exit (discover()? 0: 1) if $arg_discover;
+exit (discovery()? 0: 1) if $arg_discovery;
 exit (check()? 0: 1) if $arg_check;
 exit (status()? 0: 1) if $arg_status;

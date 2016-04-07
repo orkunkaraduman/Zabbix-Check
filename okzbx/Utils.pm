@@ -12,13 +12,13 @@ sub rtrim { my $s = shift; $s =~ s/\s+$//;       return $s };
 
 sub  trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
 
-sub printDiscoverHead
+sub printDiscoveryHead
 {
 	print "{\n";
 	print "\t\"data\":[\n";
 }
 
-sub printDiscoverItem
+sub printDiscoveryItem
 {
 	my ($item) = @_;
 	state $first = 1;
@@ -36,14 +36,14 @@ sub printDiscoverItem
 	print "\n\t\t}\n";
 }
 
-sub printDiscoverEnd
+sub printDiscoveryEnd
 {
 	print "\t]\n";
 	print "}\n";
 }
 
 
-our @EXPORT_OK = qw(ltrim rtrim trim printDiscoverHead printDiscoverItem printDiscoverEnd);
+our @EXPORT_OK = qw(ltrim rtrim trim printDiscoveryHead printDiscoveryItem printDiscoveryEnd);
 our @EXPORT = @EXPORT_OK;
 
 return 1;
