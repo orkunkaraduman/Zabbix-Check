@@ -16,7 +16,7 @@ while (scalar @ARGV)
 	{
 		$arg_discover = 1;
 	}
-	elsif (/^\-c|\-\-check$/)
+	elsif ($arg =~ /^\-c|\-\-check$/)
 	{
 		$arg_check = 1;
 	}
@@ -62,6 +62,7 @@ sub discover
 
 sub check
 {
+	return 0 if not -e '/usr/bin/supervisorctl';
 	system 'pgrep -f "/usr/bin/python /usr/bin/supervisord" >/dev/null 2>&1';
 	say $?? 0: 1;
 	return 1;
