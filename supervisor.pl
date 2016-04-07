@@ -70,7 +70,20 @@ sub check
 
 sub status
 {
+	my $statuses = getStatuses;
+	return 0 if not defined $statuses;
+	my @names = keys %$statuses;
+	for (@names)
+	{
+		if ($_ == $arg_status)
+		{
+			say $statuses->{$_};
+			return 1;
+		}
+	}
+	return 0;
 }
 
 exit (discover()? 0: 1) if $arg_discover;
 exit (check()? 0: 1) if $arg_check;
+exit (status()? 0: 1) if $arg_status;
