@@ -22,18 +22,18 @@ sub printDiscoverItem
 {
 	my ($item) = @_;
 	state $first = 1;
-	print "\t,\n" if not $first;
+	print "\t\t,\n" if not $first;
 	$first = 0;
-	print "\t{";
+	print "\t\t{";
 	my $first2 = 1;
 	for my $key (keys %$item)
 	{
 		my $val = $item->{$key};
 		print "," if not $first2;
-		print "\n\t\t\"{#$key}\":\"$val\"";
+		print "\n\t\t\t\"{#$key}\":\"$val\"";
 		$first2 = 0;
 	}
-	print "\n\t}\n";
+	print "\n\t\t}\n";
 }
 
 sub printDiscoverEnd
