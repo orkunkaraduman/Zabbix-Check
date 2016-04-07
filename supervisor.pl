@@ -75,7 +75,7 @@ sub status
 	my @names = keys %$statuses;
 	for (@names)
 	{
-		if ($_ == $arg_status)
+		if ($_ eq $arg_status)
 		{
 			say $statuses->{$_};
 			return 1;
