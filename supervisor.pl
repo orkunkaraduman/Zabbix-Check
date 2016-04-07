@@ -62,6 +62,9 @@ sub discover
 
 sub check
 {
+	system 'pgrep -f "/usr/bin/python /usr/bin/supervisord" >/dev/null 2>&1';
+	say $?? 0: 1;
+	return 1;
 }
 
 sub status
@@ -69,3 +72,4 @@ sub status
 }
 
 exit (discover()? 0: 1) if $arg_discover;
+exit (check()? 0: 1) if $arg_check;
