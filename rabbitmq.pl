@@ -110,7 +110,7 @@ sub queue_discovery
 		next if not defined $queues;
 		for my $queue (keys %$queues)
 		{
-			printDiscoveryItem {'VHOST' => zbxEncode $vhost, 'QUEUE' => zbxEncode $queue};
+			printDiscoveryItem {'VHOST' => zbxEncode($vhost), 'QUEUE' => zbxEncode($queue)};
 		}
 	}
 	printDiscoveryEnd;
@@ -147,7 +147,7 @@ sub vhost_discovery
 	printDiscoveryHead;
 	for my $vhost (keys %$vhosts)
 	{
-		printDiscoveryItem {'VHOST' => zbxEncode $vhost};
+		printDiscoveryItem {'VHOST' => zbxEncode($vhost)};
 	}
 	printDiscoveryEnd;
 	return 1;
