@@ -54,11 +54,7 @@ while (scalar @ARGV)
 	}
 }
 die "There are missed argument(s)" if
-	not defined $arg_type; # or
-#	(
-#	not defined $arg_discovery and
-#	not defined $arg_status
-#	);
+	not defined $arg_type;
 
 sub getQueues
 {
@@ -75,6 +71,25 @@ sub getQueues
 		}
 		my ($name, $status) = $line =~ m/^([^\t]+)\t+([^\t]+)\t*/;
 		$result->{$name} = $status;
+	}
+	return $result;
+}
+
+sub getVhosts
+{
+	return undef if not -e '/usr/sbin/rabbitmqctl';
+	my $result = {};
+	my $first = 1;
+	for my $line (`/usr/sbin/rabbitmqctl list_vhosts`)
+	{
+		chomp $line;
+		if ($first)
+		{
+			$first = 0;
+			next;
+		}
+		my ($name) = $line =~ m/^(.*)/;
+		$result->{$name} = $name;
 	}
 	return $result;
 }
@@ -109,14 +124,29 @@ sub queue_status
 	return 0;
 }
 
+sub vhost_discovery
+{
+	my $vhosts = getVhosts;
+	return 0 if not defined $vhosts;
+	my @names = keys %$vhosts;
+	printDiscoveryHead;
+	for (@names)
+	{
+		printDiscoveryItem {'NAME' => $_};
+	}
+	printDiscoveryEnd;
+	return 1;
+}
+
 if ($arg_type eq 'queue')
 {
+	die "vhost argument is missed" if not defined $arg_vhost;
 	exit (queue_discovery()? 0: 1) if $arg_discovery;
 	exit (queue_status()? 0: 1) if $arg_status;
 }
 elsif ($arg_type eq 'vhost')
 {
-
+	exit (vhost_discovery()? 0: 1) if $arg_discovery;
 }
 
-exit 2;
+die "Invalid argument(s)";
