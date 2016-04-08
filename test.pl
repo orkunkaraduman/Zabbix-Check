@@ -5,9 +5,9 @@ use warnings;
 use v5.10;
 use okzbx::Utils;
 
-printDiscoverHead;
-printDiscoverItem {'a' => 'x', 'b' => 'y'};
-printDiscoverItem {'c' => 'z', 'd' => 'f'};
-printDiscoverEnd;
+printDiscoveryHead;
+printDiscoveryItem {'a' => 'x', 'b' => 'y'};
+printDiscoveryItem {'c' => 'z', 'd' => 'f'};
+printDiscoveryEnd;
 
 exit 0;
