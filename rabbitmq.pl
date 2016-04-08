@@ -28,6 +28,7 @@ use okzbx::Utils;
 our $arg_type;
 our $arg_discovery;
 our $arg_status;
+our $arg_vhost;
 while (scalar @ARGV)
 {
 	my $arg = shift;
@@ -37,11 +38,15 @@ while (scalar @ARGV)
 	}
 	elsif ($arg =~ /^\-d|\-\-discovery$/)
 	{
-		$arg_discovery = shift;
+		$arg_discovery = 1;
 	}
 	elsif ($arg =~ /^\-s|\-\-status$/)
 	{
 		$arg_status = shift;
+	}
+	elsif ($arg =~ /^\-v|\-\-vhost$/)
+	{
+		$arg_vhost = shift;
 	}
 	else
 	{
@@ -49,19 +54,18 @@ while (scalar @ARGV)
 	}
 }
 die "There are missed argument(s)" if
-	not defined $arg_type or
-	(
-	not defined $arg_discovery and
-	not defined $arg_status
-	);
+	not defined $arg_type; # or
+#	(
+#	not defined $arg_discovery and
+#	not defined $arg_status
+#	);
 
 sub getQueues
 {
-	my ($vhost) = @_;
 	return undef if not -e '/usr/sbin/rabbitmqctl';
 	my $result = {};
 	my $first = 1;
-	for (`/usr/sbin/rabbitmqctl list_queues -p "$vhost"`)
+	for (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost"`)
 	{
 		if ($first)
 		{
@@ -76,7 +80,7 @@ sub getQueues
 
 sub queue_discovery
 {
-	my $queues = getQueues $arg_discovery;
+	my $queues = getQueues;
 	return 0 if not defined $queues;
 	my @names = keys %$queues;
 	printDiscoveryHead;
@@ -90,7 +94,7 @@ sub queue_discovery
 
 sub queue_status
 {
-	my $queues = getQueues $arg_status;
+	my $queues = getQueues;
 	return 0 if not defined $queues;
 	my @names = keys %$queues;
 	for (@names)
