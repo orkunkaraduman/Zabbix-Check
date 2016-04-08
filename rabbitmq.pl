@@ -47,11 +47,11 @@ while (scalar @ARGV)
 	}
 	elsif ($arg =~ /^\-v|\-\-vhost$/)
 	{
-		$arg_vhost = shift;
+		$arg_vhost = zbxDecode shift;
 	}
 	elsif ($arg =~ /^\-q|\-\-queue$/)
 	{
-		$arg_queue = shift;
+		$arg_queue = zbxDecode shift;
 	}
 	else
 	{
@@ -110,7 +110,7 @@ sub queue_discovery
 		next if not defined $queues;
 		for my $queue (keys %$queues)
 		{
-			printDiscoveryItem {'VHOST' => $vhost, 'QUEUE' => $queue};
+			printDiscoveryItem {'VHOST' => zbxEncode $vhost, 'QUEUE' => zbxEncode $queue};
 		}
 	}
 	printDiscoveryEnd;
@@ -147,7 +147,7 @@ sub vhost_discovery
 	printDiscoveryHead;
 	for my $vhost (keys %$vhosts)
 	{
-		printDiscoveryItem {'VHOST' => $vhost};
+		printDiscoveryItem {'VHOST' => zbxEncode $vhost};
 	}
 	printDiscoveryEnd;
 	return 1;
