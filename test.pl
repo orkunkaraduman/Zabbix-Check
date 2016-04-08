@@ -22,9 +22,9 @@ use warnings;
 use v5.10;
 use okzbx::Utils;
 
-printDiscoveryHead;
-printDiscoveryItem {'a' => 'x', 'b' => 'y'};
-printDiscoveryItem {'c' => 'z', 'd' => 'f'};
-printDiscoveryEnd;
+
+my $s = zbxEncode "[a/sd<fs>dfs/%b]"; 
+say $s;
+say zbxDecode $s;
 
 exit 0;

@@ -59,8 +59,52 @@ sub printDiscoveryEnd
 	print "}\n";
 }
 
+=pod
+Zabbix special characters "\, ', ", `, *, ?, [, ], {, }, ~, $, !, &, ;, (, ), <, >, |, #, @, 0x0a"
+=cut
+our @zbxSpecials = (qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @), "\n");
+sub zbxEncode
+{
+	my $result = "";
+	my ($str) = @_;
+	for (my $i = 0; $i < length $str; $i++)
+	{
+		my $chr = substr $str, $i, 1;
+		if (grep ($_ eq $chr, (@zbxSpecials, '%')))
+		{
+			$result .= uc sprintf("%%%x", ord($chr));
+		} else
+		{
+			$result .= $chr;
+		}
+	}
+	$result;
+}
 
-our @EXPORT_OK = qw(ltrim rtrim trim printDiscoveryHead printDiscoveryItem printDiscoveryEnd);
+sub zbxDecode
+{
+	my $result = "";
+	my ($str) = @_;
+	my ($i, $len) = (0, length $str);
+	while ($i < $len)
+	{
+		my $chr = substr $str, $i, 1;
+		if ($chr eq '%')
+		{
+			return $result if $len-$i-1 < 2;
+			$result .= chr(hex(substr($str, $i+1, 2)));
+			$i += 2;
+		} else
+		{
+			$result .= $chr;
+		}
+		$i++;
+	}
+	$result;
+}
+
+
+our @EXPORT_OK = qw(ltrim rtrim trim printDiscoveryHead printDiscoveryItem printDiscoveryEnd zbxEncode zbxDecode);
 our @EXPORT = @EXPORT_OK;
 
 return 1;
