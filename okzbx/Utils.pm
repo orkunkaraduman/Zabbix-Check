@@ -18,7 +18,8 @@
 package okzbx::Utils;
 
 use strict;
-#use warnings;
+use warnings;
+no warnings qw(qw);
 use v5.10;
 use Exporter qw(import);
 
