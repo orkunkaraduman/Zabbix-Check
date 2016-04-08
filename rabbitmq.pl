@@ -106,7 +106,7 @@ sub queue_discovery
 	printDiscoveryHead;
 	for (@names)
 	{
-		printDiscoveryItem {'NAME' => $_};
+		printDiscoveryItem {'QUEUE' => $_, 'VHOST' => $arg_vhost};
 	}
 	printDiscoveryEnd;
 	return 1;
@@ -143,7 +143,7 @@ sub vhost_discovery
 	printDiscoveryHead;
 	for (@names)
 	{
-		printDiscoveryItem {'NAME' => $_};
+		printDiscoveryItem {'VHOST' => $_};
 	}
 	printDiscoveryEnd;
 	return 1;
