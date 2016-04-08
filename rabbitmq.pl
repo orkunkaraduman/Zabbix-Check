@@ -101,13 +101,17 @@ sub getVhosts
 
 sub queue_discovery
 {
-	my $queues = getQueues $arg_vhost;
-	return 0 if not defined $queues;
-	my @names = keys %$queues;
+	my $vhosts = getVhosts;
+	return 0 if not defined $vhosts;
 	printDiscoveryHead;
-	for (@names)
-	{
-		printDiscoveryItem {'QUEUE' => $_, 'VHOST' => $arg_vhost};
+	for my $vhost (keys %$vhosts)
+	{ 
+		my $queues = getQueues $vhost;
+		next if not defined $queues;
+		for my $queue (keys %$queues)
+		{
+			printDiscoveryItem {'VHOST' => $vhost, 'QUEUE' => $queue};
+		}
 	}
 	printDiscoveryEnd;
 	return 1;
@@ -140,11 +144,10 @@ sub vhost_discovery
 {
 	my $vhosts = getVhosts;
 	return 0 if not defined $vhosts;
-	my @names = keys %$vhosts;
 	printDiscoveryHead;
-	for (@names)
+	for my $vhost (keys %$vhosts)
 	{
-		printDiscoveryItem {'VHOST' => $_};
+		printDiscoveryItem {'VHOST' => $vhost};
 	}
 	printDiscoveryEnd;
 	return 1;
@@ -152,8 +155,8 @@ sub vhost_discovery
 
 if ($arg_type eq 'queue')
 {
-	die "vhost argument is missed" if not defined $arg_vhost;
 	exit (queue_discovery()? 0: 1) if $arg_discovery;
+	die "vhost argument is missed" if not defined $arg_vhost;
 	die "queue argument is missed" if not defined $arg_queue;
 	exit (queue_status()? 0: 1) if $arg_status;
 }
