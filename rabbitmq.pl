@@ -65,16 +65,14 @@ sub getQueues
 	return undef if not -e '/usr/sbin/rabbitmqctl';
 	my $result = {};
 	my $first = 1;
-	for (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost"`)
+	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost"`)
 	{
-		my $line = $_;
 		if ($first)
 		{
 			$first = 0;
 			next;
 		}
-		$_ = $line;
-		my ($name, $status) = m/^([^\t])\t+([^\t])/;
+		my ($name, $status) = $line =~ m/^([^\t]+)\t+([^\t]+)/;
 		$result->{$name} = $status;
 	}
 	return $result;
