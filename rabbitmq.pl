@@ -29,6 +29,7 @@ our $arg_type;
 our $arg_discovery;
 our $arg_status;
 our $arg_vhost;
+our $arg_queue;
 while (scalar @ARGV)
 {
 	my $arg = shift;
@@ -48,20 +49,23 @@ while (scalar @ARGV)
 	{
 		$arg_vhost = shift;
 	}
+	elsif ($arg =~ /^\-q|\-\-queue$/)
+	{
+		$arg_queue = shift;
+	}
 	else
 	{
 		die "Bad input argument $arg";
 	}
 }
-die "There are missed argument(s)" if
-	not defined $arg_type;
+die "type argument is missed" if not defined $arg_type;
 
 sub getQueues
 {
 	return undef if not -e '/usr/sbin/rabbitmqctl';
 	my $result = {};
 	my $first = 1;
-	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost"`)
+	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost" name messages_ready messages_unacknowledged messages`)
 	{
 		chomp $line;
 		if ($first)
@@ -69,8 +73,8 @@ sub getQueues
 			$first = 0;
 			next;
 		}
-		my ($name, $status) = $line =~ m/^([^\t]+)\t+([^\t]+)\t*/;
-		$result->{$name} = $status;
+		my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
+		$result->{$name} = {'ready' => $ready, 'unacked' => $unacked, 'total' => $total};
 	}
 	return $result;
 }
@@ -115,10 +119,17 @@ sub queue_status
 	my @names = keys %$queues;
 	for (@names)
 	{
-		if ($_ eq $arg_status)
+		if ($_ eq $arg_queue)
 		{
-			say $queues->{$_};
-			return 1;
+			my $val = $queues->{$_};
+			if (defined $val->{$arg_status})
+			{
+				say $val->{$arg_status};
+				return 1;
+			} else
+			{
+				return 0;
+			}
 		}
 	}
 	return 0;
@@ -141,6 +152,7 @@ sub vhost_discovery
 if ($arg_type eq 'queue')
 {
 	die "vhost argument is missed" if not defined $arg_vhost;
+	die "queue argument is missed" if not defined $arg_queue;
 	exit (queue_discovery()? 0: 1) if $arg_discovery;
 	exit (queue_status()? 0: 1) if $arg_status;
 }
