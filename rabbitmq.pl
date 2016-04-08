@@ -152,8 +152,8 @@ sub vhost_discovery
 if ($arg_type eq 'queue')
 {
 	die "vhost argument is missed" if not defined $arg_vhost;
-	die "queue argument is missed" if not defined $arg_queue;
 	exit (queue_discovery()? 0: 1) if $arg_discovery;
+	die "queue argument is missed" if not defined $arg_queue;
 	exit (queue_status()? 0: 1) if $arg_status;
 }
 elsif ($arg_type eq 'vhost')
