@@ -73,7 +73,7 @@ sub getQueues
 			$first = 0;
 			next;
 		}
-		my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
+		my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
 		$result->{$name} = {'ready' => $ready, 'unacked' => $unacked, 'total' => $total};
 	}
 	return $result;
