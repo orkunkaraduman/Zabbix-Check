@@ -59,7 +59,8 @@ sub getStatuses
 	my $result = {};
 	for (`/usr/bin/supervisorctl status`)
 	{
-		my ($name, $status) = m/^\s*(\S+)\s+(\S+)\s+.*$/;
+		chomp;
+		my ($name, $status) = m/^(\S+)\s+(\S+)\s*/;
 		$result->{$name} = $status;
 	}
 	return $result;

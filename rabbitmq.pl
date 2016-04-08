@@ -73,7 +73,7 @@ sub getQueues
 			$first = 0;
 			next;
 		}
-		my ($name, $status) = $line =~ m/^([^\t]+)\t+([^\t]+)/;
+		my ($name, $status) = $line =~ m/^([^\t]+)\t+([^\t]+)\t*/;
 		$result->{$name} = $status;
 	}
 	return $result;
