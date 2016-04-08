@@ -67,6 +67,7 @@ sub getQueues
 	my $first = 1;
 	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost"`)
 	{
+		chomp $line;
 		if ($first)
 		{
 			$first = 0;
