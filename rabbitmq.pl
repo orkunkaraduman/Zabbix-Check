@@ -62,10 +62,11 @@ die "type argument is missed" if not defined $arg_type;
 
 sub getQueues
 {
+	my ($vhost) = @_;
 	return undef if not -e '/usr/sbin/rabbitmqctl';
 	my $result = {};
 	my $first = 1;
-	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$arg_vhost" name messages_ready messages_unacknowledged messages`)
+	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$vhost" name messages_ready messages_unacknowledged messages`)
 	{
 		chomp $line;
 		if ($first)
@@ -100,7 +101,7 @@ sub getVhosts
 
 sub queue_discovery
 {
-	my $queues = getQueues;
+	my $queues = getQueues $arg_vhost;
 	return 0 if not defined $queues;
 	my @names = keys %$queues;
 	printDiscoveryHead;
@@ -114,7 +115,7 @@ sub queue_discovery
 
 sub queue_status
 {
-	my $queues = getQueues;
+	my $queues = getQueues $arg_vhost;
 	return 0 if not defined $queues;
 	my @names = keys %$queues;
 	for (@names)
