@@ -1,3 +1,7 @@
 .project
 .includepath
 .settings/**
+
+.DS_Store
+*.sublime-project
+*.sublime-workspace

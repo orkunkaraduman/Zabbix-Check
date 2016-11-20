@@ -1,1 +1,1 @@
-# okzbx
+# okZabbix
