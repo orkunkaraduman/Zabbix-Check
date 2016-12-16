@@ -59,6 +59,7 @@ sub zbxEncode
 {
 	my $result = "";
 	my ($str) = @_;
+	return $result unless $str;
 	for (my $i = 0; $i < length $str; $i++)
 	{
 		my $chr = substr $str, $i, 1;
@@ -70,13 +71,14 @@ sub zbxEncode
 			$result .= $chr;
 		}
 	}
-	$result;
+	return $result;
 }
 
 sub zbxDecode
 {
 	my $result = "";
 	my ($str) = @_;
+	return $result unless $str;
 	my ($i, $len) = (0, length $str);
 	while ($i < $len)
 	{
@@ -92,7 +94,7 @@ sub zbxDecode
 		}
 		$i++;
 	}
-	$result;
+	return $result;
 }
 
 sub printDiscovery
@@ -107,7 +109,9 @@ sub printDiscovery
 						my $val = $item->{$key};
 						my $newkey = zbxEncode($key);
 						$newkey = uc("{#$newkey}");
-						$newkey => zbxEncode($val);
+						my $newval = zbxEncode($val);
+						$newkey => $newval;
+
 					} keys(%$item));
 				};
 			} @_),
