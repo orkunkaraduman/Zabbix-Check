@@ -90,10 +90,11 @@ sub stats
 	for my $devname (keys %$disks)
 	{
 		my $disk = $disks->{$devname};
-		next unless -f "$disk->blockpath/stat";
-		my $statLine = read_file("$disk->blockpath/stat");
+		next unless -f "$disk->{blockpath}/stat";
+		my $statLine = read_file("$disk->{blockpath}/stat");
 		next unless $statLine;
-		my $stat = {};
+		chomp $statLine;
+		my $stat = { 'time' => time };
 		(
 			$stat->{readsCompleted},
 			$stat->{readsMerged},
@@ -105,8 +106,8 @@ sub stats
 			$stat->{timeSpentWriting},
 			$stat->{IOsCurrently},
 			$stat->{timeSpentIOs},
-			$stat->{weightedTimeSpent},
-		) = /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+/;
+			$stat->{weightedTimeSpentIOs},
+		) = $statLine =~ /^\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/;
 		$result->{$devname} = $stat;
 	}
 	return $result;
