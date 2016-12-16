@@ -101,12 +101,13 @@ sub printDiscovery
 		data => [
 			map({
 				my $item = $_; 
-				{
+				return {
 					map({
 						my $key = $_;
 						my $val = $item->{$key};
-						my $newkey = uc("{#$key}");
-						$newkey => $val;
+						my $newkey = zbxEncode($key);
+						$newkey = uc("{#$newkey}");
+						return $newkey => zbxEncode($val);
 					} keys(%$item));
 				};
 			} @_),
