@@ -83,6 +83,35 @@ sub disks
 	return $result;
 }
 
+sub stats
+{
+	my $result = {};
+	my $disks = disks();
+	for my $devname (keys %$disks)
+	{
+		my $disk = $disks->{$devname};
+		next unless -f "$disk->blockpath/stat";
+		my $statLine = read_file("$disk->blockpath/stat");
+		next unless $statLine;
+		my $stat = {};
+		(
+			$stat->{readsCompleted},
+			$stat->{readsMerged},
+			$stat->{sectorsRead},
+			$stat->{timeSpentReading},
+			$stat->{writesCompleted},
+			$stat->{writesMerged},
+			$stat->{sectorsWritten},
+			$stat->{timeSpentWriting},
+			$stat->{IOsCurrently},
+			$stat->{timeSpentIOs},
+			$stat->{weightedTimeSpent},
+		) = /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+/;
+		$result->{$devname} = $stat;
+	}
+	return $result;
+}
+
 sub discovery
 {
 	my ($removable) = @_;
