@@ -86,16 +86,15 @@ sub disks
 sub discovery
 {
 	my ($removable) = @_;
-	my @result;
+	my @items;
 	my $disks = disks();
 	for my $devname (keys %$disks)
 	{
 		my $disk = $disks->{$devname};
 		next if not $removable and $disk->{removable};
-		push @result, $disk;
+		push @items, $disk;
 	}
-	Zabbix::Check::printDiscovery(@result);
-	return @result;
+	return Zabbix::Check::printDiscovery(@items);
 }
 
 

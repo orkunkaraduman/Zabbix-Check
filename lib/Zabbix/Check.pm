@@ -99,6 +99,7 @@ sub zbxDecode
 
 sub printDiscovery
 {
+	my @items = @_;
 	my $result = {
 		data => [
 			map({
@@ -114,7 +115,7 @@ sub printDiscovery
 
 					} keys(%$item));
 				};
-			} @_),
+			} @items),
 		],
 	};
 	say to_json($result);
