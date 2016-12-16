@@ -104,17 +104,15 @@ sub printDiscovery
 		data => [
 			map({
 				my $item = $_; 
-				{
-					map({
-						my $key = $_;
-						my $val = $item->{$key};
-						my $newkey = zbxEncode($key);
-						$newkey = uc("{#$newkey}");
-						my $newval = zbxEncode($val);
-						$newkey => $newval;
-
-					} keys(%$item));
-				};
+				my %newitem = map({
+					my $key = $_;
+					my $val = $item->{$key};
+					my $newkey = zbxEncode($key);
+					$newkey = uc("{#$newkey}");
+					my $newval = zbxEncode($val);
+					$newkey => $newval;
+				} keys(%$item));
+				\%newitem;
 			} @items),
 		],
 	};
