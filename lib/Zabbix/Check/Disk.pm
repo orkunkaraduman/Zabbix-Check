@@ -53,7 +53,7 @@ sub disks
 		my ($devname) = $uevent =~ /^\QDEVNAME=\E(.*)/m;
 		my ($devtype) = $uevent =~ /^\QDEVTYPE=\E(.*)/m;
 		my $devpath = "/dev/$devname";
-		$result->{$devname} = {
+		my $disk = {
 			blockpath => $blockpath,
 			devname => $devname,
 			devtype => $devtype,
@@ -69,15 +69,16 @@ sub disks
 		if ((-f "$blockpath/dm/name") and (my $dmname = read_file("$blockpath/dm/name")))
 		{
 			chomp $dmname;
-			$result->{dmname} = $dmname;
-			$result->{dmpath} = "/dev/mapper/$dmname";
+			$disk->{dmname} = $dmname;
+			$disk->{dmpath} = "/dev/mapper/$dmname";
 		}
-		for my $mount (grep(/^(\Q$result->{devpath}\E|\Q$result->{dmpath}\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts"): ()))
+		for my $mount (grep(/^(\Q$disk->{devpath}\E|\Q$disk->{dmpath}\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts"): ()))
 		{
 			chomp $mount;
 			my ($devpath, $mountpoint, $fstype) = $mount =~ /^(\S+)\s+(\S+)\s+(\S+)\s+/;
-			$result->{$devname}->{fstype} = $fstype;
+			$disk->{fstype} = $fstype;
 		}
+		$result->{$devname} = $disk;
 	}
 	return $result;
 }
