@@ -124,16 +124,13 @@ sub analyzeStats
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
 		{
+			my $tmp = read_file($tmpPath);
 			if ($now-$epoch < 1*60)
 			{
-				unless ($stats)
-				{
-					$stats = stats();
-					write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
-				}
+				eval { $stats = from_json($tmp) } if not $stats and $tmp;
 				next;
 			}
-			if (not $oldStats and my $tmp = read_file($tmpPath))
+			if (not $oldStats anf $tmp)
 			{
 				eval { $oldStats = from_json($tmp) };
 				next unless $@;
