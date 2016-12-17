@@ -123,9 +123,13 @@ sub analyzeStats
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
 		{
-			my $tmp;
-			eval { $oldStats = from_json($tmp) } if $now-$epoch >= 1*60 and not $oldStats and $tmp = read_file($tmpPath);
-			unlink($tmpPath) if $now-$epoch > 2*60;
+			if ($now-$epoch >= 1*60 and not $oldStats and my $tmp = read_file($tmpPath))
+			{
+				eval { $oldStats = from_json($tmp) };
+			} else
+			{
+				unlink($tmpPath) if $now-$epoch > 2*60;
+			}
 		} else
 		{
 			unlink($tmpPath);
@@ -142,9 +146,16 @@ sub analyzeStats
 		next unless defined $oldStat;
 		my $diff = $stat->{epoch} - $oldStat->{epoch};
 		next unless $diff;
-		$result->{$devname} = {
-			ioutil_read => 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/(($_ = $stat->{sectorsRead} - $oldStat->{sectorsRead})? $_: 1),
-		};
+		$result->{$devname} = {};
+
+		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead};
+		$result->{$devname}->{ioutil_read} = (not $_)? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/$_: 0;
+
+		$_ = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
+		$result->{$devname}->{ioutil_write} = (not $_)? 100*($stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
+
+		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
+		$result->{$devname}->{ioutil_total} = (not $_)? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
 	}
 	return $result;
 }
