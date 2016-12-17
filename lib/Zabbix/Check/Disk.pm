@@ -42,7 +42,6 @@ BEGIN
 
 sub disks
 {
-	no warnings qw(uninitialized);
 	my $result = {};
 	for my $blockpath (glob("/sys/dev/block/*"))
 	{
@@ -60,13 +59,13 @@ sub disks
 			devpath => $devpath,
 			major => $major,
 			minor => $minor,
-			size => (-f "$blockpath/size")? int(read_file("$blockpath/size") =~ s/^\s+|\s+$//gr)*512: undef,
-			removable => (-f "$blockpath/removable")? read_file("$blockpath/removable") =~ s/^\s+|\s+$//gr: undef,
-			partition => (-f "$blockpath/partition")? read_file("$blockpath/partition") =~ s/^\s+|\s+$//gr: undef,
+			size => (-f "$blockpath/size" and $_ = read_file("$blockpath/size"))? int(s/^\s+|\s+$//gr)*512: undef,
+			removable => (-f "$blockpath/removable" and $_ = read_file("$blockpath/removable"))? s/^\s+|\s+$//gr: undef,
+			partition => (-f "$blockpath/partition" and $_ = read_file("$blockpath/partition"))? s/^\s+|\s+$//gr: undef,
 			dmname => undef,
 			dmpath => undef,
 		};
-		if ((-f "$blockpath/dm/name") and (my $dmname = read_file("$blockpath/dm/name")))
+		if (-f "$blockpath/dm/name" and my $dmname = read_file("$blockpath/dm/name"))
 		{
 			chomp $dmname;
 			$disk->{dmname} = $dmname;
@@ -111,6 +110,21 @@ sub stats
 		$result->{$devname} = $stat;
 	}
 	return $result;
+}
+
+sub analyzeStats
+{
+	my $result = {};
+	my $oldStats;
+	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/\Q-\E/.".".__SUB__.".";
+	for my $tmpPath (sort {$b <=> $a} glob("$tmpPrefix*"))
+	{
+		next unless my ($time, $pid) = /^\Q$tmpPrefix\E(\d*)\.(\d*)/ =~ $tmpPath;
+		next if (time-$time <= 60);
+		$oldStats = read_file($tmpPath);
+		say $oldStats;
+		last;
+	}
 }
 
 sub discovery
