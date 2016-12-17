@@ -22,6 +22,7 @@ use FindBin;
 use Cwd;
 use File::Basename;
 use File::Slurp;
+use JSON;
 
 use Zabbix::Check;
 
@@ -93,7 +94,7 @@ sub stats
 		my $statLine = read_file("$disk->{blockpath}/stat");
 		next unless $statLine;
 		chomp $statLine;
-		my $stat = { 'time' => time };
+		my $stat = { 'epoch' => time() };
 		(
 			$stat->{readsCompleted},
 			$stat->{readsMerged},
@@ -114,17 +115,36 @@ sub stats
 
 sub analyzeStats
 {
-	my $result = {};
+	my $now = time();
 	my $oldStats;
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/\Q-\E/.".".__SUB__.".";
-	for my $tmpPath (sort {$b <=> $a} glob("$tmpPrefix*"))
+	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".analyzeStats.";
+	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
-		next unless my ($time, $pid) = /^\Q$tmpPrefix\E(\d*)\.(\d*)/ =~ $tmpPath;
-		next if (time-$time <= 60);
-		$oldStats = read_file($tmpPath);
-		say $oldStats;
-		last;
+		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
+		{
+			eval { $oldstats = from_json($tmp) } if $now-$epoch >= 1*60 and not $oldStats and my $tmp = read_file($tmpPath);
+			unlink($tmpPath) if $now-$epoch > 2*60;
+		} else
+		{
+			unlink($tmpPath);
+		}
 	}
+	my $stats = stats();
+	write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
+	return unless $oldStats;
+	my $result = {};
+	for my $devname (keys %$stats)
+	{
+		my $stat = $stats->{$devname};
+		my $oldStat = $oldStats->{$devname};
+		next unless defined $oldStat;
+		my $diff = $stat->{epoch} - $oldStat->{epoch};
+		next unless $diff;
+		$result->{$devname} = {
+			ioutil_read => 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/($stat->{sectorsRead} - $oldStat->{sectorsRead}),
+		};
+	}
+	return $result;
 }
 
 sub discovery

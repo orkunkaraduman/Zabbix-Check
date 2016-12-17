@@ -116,7 +116,7 @@ sub printDiscovery
 			} @items),
 		],
 	};
-	say to_json($result);
+	say to_json($result, {pretty => 1});
 	return $result;
 }
 
