@@ -1,7 +1,7 @@
 package Zabbix::Check::RabbitMQ;
 =head1 NAME
 
-Zabbix::Check::RabbitMQ - Zabbix check RabbitMQ service
+Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
@@ -9,7 +9,23 @@ version 1.01
 
 =head1 SYNOPSIS
 
-Zabbix check RabbitMQ service
+Zabbix check for RabbitMQ service
+
+=head3 zabbix_agentd.conf
+
+	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
+	UserParameter=cpan.zabbix.check.rabbitmq.check,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_check
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
+
+B<queue_status $1 $2 $3>
+
+$1 I<Vhost name>
+
+$2 I<Queue name>
+
+$3 I<Type: ready|unacked|total>
 
 =cut
 use strict;

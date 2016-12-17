@@ -17,7 +17,7 @@ USAGE
 
     $1 *Device name eg: sda, sdb1, dm-3, ...*
 
-    $2 *Type: read or write or total*
+    $2 *Type: read|write|total*
 
   Supervisor
    zabbix_agentd.conf
@@ -26,7 +26,7 @@ USAGE
             UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
             UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
 
-    worker_status
+    worker_status $1
 
     $1 *Worker name*
 
@@ -38,9 +38,13 @@ USAGE
             UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
             UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
-    queue_status
+    queue_status $1 $2 $3
 
-    $1 *Queue name*
+    $1 *Vhost name*
+
+    $2 *Queue name*
+
+    $3 *Type: ready|unacked|total*
 
 INSTALLATION
     To install this module type the following

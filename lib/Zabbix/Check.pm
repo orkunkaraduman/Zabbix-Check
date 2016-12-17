@@ -24,7 +24,7 @@ Zabbix checks
 
 $1 I<Device name eg: sda, sdb1, dm-3, ...>
 
-$2 I<Type: read or write or total>
+$2 I<Type: read|write|total>
 
 =head2 Supervisor
 
@@ -35,7 +35,7 @@ $2 I<Type: read or write or total>
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
 	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
 
-B<worker_status>
+B<worker_status $1>
 
 $1 I<Worker name>
 
@@ -49,9 +49,13 @@ $1 I<Worker name>
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
-B<queue_status>
+B<queue_status $1 $2 $3>
 
-$1 I<Queue name>
+$1 I<Vhost name>
+
+$2 I<Queue name>
+
+$3 I<Type: ready|unacked|total>
 
 =head1 INSTALLATION
 

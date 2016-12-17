@@ -1,7 +1,7 @@
 package Zabbix::Check::Supervisor;
 =head1 NAME
 
-Zabbix::Check::Supervisor - Zabbix check Supervisor service
+Zabbix::Check::Supervisor - Zabbix check for Supervisor service
 
 =head1 VERSION
 
@@ -9,7 +9,18 @@ version 1.01
 
 =head1 SYNOPSIS
 
-Zabbix check Supervisor service
+Zabbix check for Supervisor service
+
+=head3 zabbix_agentd.conf
+
+	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
+	UserParameter=cpan.zabbix.check.supervisor.check,/usr/bin/perl -MZabbix::Check::Supervisor -e_check
+	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
+	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
+
+B<worker_status $1>
+
+$1 I<Worker name>
 
 =cut
 use strict;

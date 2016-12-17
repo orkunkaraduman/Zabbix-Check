@@ -1,7 +1,7 @@
 package Zabbix::Check::Disk;
 =head1 NAME
 
-Zabbix::Check::Disk - Zabbix check disk
+Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
@@ -9,7 +9,18 @@ version 1.01
 
 =head1 SYNOPSIS
 
-Zabbix check disk
+Zabbix check for disk
+
+=head3 zabbix_agentd.conf
+
+	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
+	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
+	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
+	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
+
+$1 I<Device name eg: sda, sdb1, dm-3, ...>
+
+$2 I<Type: read|write|total>
 
 =cut
 use strict;
