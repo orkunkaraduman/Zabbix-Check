@@ -1,7 +1,7 @@
 package Zabbix::Check;
 =head1 NAME
 
-Zabbix::Check - Zabbix checks
+Zabbix::Check - Zabbix Agent system and service checks
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.01
 
 =head1 SYNOPSIS
 
-Zabbix checks
+Zabbix Agent system and service checks
 
 =head1 USAGE
 

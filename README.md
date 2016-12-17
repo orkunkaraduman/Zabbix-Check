@@ -1,6 +1,6 @@
 # NAME
 
-Zabbix::Check - Zabbix checks
+Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
@@ -8,7 +8,7 @@ version 1.01
 
 # SYNOPSIS
 
-Zabbix checks
+Zabbix Agent system and service checks
 
 # USAGE
 
