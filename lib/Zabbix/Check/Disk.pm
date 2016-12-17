@@ -117,26 +117,38 @@ sub stats
 sub analyzeStats
 {
 	my $now = time();
+	my $stats;
 	my $oldStats;
 	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".analyzeStats.";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
 		{
-			if ($now-$epoch >= 1*60 and not $oldStats and my $tmp = read_file($tmpPath))
+			if ($now-$epoch < 1*60)
+			{
+				unless ($stats)
+				{
+					$stats = stats();
+					write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
+				}
+				next;
+			}
+			if (not $oldStats and my $tmp = read_file($tmpPath))
 			{
 				eval { $oldStats = from_json($tmp) };
-			} else
-			{
-				unlink($tmpPath) if $now-$epoch > 2*60;
+				next unless $@;
 			}
+			unlink($tmpPath) if $now-$epoch > 2*60;
 		} else
 		{
 			unlink($tmpPath);
 		}
 	}
-	my $stats = stats();
-	write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
+	unless ($stats)
+	{
+		$stats = stats();
+		write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
+	}
 	return unless $oldStats;
 	my $result = {};
 	for my $devname (keys %$stats)
