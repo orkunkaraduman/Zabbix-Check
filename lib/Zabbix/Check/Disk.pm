@@ -130,16 +130,15 @@ sub analyzeStats
 				eval { $stats = from_json($tmp) } if not $stats and $tmp;
 				next;
 			}
-			if (not $oldStats anf $tmp)
+			if (not $oldStats and $tmp)
 			{
 				eval { $oldStats = from_json($tmp) };
 				next unless $@;
 			}
 			unlink($tmpPath) if $now-$epoch > 2*60;
-		} else
-		{
-			unlink($tmpPath);
+			next;
 		}
+		unlink($tmpPath);
 	}
 	unless ($stats)
 	{
@@ -162,21 +161,21 @@ sub analyzeStats
 
 		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead};
 		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted};
-		$result->{$devname}->{read_bps} = 512*$rw/$diff;
-		$result->{$devname}->{read_iops} = $io/$diff;
-		$result->{$devname}->{read_ioutil} = $rw? 100*$io/$rw: 0;
+		$result->{$devname}->{bps_read} = 512*$rw/$diff;
+		$result->{$devname}->{iops_read} = $io/$diff;
+		$result->{$devname}->{ioutil_read} = $rw? 100*$io/$rw: 0;
 
 		$rw = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
 		$io = $stat->{writesCompleted} - $oldStat->{writesCompleted};
-		$result->{$devname}->{write_bps} = 512*$rw/$diff;
-		$result->{$devname}->{write_iops} = $io/$diff;
-		$result->{$devname}->{write_ioutil} = $rw? 100*$io/$rw: 0;
+		$result->{$devname}->{bps_write} = 512*$rw/$diff;
+		$result->{$devname}->{iops_write} = $io/$diff;
+		$result->{$devname}->{ioutil_write} = $rw? 100*$io/$rw: 0;
 
 		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
 		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted};
-		$result->{$devname}->{total_bps} = 512*$rw/$diff;
-		$result->{$devname}->{total_iops} = $io/$diff;
-		$result->{$devname}->{total_ioutil} = $rw? 100*$io/$rw: 0;
+		$result->{$devname}->{bps_total} = 512*$rw/$diff;
+		$result->{$devname}->{iops_total} = $io/$diff;
+		$result->{$devname}->{ioutil_total} = $rw? 100*$io/$rw: 0;
 	}
 	return $result;
 }
@@ -193,6 +192,45 @@ sub discovery
 		push @items, $disk;
 	}
 	return Zabbix::Check::printDiscovery(@items);
+}
+
+sub bps
+{
+	my ($devname, $type) = @ARGV;
+	return unless $devname and $type and $type =~ /^read|write|total$/;
+	my $statuses = analyzeStats();
+	return unless $statuses;
+	my $status = $status->{$devname};
+	return unless $status;
+	my $result = $status->{"bps_$type"};
+	print $result;
+	return $result;
+}
+
+sub iops
+{
+	my ($devname, $type) = @ARGV;
+	return unless $devname and $type and $type =~ /^read|write|total$/;
+	my $statuses = analyzeStats();
+	return unless $statuses;
+	my $status = $status->{$devname};
+	return unless $status;
+	my $result = $status->{"iops_$type"};
+	print $result;
+	return $result;
+}
+
+sub ioutil
+{
+	my ($devname, $type) = @ARGV;
+	return unless $devname and $type and $type =~ /^read|write|total$/;
+	my $statuses = analyzeStats();
+	return unless $statuses;
+	my $status = $status->{$devname};
+	return unless $status;
+	my $result = $status->{"ioutil_$type"};
+	print $result;
+	return $result;
 }
 
 

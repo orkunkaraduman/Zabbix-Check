@@ -100,7 +100,7 @@ sub zbxDecode
 sub printDiscovery
 {
 	my @items = @_;
-	my $result = {
+	my $discovery = {
 		data => [
 			map({
 				my $item = $_; 
@@ -116,7 +116,8 @@ sub printDiscovery
 			} @items),
 		],
 	};
-	say to_json($result, {pretty => 1});
+	my $result = to_json($discovery, {pretty => 1});
+	print $result;
 	return $result;
 }
 
