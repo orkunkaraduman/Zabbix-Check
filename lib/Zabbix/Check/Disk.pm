@@ -194,9 +194,7 @@ sub bps
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $statuses = analyzeStats();
-	return unless $statuses;
-	my $status = $statuses->{$devname};
+	my $status = analyzeStats()->{$devname};
 	return unless $status;
 	my $result = $status->{"bps_$type"};
 	print $result;
@@ -207,9 +205,7 @@ sub iops
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $statuses = analyzeStats();
-	return unless $statuses;
-	my $status = $statuses->{$devname};
+	my $status = analyzeStats()->{$devname};
 	return unless $status;
 	my $result = $status->{"iops_$type"};
 	print $result;
@@ -220,9 +216,7 @@ sub ioutil
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $statuses = analyzeStats();
-	return unless $statuses;
-	my $status = $statuses->{$devname};
+	my $status = analyzeStats()->{$devname};
 	return unless $status;
 	my $result = $status->{"ioutil_$type"};
 	print $result;

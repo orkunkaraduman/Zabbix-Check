@@ -1,7 +1,7 @@
-package Zabbix::Check::Supervisor;
+package Zabbix::Check::RabbitMQ;
 =head1 NAME
 
-Zabbix::Check::Supervisor - Zabbix check Supervisor service
+Zabbix::Check::RabbitMQ - Zabbix check RabbitMQ service
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.01
 
 =head1 SYNOPSIS
 
-Zabbix check Supervisor service
+Zabbix check RabbitMQ service
 
 =cut
 use strict;
@@ -35,15 +35,41 @@ BEGIN
 }
 
 
-sub getStatuses
+sub getVhosts
 {
-	return unless -x '/usr/bin/supervisorctl';
+	return unless -x '/usr/sbin/rabbitmqctl';
 	my $result = {};
-	for (`/usr/bin/supervisorctl status`)
+	my $first = 1;
+	for my $line (`/usr/sbin/rabbitmqctl list_vhosts`)
 	{
-		chomp;
-		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
-		$result->{$name} = $status;
+		chomp $line;
+		if ($first)
+		{
+			$first = 0;
+			next;
+		}
+		my ($name) = $line =~ /^(.*)/;
+		$result->{$name} = $name;
+	}
+	return $result;
+}
+
+sub getQueues
+{
+	my ($vhost) = @_;
+	return unless -x '/usr/sbin/rabbitmqctl';
+	my $result = {};
+	my $first = 1;
+	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$vhost" name messages_ready messages_unacknowledged messages`)
+	{
+		chomp $line;
+		if ($first)
+		{
+			$first = 0;
+			next;
+		}
+		my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
+		$result->{$name} = {'ready' => $ready, 'unacked' => $unacked, 'total' => $total};
 	}
 	return $result;
 }
@@ -57,21 +83,42 @@ sub check
 	return $result;
 }
 
-sub worker_discovery
+sub vhost_discovery
 {
-	my $statuses = getStatuses();
-	return unless $statuses;
-	my @items = map({ name => $_}, keys %$statuses);
+	my @items;
+	my $vhosts = getVhosts();
+	return unless $vhosts;
+	for my $vhost (keys %$vhosts)
+	{ 
+		push @items, { vhost => $vhost };
+	}
 	return Zabbix::Check::printDiscovery(@items);
 }
 
-sub worker_status
+sub queue_discovery
 {
-	my ($name) = @ARGV;
-	return unless $name;
-	my $statuses = getStatuses();
-	return unless defined $statuses->{$name};
-	my $result = $statuses->{$name};
+	my @items;
+	my $vhosts = getVhosts();
+	return unless $vhosts;
+	for my $vhost (keys %$vhosts)
+	{ 
+		my $queues = getQueues($vhost);
+		next unless $queues;
+		for my $queue (keys %$queues)
+		{
+			push @items, { vhost => $vhost, queue => $queue };
+		}
+	}
+	return Zabbix::Check::printDiscovery(@items);
+}
+
+sub queue_status
+{
+	my ($vhost, $queue, $type) = @ARGV;
+	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
+	my $queues = getQueues($vhost);
+	return unless defined $queues->{$name};
+	my $result = $queues->{$name}->{$type};
 	print $result;
 	return $result;	
 }
