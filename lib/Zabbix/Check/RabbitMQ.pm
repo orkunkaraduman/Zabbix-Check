@@ -108,8 +108,8 @@ sub _queue_status
 	my ($vhost, $queue, $type) = @ARGV;
 	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
 	my $queues = getQueues($vhost);
-	return unless defined $queues->{$name};
-	my $result = $queues->{$name}->{$type};
+	return unless defined $queues->{$queue};
+	my $result = $queues->{$queue}->{$type};
 	print $result;
 	return $result;	
 }
