@@ -148,14 +148,26 @@ sub analyzeStats
 		next unless $diff;
 		$result->{$devname} = {};
 
-		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead};
-		$result->{$devname}->{ioutil_read} = $_? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/$_: 0;
+		my $rw;
+		my $io;
 
-		$_ = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$result->{$devname}->{ioutil_write} = $_? 100*($stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
+		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead};
+		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted};
+		$result->{$devname}->{read_bps} = 512*$rw/$diff;
+		$result->{$devname}->{read_iops} = $io/$diff;
+		$result->{$devname}->{read_ioutil} = $rw? 100*$io/$rw: 0;
 
-		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$result->{$devname}->{ioutil_total} = $_? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
+		$rw = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
+		$io = $stat->{writesCompleted} - $oldStat->{writesCompleted};
+		$result->{$devname}->{write_bps} = 512*$rw/$diff;
+		$result->{$devname}->{write_iops} = $io/$diff;
+		$result->{$devname}->{write_ioutil} = $rw? 100*$io/$rw: 0;
+
+		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
+		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted};
+		$result->{$devname}->{total_bps} = 512*$rw/$diff;
+		$result->{$devname}->{total_iops} = $io/$diff;
+		$result->{$devname}->{total_ioutil} = $rw? 100*$io/$rw: 0;
 	}
 	return $result;
 }
