@@ -11,6 +11,23 @@ version 1.01
 
 Zabbix checks
 
+=head1 USAGE
+
+=head2 Disk
+
+C<UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
+UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
+UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
+UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2>
+
+=over
+
+B<$1> Device name eg: sda, sdb1, dm-3, ...
+
+B<$2> Type: read or write or total
+
+=back
+
 =head1 INSTALLATION
 
 To install this module type the following
@@ -23,6 +40,38 @@ To install this module type the following
 from CPAN
 
 	cpan -i Zabbix::Check
+
+=head1 DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+=over
+
+=item *
+
+Switch
+
+=item *
+
+FindBin
+
+=item *
+
+Cwd
+
+=item *
+
+File::Basename
+
+=item *
+
+File::Slurp
+
+=item *
+
+JSON
+
+=back
 
 =cut
 use strict;
