@@ -18,7 +18,7 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 
-use Zabbix::Check;
+use Zabbix::Check qw(printDiscovery whereisBin);
 
 
 BEGIN
@@ -29,18 +29,21 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_vhost_discovery _queue_discovery _queue_status);
+	our @EXPORT      = qw(_installed _vhost_discovery _queue_discovery _queue_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
+our ($rabbitmqctl) = whereisBin('rabbitmqctl');
+
+
 sub getVhosts
 {
-	return unless -x '/usr/sbin/rabbitmqctl';
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my $result = {};
 	my $first = 1;
-	for my $line (`/usr/sbin/rabbitmqctl list_vhosts`)
+	for my $line (`$rabbitmqctl list_vhosts`)
 	{
 		chomp $line;
 		if ($first)
@@ -57,10 +60,10 @@ sub getVhosts
 sub getQueues
 {
 	my ($vhost) = @_;
-	return unless -x '/usr/sbin/rabbitmqctl';
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my $result = {};
 	my $first = 1;
-	for my $line (`/usr/sbin/rabbitmqctl list_queues -p "$vhost" name messages_ready messages_unacknowledged messages`)
+	for my $line (`$rabbitmqctl list_queues -p \"\Q$vhost\E\" name messages_ready messages_unacknowledged messages`)
 	{
 		chomp $line;
 		if ($first)
@@ -74,6 +77,22 @@ sub getQueues
 	return $result;
 }
 
+sub _installed
+{
+	my $result = (defined($rabbitmqctl) and -x $rabbitmqctl)? 1: 0;
+	print $result;
+	return $result;
+}
+
+sub _check
+{
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
+	system "$rabbitmqctl cluster_status >/dev/null 2>&1";
+	my $result = ($? == 0)? 1: 0;
+	print $result;
+	return $result;
+}
+
 sub _vhost_discovery
 {
 	my @items;
@@ -83,7 +102,7 @@ sub _vhost_discovery
 	{ 
 		push @items, { vhost => $vhost };
 	}
-	return Zabbix::Check::printDiscovery(@items);
+	return printDiscovery(@items);
 }
 
 sub _queue_discovery
@@ -100,7 +119,7 @@ sub _queue_discovery
 			push @items, { vhost => $vhost, queue => $queue };
 		}
 	}
-	return Zabbix::Check::printDiscovery(@items);
+	return printDiscovery(@items);
 }
 
 sub _queue_status

@@ -18,7 +18,7 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 
-use Zabbix::Check;
+use Zabbix::Check qw(printDiscovery whereisBin);
 
 
 BEGIN
@@ -29,17 +29,21 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_check _worker_discovery _worker_status);
+	our @EXPORT      = qw(_installed _check _worker_discovery _worker_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
+our ($supervisorctl) = whereisBin('supervisorctl');
+our ($supervisord) = whereisBin('supervisord');
+
+
 sub getStatuses
 {
-	return unless -x '/usr/bin/supervisorctl';
+	return unless defined($supervisorctl) and -x $supervisorctl;
 	my $result = {};
-	for (`/usr/bin/supervisorctl status`)
+	for (`$supervisorctl status`)
 	{
 		chomp;
 		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
@@ -48,10 +52,17 @@ sub getStatuses
 	return $result;
 }
 
+sub _installed
+{
+	my $result = (defined($supervisorctl) and -x $supervisorctl)? 1: 0;
+	print $result;
+	return $result;
+}
+
 sub _check
 {
-	return unless -x '/usr/bin/supervisorctl';
-	system 'pgrep -f "/usr/bin/python /usr/bin/supervisord" >/dev/null 2>&1';
+	return unless defined($supervisorctl) and -x $supervisorctl and -f $supervisord;
+	system "pgrep -f '/usr/bin/python $supervisord' >/dev/null 2>&1";
 	my $result = ($? == 0)? 1: 0;
 	print $result;
 	return $result;
@@ -62,7 +73,7 @@ sub _worker_discovery
 	my $statuses = getStatuses();
 	return unless $statuses;
 	my @items = map({ name => $_}, keys %$statuses);
-	return Zabbix::Check::printDiscovery(@items);
+	return printDiscovery(@items);
 }
 
 sub _worker_status

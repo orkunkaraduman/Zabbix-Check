@@ -42,9 +42,9 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
+	our @EXPORT      = qw(zbxEncode zbxDecode);
 	# Functions and variables which can be optionally exported
-	our @EXPORT_OK   = qw(zbxEncode zbxDecode);
+	our @EXPORT_OK   = qw(printDiscovery whereisBin);
 }
 
 
@@ -115,6 +115,12 @@ sub printDiscovery
 	my $result = to_json($discovery, {pretty => 1});
 	print $result;
 	return $result;
+}
+
+sub whereisBin
+{
+	my ($name) = @_;
+	return grep(-f $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")));
 }
 
 

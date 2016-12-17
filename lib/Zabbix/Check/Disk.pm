@@ -20,7 +20,7 @@ use utf8;
 use File::Slurp;
 use JSON;
 
-use Zabbix::Check;
+use Zabbix::Check qw(printDiscovery whereisBin);
 
 
 BEGIN
@@ -187,7 +187,7 @@ sub _discovery
 		next if not $removable and $disk->{removable};
 		push @items, $disk;
 	}
-	return Zabbix::Check::printDiscovery(@items);
+	return printDiscovery(@items);
 }
 
 sub _bps
