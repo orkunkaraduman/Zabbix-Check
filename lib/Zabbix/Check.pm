@@ -198,6 +198,9 @@ sub whereisBin
 }
 
 
+my $osname = $Config{osname};
+die "OS '$osname' is not supported" unless $osname eq 'linux';
+
 1;
 __END__
 =head1 AUTHOR
