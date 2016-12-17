@@ -12,6 +12,7 @@ WriteMakefile(
 		'FindBin' => 0,
 		'Cwd' => 0,
 		'File::Basename' => 0,
+		'File::Slurp' => 0,
 		'JSON' => 0,
 	},
 	EXE_FILES			=> [qw(
