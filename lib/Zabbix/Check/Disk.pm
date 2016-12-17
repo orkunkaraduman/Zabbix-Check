@@ -17,10 +17,6 @@ use warnings;
 no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use Config;
-use FindBin;
-use Cwd;
-use File::Basename;
 use File::Slurp;
 use JSON;
 
