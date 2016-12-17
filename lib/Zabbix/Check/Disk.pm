@@ -200,7 +200,7 @@ sub bps
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $statuses = analyzeStats();
 	return unless $statuses;
-	my $status = $status->{$devname};
+	my $status = $statuses->{$devname};
 	return unless $status;
 	my $result = $status->{"bps_$type"};
 	print $result;
@@ -213,7 +213,7 @@ sub iops
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $statuses = analyzeStats();
 	return unless $statuses;
-	my $status = $status->{$devname};
+	my $status = $statuses->{$devname};
 	return unless $status;
 	my $result = $status->{"iops_$type"};
 	print $result;
@@ -226,7 +226,7 @@ sub ioutil
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $statuses = analyzeStats();
 	return unless $statuses;
-	my $status = $status->{$devname};
+	my $status = $statuses->{$devname};
 	return unless $status;
 	my $result = $status->{"ioutil_$type"};
 	print $result;
