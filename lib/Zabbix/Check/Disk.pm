@@ -72,7 +72,8 @@ sub disks
 			$disk->{dmname} = $dmname;
 			$disk->{dmpath} = "/dev/mapper/$dmname";
 		}
-		for my $mount (grep(/^(\Q$disk->{devpath}\E|\Q$disk->{dmpath}\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts"): ()))
+		my $dmpath = $disk->{dmpath}? $disk->{dmpath}: "";
+		for my $mount (grep(/^(\Q$disk->{devpath}\E|\Q$dmpath\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts"): ()))
 		{
 			chomp $mount;
 			my ($devpath, $mountpoint, $fstype) = $mount =~ /^(\S+)\s+(\S+)\s+(\S+)\s+/;
@@ -122,7 +123,8 @@ sub analyzeStats
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
 		{
-			eval { $oldstats = from_json($tmp) } if $now-$epoch >= 1*60 and not $oldStats and my $tmp = read_file($tmpPath);
+			my $tmp;
+			eval { $oldStats = from_json($tmp) } if $now-$epoch >= 1*60 and not $oldStats and $tmp = read_file($tmpPath);
 			unlink($tmpPath) if $now-$epoch > 2*60;
 		} else
 		{
@@ -141,7 +143,7 @@ sub analyzeStats
 		my $diff = $stat->{epoch} - $oldStat->{epoch};
 		next unless $diff;
 		$result->{$devname} = {
-			ioutil_read => 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/($stat->{sectorsRead} - $oldStat->{sectorsRead}),
+			ioutil_read => 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/(($_ = $stat->{sectorsRead} - $oldStat->{sectorsRead})? $_: 1),
 		};
 	}
 	return $result;
