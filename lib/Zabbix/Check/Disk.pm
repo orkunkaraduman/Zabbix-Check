@@ -149,13 +149,13 @@ sub analyzeStats
 		$result->{$devname} = {};
 
 		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead};
-		$result->{$devname}->{ioutil_read} = (not $_)? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/$_: 0;
+		$result->{$devname}->{ioutil_read} = $_? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted})/$_: 0;
 
 		$_ = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$result->{$devname}->{ioutil_write} = (not $_)? 100*($stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
+		$result->{$devname}->{ioutil_write} = $_? 100*($stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
 
 		$_ = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$result->{$devname}->{ioutil_total} = (not $_)? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
+		$result->{$devname}->{ioutil_total} = $_? 100*($stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted})/$_: 0;
 	}
 	return $result;
 }
