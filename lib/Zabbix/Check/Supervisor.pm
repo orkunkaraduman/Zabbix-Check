@@ -29,7 +29,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
+	our @EXPORT      = qw(_check _worker_discovery _worker_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -48,7 +48,7 @@ sub getStatuses
 	return $result;
 }
 
-sub check
+sub _check
 {
 	return unless -x '/usr/bin/supervisorctl';
 	system 'pgrep -f "/usr/bin/python /usr/bin/supervisord" >/dev/null 2>&1';
@@ -57,7 +57,7 @@ sub check
 	return $result;
 }
 
-sub worker_discovery
+sub _worker_discovery
 {
 	my $statuses = getStatuses();
 	return unless $statuses;
@@ -65,7 +65,7 @@ sub worker_discovery
 	return Zabbix::Check::printDiscovery(@items);
 }
 
-sub worker_status
+sub _worker_status
 {
 	my ($name) = @ARGV;
 	return unless $name;

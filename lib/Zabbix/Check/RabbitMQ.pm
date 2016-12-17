@@ -29,7 +29,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
+	our @EXPORT      = qw(_vhost_discovery _queue_discovery _queue_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -49,7 +49,7 @@ sub getVhosts
 			next;
 		}
 		my ($name) = $line =~ /^(.*)/;
-		$result->{$name} = $name;
+		$result->{$name} = { 'name' => $name };
 	}
 	return $result;
 }
@@ -74,16 +74,7 @@ sub getQueues
 	return $result;
 }
 
-sub check
-{
-	return unless -x '/usr/bin/supervisorctl';
-	system 'pgrep -f "/usr/bin/python /usr/bin/supervisord" >/dev/null 2>&1';
-	my $result = ($? == 0)? 1: 0;
-	print $result;
-	return $result;
-}
-
-sub vhost_discovery
+sub _vhost_discovery
 {
 	my @items;
 	my $vhosts = getVhosts();
@@ -95,7 +86,7 @@ sub vhost_discovery
 	return Zabbix::Check::printDiscovery(@items);
 }
 
-sub queue_discovery
+sub _queue_discovery
 {
 	my @items;
 	my $vhosts = getVhosts();
@@ -112,7 +103,7 @@ sub queue_discovery
 	return Zabbix::Check::printDiscovery(@items);
 }
 
-sub queue_status
+sub _queue_status
 {
 	my ($vhost, $queue, $type) = @ARGV;
 	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;

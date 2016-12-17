@@ -31,7 +31,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw();
+	our @EXPORT      = qw(_discovery _bps _iops _ioutil);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -176,7 +176,7 @@ sub analyzeStats
 	return $result;
 }
 
-sub discovery
+sub _discovery
 {
 	my ($removable) = @_;
 	my @items;
@@ -190,7 +190,7 @@ sub discovery
 	return Zabbix::Check::printDiscovery(@items);
 }
 
-sub bps
+sub _bps
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
@@ -201,7 +201,7 @@ sub bps
 	return $result;
 }
 
-sub iops
+sub _iops
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
@@ -212,7 +212,7 @@ sub iops
 	return $result;
 }
 
-sub ioutil
+sub _ioutil
 {
 	my ($devname, $type) = @ARGV;
 	return unless $devname and $type and $type =~ /^read|write|total$/;
