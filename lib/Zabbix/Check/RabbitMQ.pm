@@ -5,7 +5,7 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -34,14 +34,14 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 
-use Zabbix::Check qw(printDiscovery whereisBin);
+use Zabbix::Check;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.01';
+	our $VERSION     = '1.02';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -75,8 +75,8 @@ sub getVhosts
 
 sub getQueues
 {
-	my ($vhost) = @_;
 	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
+	my ($vhost) = @_;
 	my $result = {};
 	my $first = 1;
 	for my $line (`$rabbitmqctl list_queues -p \"\Q$vhost\E\" name messages_ready messages_unacknowledged messages`)
@@ -111,6 +111,7 @@ sub _check
 
 sub _vhost_discovery
 {
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my @items;
 	my $vhosts = getVhosts();
 	return unless $vhosts;
@@ -123,6 +124,7 @@ sub _vhost_discovery
 
 sub _queue_discovery
 {
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my @items;
 	my $vhosts = getVhosts();
 	return unless $vhosts;
@@ -140,7 +142,8 @@ sub _queue_discovery
 
 sub _queue_status
 {
-	my ($vhost, $queue, $type) = @ARGV;
+	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
+	my ($vhost, $queue, $type) = map(zbxDecode($_), @ARGV);
 	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
 	my $queues = getQueues($vhost);
 	return unless defined $queues->{$queue};
