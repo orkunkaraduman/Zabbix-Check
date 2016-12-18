@@ -120,9 +120,9 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin);
 	# Functions and variables which can be optionally exported
-	our @EXPORT_OK   = qw(printDiscovery whereisBin);
+	our @EXPORT_OK   = qw();
 }
 
 

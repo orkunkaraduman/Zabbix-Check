@@ -40,7 +40,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_installed _check _worker_discovery _worker_status);
+	our @EXPORT      = qw(_installed _check _service_discovery _service_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -63,11 +63,11 @@ sub getUnits
 			$first = 0;
 			next;
 		}
-		last if s/^\s+|\s+$//gr;
+		last unless s/^\s+|\s+$//gr;
 		my ($unit, $state) = /^(\S+)\s+(\S+)/;
 		my $unitInfo = {
-			unit => $unit;
-			state => $state;
+			unit => $unit,
+			state => $state,
 		};
 		($unitInfo->{name}, $unitInfo->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
 		$result->{$unit} = $unitInfo if (not $type or $type eq $unitInfo->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
@@ -98,7 +98,7 @@ sub _service_discovery
 	$stateRgx = '^enabled' unless defined $stateRgx;
 	my $units = getUnits('service', $stateRgx);
 	return unless $units;
-	my @items = map({ name => $_}, keys %$units);
+	my @items = map($units->{$_}, keys %$units);
 	return printDiscovery(@items);
 }
 
@@ -107,7 +107,7 @@ sub _service_status
 	return unless defined($systemctl) and -x $systemctl;
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
-	my $result = `$systemctl is-active $name.service 2>/dev/null`;
+	my $result = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null`;
 	return unless defined $result;
 	chomp $result;
 	print $result;
