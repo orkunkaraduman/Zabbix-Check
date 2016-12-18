@@ -64,7 +64,7 @@ $3 _Type: ready|unacked|total_
 
 ## Systemd
 
-Zabbix check for Systemd service
+Zabbix check for Systemd services
 
 ### zabbix\_agentd.conf
 

@@ -53,7 +53,7 @@ USAGE
     $3 *Type: ready|unacked|total*
 
   Systemd
-    Zabbix check for Systemd service
+    Zabbix check for Systemd services
 
    zabbix_agentd.conf
             UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed

@@ -1,2 +1,6 @@
+1.02	2016-12-18
+		- Added Systemd.pm
+		- Improvements and fixes
+
 1.01	2016-12-17
 		- Zabbix::Check first release
