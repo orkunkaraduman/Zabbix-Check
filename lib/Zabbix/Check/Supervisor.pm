@@ -81,6 +81,7 @@ sub _check
 
 sub _worker_discovery
 {
+	return unless defined($supervisorctl) and -x $supervisorctl;
 	my $statuses = getStatuses();
 	return unless $statuses;
 	my @items = map({ name => $_}, keys %$statuses);
@@ -89,6 +90,7 @@ sub _worker_discovery
 
 sub _worker_status
 {
+	return unless defined($supervisorctl) and -x $supervisorctl;
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
 	my $statuses = getStatuses();
