@@ -4,7 +4,7 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
-version 1.01
+version 1.02
 
 # SYNOPSIS
 
@@ -13,6 +13,8 @@ Zabbix Agent system and service checks
 # USAGE
 
 ## Disk
+
+Zabbix check for disk
 
 ### zabbix\_agentd.conf
 
@@ -27,6 +29,8 @@ $2 _Type: read|write|total_
 
 ## Supervisor
 
+Zabbix check for Supervisor service
+
 ### zabbix\_agentd.conf
 
         UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
@@ -39,6 +43,8 @@ $2 _Type: read|write|total_
 $1 _Worker name_
 
 ## RabbitMQ
+
+Zabbix check for RabbitMQ service
 
 ### zabbix\_agentd.conf
 
@@ -55,6 +61,21 @@ $1 _Vhost name_
 $2 _Queue name_
 
 $3 _Type: ready|unacked|total_
+
+## Systemd
+
+Zabbix check for Systemd service
+
+### zabbix\_agentd.conf
+
+        UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
+        UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+        UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+        UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
+
+**service\_status $1**
+
+$1 _Service name_
 
 # INSTALLATION
 

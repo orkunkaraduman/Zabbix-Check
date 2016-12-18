@@ -2,13 +2,15 @@ NAME
     Zabbix::Check - Zabbix Agent system and service checks
 
 VERSION
-    version 1.01
+    version 1.02
 
 SYNOPSIS
     Zabbix Agent system and service checks
 
 USAGE
   Disk
+    Zabbix check for disk
+
    zabbix_agentd.conf
             UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
             UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
@@ -20,6 +22,8 @@ USAGE
     $2 *Type: read|write|total*
 
   Supervisor
+    Zabbix check for Supervisor service
+
    zabbix_agentd.conf
             UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
             UserParameter=cpan.zabbix.check.supervisor.check,/usr/bin/perl -MZabbix::Check::Supervisor -e_check
@@ -31,6 +35,8 @@ USAGE
     $1 *Worker name*
 
   RabbitMQ
+    Zabbix check for RabbitMQ service
+
    zabbix_agentd.conf
             UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
             UserParameter=cpan.zabbix.check.rabbitmq.check,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_check
@@ -45,6 +51,19 @@ USAGE
     $2 *Queue name*
 
     $3 *Type: ready|unacked|total*
+
+  Systemd
+    Zabbix check for Systemd service
+
+   zabbix_agentd.conf
+            UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
+            UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+            UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+            UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
+
+    service_status $1
+
+    $1 *Service name*
 
 INSTALLATION
     To install this module type the following
