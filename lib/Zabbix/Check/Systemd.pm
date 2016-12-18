@@ -84,9 +84,12 @@ sub _installed
 
 sub _check
 {
-	return unless defined($systemctl) and -x $systemctl;
-	system "$systemctl is-system-running >/dev/null 2>&1";
-	my $result = ($? == 0)? 1: 0;
+	my $result = 2;
+	if (defined($systemctl) and -x $systemctl)
+	{
+		system "$systemctl is-system-running >/dev/null 2>&1";
+		$result = ($? == 0)? 1: 0;
+	}
 	print $result;
 	return $result;
 }

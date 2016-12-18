@@ -72,9 +72,12 @@ sub _installed
 
 sub _check
 {
-	return unless defined($supervisorctl) and -x $supervisorctl;
-	system "pgrep -f '/usr/bin/python $supervisord' >/dev/null 2>&1";
-	my $result = ($? == 0)? 1: 0;
+	my $result = 2;
+	if (defined($supervisorctl) and -x $supervisorctl)
+	{
+		system "pgrep -f '/usr/bin/python $supervisord' >/dev/null 2>&1";
+		$result = ($? == 0)? 1: 0;
+	}
 	print $result;
 	return $result;
 }
