@@ -1,7 +1,7 @@
 package Zabbix::Check::Systemd;
 =head1 NAME
 
-Zabbix::Check::Systemd - Zabbix check for Systemd service
+Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.02
 
 =head1 SYNOPSIS
 
-Zabbix check for Systemd service
+Zabbix check for Systemd services
 
 =head3 zabbix_agentd.conf
 

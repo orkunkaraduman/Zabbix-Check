@@ -65,7 +65,7 @@ $3 I<Type: ready|unacked|total>
 
 =head2 Systemd
 
-Zabbix check for Systemd service
+Zabbix check for Systemd services
 
 =head3 zabbix_agentd.conf
 
