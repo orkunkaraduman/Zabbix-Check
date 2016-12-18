@@ -15,6 +15,8 @@ Zabbix Agent system and service checks
 
 =head2 Disk
 
+Zabbix check for disk
+
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
@@ -28,6 +30,8 @@ $2 I<Type: read|write|total>
 
 =head2 Supervisor
 
+Zabbix check for Supervisor service
+
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
@@ -40,6 +44,8 @@ B<worker_status $1>
 $1 I<Worker name>
 
 =head2 RabbitMQ
+
+Zabbix check for RabbitMQ service
 
 =head3 zabbix_agentd.conf
 
@@ -56,6 +62,21 @@ $1 I<Vhost name>
 $2 I<Queue name>
 
 $3 I<Type: ready|unacked|total>
+
+=head2 Systemd
+
+Zabbix check for Systemd service
+
+=head3 zabbix_agentd.conf
+
+	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
+	UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
+
+B<service_status $1>
+
+$1 I<Service name>
 
 =head1 INSTALLATION
 

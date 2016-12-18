@@ -18,9 +18,9 @@ Zabbix check for Systemd service
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
-B<worker_status $1>
+B<service_status $1>
 
-$1 I<Worker name>
+$1 I<Service name>
 
 =cut
 use strict;
