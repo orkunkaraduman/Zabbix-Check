@@ -206,10 +206,9 @@ sub _bps
 	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $analyzed = analyzeStats();
-	return unless $analyzed;
-	my $status = $analyzed->{$devname};
-	return unless $status;
-	my $result = $status->{"bps_$type"};
+	my $status = $analyzed->{$devname} if $analyzed;
+	my $result = 0;
+	$result = $status->{"bps_$type"} if $status;
 	print $result;
 	return $result;
 }
@@ -219,10 +218,9 @@ sub _iops
 	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $analyzed = analyzeStats();
-	return unless $analyzed;
-	my $status = $analyzed->{$devname};
-	return unless $status;
-	my $result = $status->{"iops_$type"};
+	my $status = $analyzed->{$devname} if $analyzed;
+	my $result = 0;
+	$result = $status->{"iops_$type"} if $status;
 	print $result;
 	return $result;
 }
@@ -232,10 +230,9 @@ sub _ioutil
 	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
 	my $analyzed = analyzeStats();
-	return unless $analyzed;
-	my $status = $analyzed->{$devname};
-	return unless $status;
-	my $result = $status->{"ioutil_$type"};
+	my $status = $analyzed->{$devname} if $analyzed;
+	my $result = 0;
+	$result = $status->{"ioutil_$type"} if $status;
 	print $result;
 	return $result;
 }
