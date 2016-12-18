@@ -5,7 +5,7 @@ Zabbix::Check::Supervisor - Zabbix check for Supervisor service
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -29,14 +29,14 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 
-use Zabbix::Check qw(printDiscovery whereisBin);
+use Zabbix::Check;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.01';
+	our $VERSION     = '1.02';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -54,7 +54,7 @@ sub getStatuses
 {
 	return unless defined($supervisorctl) and -x $supervisorctl;
 	my $result = {};
-	for (`$supervisorctl status`)
+	for (`$supervisorctl status 2>/dev/null`)
 	{
 		chomp;
 		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
@@ -72,7 +72,7 @@ sub _installed
 
 sub _check
 {
-	return unless defined($supervisorctl) and -x $supervisorctl and -f $supervisord;
+	return unless defined($supervisorctl) and -x $supervisorctl;
 	system "pgrep -f '/usr/bin/python $supervisord' >/dev/null 2>&1";
 	my $result = ($? == 0)? 1: 0;
 	print $result;
@@ -89,7 +89,7 @@ sub _worker_discovery
 
 sub _worker_status
 {
-	my ($name) = @ARGV;
+	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
 	my $statuses = getStatuses();
 	return unless defined $statuses->{$name};
