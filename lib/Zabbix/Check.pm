@@ -202,9 +202,8 @@ sub printDiscovery
 				my %newitem = map({
 					my $key = $_;
 					my $val = $item->{$key};
-					my $newkey = zbxEncode($key);
-					$newkey = uc("{#$newkey}");
-					my $newval = zbxEncode($val);
+					my $newkey = uc("{#$key}");
+					my $newval = $val;
 					$newkey => $newval;
 				} keys(%$item));
 				\%newitem;
