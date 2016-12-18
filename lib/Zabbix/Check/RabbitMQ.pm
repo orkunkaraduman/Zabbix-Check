@@ -114,10 +114,9 @@ sub _check
 
 sub _vhost_discovery
 {
-	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my @items;
 	my $vhosts = getVhosts();
-	return unless $vhosts;
+	$vhosts = {} unless $vhosts;
 	for my $vhost (keys %$vhosts)
 	{ 
 		push @items, { vhost => $vhost };
@@ -127,14 +126,13 @@ sub _vhost_discovery
 
 sub _queue_discovery
 {
-	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my @items;
 	my $vhosts = getVhosts();
-	return unless $vhosts;
+	$vhosts = {} unless $vhosts;
 	for my $vhost (keys %$vhosts)
 	{ 
 		my $queues = getQueues($vhost);
-		next unless $queues;
+		$queues = {} unless $queues;
 		for my $queue (keys %$queues)
 		{
 			push @items, { vhost => $vhost, queue => $queue };
@@ -145,12 +143,11 @@ sub _queue_discovery
 
 sub _queue_status
 {
-	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
 	my ($vhost, $queue, $type) = map(zbxDecode($_), @ARGV);
 	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
+	my $result = "";
 	my $queues = getQueues($vhost);
-	return unless defined $queues->{$queue};
-	my $result = $queues->{$queue}->{$type};
+	$result = $queues->{$queue}->{$type} if defined($queues->{$queue}->{$type});
 	print $result;
 	return $result;	
 }

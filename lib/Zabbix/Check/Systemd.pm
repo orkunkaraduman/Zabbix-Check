@@ -96,23 +96,25 @@ sub _check
 
 sub _service_discovery
 {
-	return unless defined($systemctl) and -x $systemctl;
 	my ($stateRgx) = map(zbxDecode($_), @ARGV);
+	my @items;
 	$stateRgx = '^enabled' unless defined $stateRgx;
 	my $units = getUnits('service', $stateRgx);
-	return unless $units;
-	my @items = map($units->{$_}, keys %$units);
+	@items = map($units->{$_}, keys %$units) if $units;
 	return printDiscovery(@items);
 }
 
 sub _service_status
 {
-	return unless defined($systemctl) and -x $systemctl;
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
-	my $result = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null`;
-	return unless defined $result;
-	chomp $result;
+	my $result = "";
+	my $status = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null`;
+	if (defined $status)
+	{
+		chomp $status;
+		$result = $status;
+	}
 	print $result;
 	return $result;
 }

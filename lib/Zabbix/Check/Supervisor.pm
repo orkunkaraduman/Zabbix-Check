@@ -84,21 +84,18 @@ sub _check
 
 sub _worker_discovery
 {
-	return unless defined($supervisorctl) and -x $supervisorctl;
+	my @items;
 	my $statuses = getStatuses();
-	return unless $statuses;
-	my @items = map({ name => $_}, keys %$statuses);
+	@items = map({ name => $_}, keys %$statuses) if $statuses;
 	return printDiscovery(@items);
 }
 
 sub _worker_status
 {
-	return unless defined($supervisorctl) and -x $supervisorctl;
 	my ($name) = map(zbxDecode($_), @ARGV);
-	return unless $name;
+	my $result = "";
 	my $statuses = getStatuses();
-	return unless defined $statuses->{$name};
-	my $result = $statuses->{$name};
+	$result = $statuses->{$name} if $name and defined($statuses->{$name});
 	print $result;
 	return $result;	
 }
