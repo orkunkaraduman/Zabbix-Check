@@ -29,7 +29,7 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 
-use Zabbix::Check qw(printDiscovery whereisBin);
+use Zabbix::Check;
 
 
 BEGIN

@@ -5,7 +5,7 @@ Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -31,14 +31,14 @@ use utf8;
 use File::Slurp;
 use JSON;
 
-use Zabbix::Check qw(printDiscovery whereisBin);
+use Zabbix::Check;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.01';
+	our $VERSION     = '1.02';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -203,11 +203,11 @@ sub _discovery
 
 sub _bps
 {
-	my ($devname, $type) = @ARGV;
+	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $analyze = analyzeStats();
-	return unless $analyze;
-	my $status = $analyze->{$devname};
+	my $analyzed = analyzeStats();
+	return unless $analyzed;
+	my $status = $analyzed->{$devname};
 	return unless $status;
 	my $result = $status->{"bps_$type"};
 	print $result;
@@ -216,11 +216,11 @@ sub _bps
 
 sub _iops
 {
-	my ($devname, $type) = @ARGV;
+	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $analyze = analyzeStats();
-	return unless $analyze;
-	my $status = $analyze->{$devname};
+	my $analyzed = analyzeStats();
+	return unless $analyzed;
+	my $status = $analyzed->{$devname};
 	return unless $status;
 	my $result = $status->{"iops_$type"};
 	print $result;
@@ -229,11 +229,11 @@ sub _iops
 
 sub _ioutil
 {
-	my ($devname, $type) = @ARGV;
+	my ($devname, $type) = map(zbxDecode($_), @ARGV);
 	return unless $devname and $type and $type =~ /^read|write|total$/;
-	my $analyze = analyzeStats();
-	return unless $analyze;
-	my $status = $analyze->{$devname};
+	my $analyzed = analyzeStats();
+	return unless $analyzed;
+	my $status = $analyzed->{$devname};
 	return unless $status;
 	my $result = $status->{"ioutil_$type"};
 	print $result;
