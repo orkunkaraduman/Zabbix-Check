@@ -1,6 +1,6 @@
 1.03	2016-12-19
 		- sub whereisBin exec test
-		- 
+		- Service installation status detection is changed
 
 1.02	2016-12-18
 		- Added Systemd.pm
