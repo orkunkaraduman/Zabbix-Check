@@ -5,7 +5,7 @@ Zabbix::Check::Supervisor - Zabbix check for Supervisor service
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
@@ -36,7 +36,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.02';
+	our $VERSION     = '1.03';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -52,7 +52,7 @@ our ($supervisord) = whereisBin('supervisord');
 
 sub getStatuses
 {
-	return unless defined($supervisorctl) and -x $supervisorctl;
+	return unless $supervisorctl;
 	my $result = {};
 	for (`$supervisorctl status 2>/dev/null`)
 	{
@@ -65,7 +65,7 @@ sub getStatuses
 
 sub _installed
 {
-	my $result = (defined($supervisorctl) and -x $supervisorctl)? 1: 0;
+	my $result = $supervisorctl? 1: 0;
 	print $result;
 	return $result;
 }
@@ -73,7 +73,7 @@ sub _installed
 sub _check
 {
 	my $result = 2;
-	if (defined($supervisorctl) and -x $supervisorctl)
+	if ($supervisorctl)
 	{
 		system "pgrep -f '/usr/bin/python $supervisord' >/dev/null 2>&1";
 		$result = ($? == 0)? 1: 0;

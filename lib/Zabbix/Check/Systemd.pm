@@ -5,7 +5,7 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
@@ -36,7 +36,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.02';
+	our $VERSION     = '1.03';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -51,7 +51,7 @@ our ($systemctl) = whereisBin('systemctl');
 
 sub getUnits
 {
-	return unless defined($systemctl) and -x $systemctl;
+	return unless $systemctl;
 	my ($type, $stateRgx) = @_;
 	my $result = {};
 	my $first = 1;
@@ -77,7 +77,7 @@ sub getUnits
 
 sub _installed
 {
-	my $result = (defined($systemctl) and -x $systemctl)? 1: 0;
+	my $result = $systemctl? 1: 0;
 	print $result;
 	return $result;
 }
@@ -85,7 +85,7 @@ sub _installed
 sub _check
 {
 	my $result = 2;
-	if (defined($systemctl) and -x $systemctl)
+	if ($systemctl)
 	{
 		system "$systemctl is-system-running >/dev/null 2>&1";
 		$result = ($? == 0)? 1: 0;
@@ -109,7 +109,7 @@ sub _service_status
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
 	my $result = "";
-	my $status = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null`;
+	my $status = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null` if $systemctl;
 	if (defined $status)
 	{
 		chomp $status;

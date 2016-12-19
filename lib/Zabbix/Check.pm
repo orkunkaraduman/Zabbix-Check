@@ -218,7 +218,7 @@ sub printDiscovery
 sub whereisBin
 {
 	my ($name) = @_;
-	return grep(-f $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
+	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
 }
 
 

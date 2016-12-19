@@ -1,5 +1,6 @@
 1.03	2016-12-19
-		- v1.03
+		- sub whereisBin exec test
+		- 
 
 1.02	2016-12-18
 		- Added Systemd.pm

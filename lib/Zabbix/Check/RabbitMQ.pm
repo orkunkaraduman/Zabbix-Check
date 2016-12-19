@@ -5,7 +5,7 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
@@ -41,7 +41,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.02';
+	our $VERSION     = '1.03';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -56,7 +56,7 @@ our ($rabbitmqctl) = whereisBin('rabbitmqctl');
 
 sub getVhosts
 {
-	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
+	return unless $rabbitmqctl;
 	my $result = {};
 	my $first = 1;
 	for my $line (`$rabbitmqctl list_vhosts`)
@@ -75,7 +75,7 @@ sub getVhosts
 
 sub getQueues
 {
-	return unless defined($rabbitmqctl) and -x $rabbitmqctl;
+	return unless $rabbitmqctl;
 	my ($vhost) = @_;
 	my $result = {};
 	my $first = 1;
@@ -95,7 +95,7 @@ sub getQueues
 
 sub _installed
 {
-	my $result = (defined($rabbitmqctl) and -x $rabbitmqctl)? 1: 0;
+	my $result = $rabbitmqctl? 1: 0;
 	print $result;
 	return $result;
 }
@@ -103,7 +103,7 @@ sub _installed
 sub _check
 {
 	my $result = 2;
-	if (defined($rabbitmqctl) and -x $rabbitmqctl)
+	if ($rabbitmqctl)
 	{
 		system "$rabbitmqctl cluster_status >/dev/null 2>&1";
 		$result = ($? == 0)? 1: 0;
