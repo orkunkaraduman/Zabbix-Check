@@ -93,9 +93,10 @@ sub _worker_discovery
 sub _worker_status
 {
 	my ($name) = map(zbxDecode($_), @ARGV);
+	return unless $name;
 	my $result = "";
 	my $statuses = getStatuses();
-	$result = $statuses->{$name} if $name and defined($statuses->{$name});
+	$result = $statuses->{$name} if defined($statuses->{$name});
 	print $result;
 	return $result;	
 }
