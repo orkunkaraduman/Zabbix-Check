@@ -11,8 +11,6 @@ version 1.03
 
 Zabbix Agent system and service checks
 
-=head1 USAGE
-
 =head2 Disk
 
 Zabbix check for disk
@@ -228,6 +226,12 @@ die "OS '$osname' is not supported" unless $osname eq 'linux';
 
 1;
 __END__
+=head1 REPOSITORY
+
+B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
+
+B<CPAN> L<https://metacpan.org/pod/Zabbix::Check>
+
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>

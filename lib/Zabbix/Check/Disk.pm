@@ -240,6 +240,12 @@ sub _ioutil
 
 1;
 __END__
+=head1 REPOSITORY
+
+B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
+
+B<CPAN> L<https://metacpan.org/pod/Zabbix::Check>
+
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>

@@ -4,13 +4,11 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
-version 1.02
+version 1.03
 
 # SYNOPSIS
 
 Zabbix Agent system and service checks
-
-# USAGE
 
 ## Disk
 
@@ -100,6 +98,12 @@ This module requires these other modules and libraries:
 - File::Basename
 - File::Slurp
 - JSON
+
+# REPOSITORY
+
+**GitHub** [https://github.com/orkunkaraduman/Zabbix-Check](https://github.com/orkunkaraduman/Zabbix-Check)
+
+**CPAN** [https://metacpan.org/pod/Zabbix::Check](https://metacpan.org/pod/Zabbix::Check)
 
 # AUTHOR
 
