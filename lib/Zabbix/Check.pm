@@ -220,6 +220,13 @@ sub whereisBin
 	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
 }
 
+sub _version
+{
+	my $result = "";
+	$result = $VERSION;
+	return $result;
+}
+
 
 my $osname = $Config{osname};
 die "OS '$osname' is not supported" unless $osname eq 'linux';
