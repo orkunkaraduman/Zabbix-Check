@@ -227,7 +227,7 @@ sub whereisBin
 sub _version
 {
 	my $result = "";
-	$result = $VERSION;
+	$result = $Zabbix::Check::VERSION;
 	return $result;
 }
 
