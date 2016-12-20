@@ -4,11 +4,15 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
-version 1.03
+version 1.04
 
 # SYNOPSIS
 
 Zabbix Agent system and service checks
+
+### zabbix\_agentd.conf
+
+UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e\_version
 
 ## Disk
 
@@ -67,7 +71,7 @@ Zabbix check for Systemd services
 ### zabbix\_agentd.conf
 
         UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-        UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+        UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
         UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
         UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
@@ -103,7 +107,7 @@ This module requires these other modules and libraries:
 
 **GitHub** [https://github.com/orkunkaraduman/Zabbix-Check](https://github.com/orkunkaraduman/Zabbix-Check)
 
-**CPAN** [https://metacpan.org/pod/Zabbix::Check](https://metacpan.org/pod/Zabbix::Check)
+**CPAN** [https://metacpan.org/release/Zabbix-Check](https://metacpan.org/release/Zabbix-Check)
 
 # AUTHOR
 

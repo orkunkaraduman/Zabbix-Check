@@ -5,11 +5,15 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 SYNOPSIS
 
 Zabbix Agent system and service checks
+
+=head3 zabbix_agentd.conf
+
+UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
 =head2 Disk
 
@@ -68,7 +72,7 @@ Zabbix check for Systemd services
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-	UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
@@ -135,11 +139,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.03';
+	our $VERSION     = '1.04';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -220,6 +224,14 @@ sub whereisBin
 	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
 }
 
+sub _version
+{
+	my $result = "";
+	$result = $Zabbix::Check::VERSION;
+	print $result;
+	return $result;
+}
+
 
 my $osname = $Config{osname};
 die "OS '$osname' is not supported" unless $osname eq 'linux';
@@ -230,7 +242,7 @@ __END__
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
 
-B<CPAN> L<https://metacpan.org/pod/Zabbix::Check>
+B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 

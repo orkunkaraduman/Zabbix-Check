@@ -5,7 +5,7 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 SYNOPSIS
 
@@ -14,7 +14,7 @@ Zabbix check for Systemd services
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-	UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
@@ -36,11 +36,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.03';
+	our $VERSION     = '1.04';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_installed _check _service_discovery _service_status);
+	our @EXPORT      = qw(_installed _system_status _service_discovery _service_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -49,28 +49,46 @@ BEGIN
 our ($systemctl) = whereisBin('systemctl');
 
 
-sub getUnits
+sub getUnitFiles
 {
 	return unless $systemctl;
 	my ($type, $stateRgx) = @_;
 	my $result = {};
-	my $first = 1;
-	for (`$systemctl list-unit-files`)
+	for (`$systemctl --no-legend list-unit-files 2>/dev/null`)
 	{
 		chomp;
-		if ($first)
-		{
-			$first = 0;
-			next;
-		}
 		last unless s/^\s+|\s+$//gr;
 		my ($unit, $state) = /^(\S+)\s+(\S+)/;
-		my $unitInfo = {
+		my $info = {
 			unit => $unit,
 			state => $state,
 		};
-		($unitInfo->{name}, $unitInfo->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
-		$result->{$unit} = $unitInfo if (not $type or $type eq $unitInfo->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
+		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
+		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
+	}
+	return $result;
+}
+
+sub getUnits
+{
+	return unless $systemctl;
+	my ($type, $loadRgx) = @_;
+	my $result = {};
+	my $first = 1;
+	for (`$systemctl --no-legend -a list-units 2>/dev/null`)
+	{
+		chomp;
+		last unless s/^\s+|\s+$//gr;
+		my ($unit, $load, $active, $sub, $desc) = /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/;
+		my $info = {
+			unit => $unit,
+			load => $load,
+			active => $active,
+			sub => $sub,
+			desc => $desc,
+		};
+		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
+		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $loadRgx or $load =~ /$loadRgx/);
 	}
 	return $result;
 }
@@ -82,13 +100,14 @@ sub _installed
 	return $result;
 }
 
-sub _check
+sub _system_status
 {
-	my $result = 2;
-	if ($systemctl)
+	my $result = "";
+	my $status = `$systemctl is-system-running 2>/dev/null` if $systemctl;
+	if (defined $status)
 	{
-		system "$systemctl is-system-running >/dev/null 2>&1";
-		$result = ($? == 0)? 1: 0;
+		chomp $status;
+		$result = $status;
 	}
 	print $result;
 	return $result;
@@ -96,10 +115,10 @@ sub _check
 
 sub _service_discovery
 {
-	my ($stateRgx) = map(zbxDecode($_), @ARGV);
+	my ($loadRgx) = map(zbxDecode($_), @ARGV);
 	my @items;
-	$stateRgx = '^enabled' unless defined $stateRgx;
-	my $units = getUnits('service', $stateRgx);
+	$loadRgx = '^loaded' unless defined $loadRgx;
+	my $units = getUnits('service', $loadRgx);
 	@items = map($units->{$_}, keys %$units) if $units;
 	return printDiscovery(@items);
 }
@@ -126,7 +145,7 @@ __END__
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
 
-B<CPAN> L<https://metacpan.org/pod/Zabbix::Check>
+B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 

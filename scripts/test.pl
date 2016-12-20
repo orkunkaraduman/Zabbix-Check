@@ -29,6 +29,12 @@ use Zabbix::Check::Disk;
 
 exit 0;
 __END__
+=head1 REPOSITORY
+
+B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
+
+B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
+
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>
