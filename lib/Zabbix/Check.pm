@@ -228,6 +228,7 @@ sub _version
 {
 	my $result = "";
 	$result = $Zabbix::Check::VERSION;
+	print $result;
 	return $result;
 }
 
