@@ -49,13 +49,13 @@ BEGIN
 our ($systemctl) = whereisBin('systemctl');
 
 
-sub getUnits
+sub getUnitFiles
 {
 	return unless $systemctl;
 	my ($type, $stateRgx) = @_;
 	my $result = {};
 	my $first = 1;
-	for (`$systemctl list-unit-files`)
+	for (`$systemctl list-unit-files 2>/dev/null`)
 	{
 		chomp;
 		if ($first)
@@ -65,12 +65,41 @@ sub getUnits
 		}
 		last unless s/^\s+|\s+$//gr;
 		my ($unit, $state) = /^(\S+)\s+(\S+)/;
-		my $unitInfo = {
+		my $info = {
 			unit => $unit,
 			state => $state,
 		};
-		($unitInfo->{name}, $unitInfo->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
-		$result->{$unit} = $unitInfo if (not $type or $type eq $unitInfo->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
+		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
+		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
+	}
+	return $result;
+}
+
+sub getUnits
+{
+	return unless $systemctl;
+	my ($type, $loadRgx) = @_;
+	my $result = {};
+	my $first = 1;
+	for (`$systemctl -a list-units 2>/dev/null`)
+	{
+		chomp;
+		if ($first)
+		{
+			$first = 0;
+			next;
+		}
+		last unless s/^\s+|\s+$//gr;
+		my ($unit, $load, $active, $sub, $desc) = /^\.(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/;
+		my $info = {
+			unit => $unit,
+			load => $load,
+			active => $active,
+			sub => $sub,
+			desc => $desc,
+		};
+		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
+		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $loadRgx or $load =~ /$loadRgx/);
 	}
 	return $result;
 }
@@ -97,10 +126,10 @@ sub _system_status
 
 sub _service_discovery
 {
-	my ($stateRgx) = map(zbxDecode($_), @ARGV);
+	my ($loadedRgx) = map(zbxDecode($_), @ARGV);
 	my @items;
-	$stateRgx = '^enabled' unless defined $stateRgx;
-	my $units = getUnits('service', $stateRgx);
+	$loadedRgx = '^loaded' unless defined $loadedRgx;
+	my $units = getUnits('service', $loadedRgx);
 	@items = map($units->{$_}, keys %$units) if $units;
 	return printDiscovery(@items);
 }
