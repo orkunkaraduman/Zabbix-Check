@@ -85,7 +85,7 @@ sub _installed
 sub _system_status
 {
 	my $result = "";
-	my $status = `$systemctl is-system-running >/dev/null 2>&1` if $systemctl;
+	my $status = `$systemctl is-system-running 2>/dev/null` if $systemctl;
 	if (defined $status)
 	{
 		chomp $status;
