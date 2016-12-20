@@ -14,7 +14,7 @@ Zabbix check for Systemd services
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-	UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
@@ -40,7 +40,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_installed _check _service_discovery _service_status);
+	our @EXPORT      = qw(_installed _system_status _service_discovery _service_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -82,13 +82,14 @@ sub _installed
 	return $result;
 }
 
-sub _check
+sub _system_status
 {
-	my $result = 2;
-	if ($systemctl)
+	my $result = "";
+	my $status = `$systemctl is-system-running >/dev/null 2>&1` if $systemctl;
+	if (defined $status)
 	{
-		system "$systemctl is-system-running >/dev/null 2>&1";
-		$result = ($? == 0)? 1: 0;
+		chomp $status;
+		$result = $status;
 	}
 	print $result;
 	return $result;
