@@ -107,7 +107,7 @@ This module requires these other modules and libraries:
 
 **GitHub** [https://github.com/orkunkaraduman/Zabbix-Check](https://github.com/orkunkaraduman/Zabbix-Check)
 
-**CPAN** Lhttps://metacpan.org/release/Zabbix-Check&gt;
+**CPAN** [https://metacpan.org/release/Zabbix-Check](https://metacpan.org/release/Zabbix-Check)
 
 # AUTHOR
 

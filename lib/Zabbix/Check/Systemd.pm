@@ -126,7 +126,7 @@ __END__
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
 
-B<CPAN> Lhttps://metacpan.org/release/Zabbix-Check>
+B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
