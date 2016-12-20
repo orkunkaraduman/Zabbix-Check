@@ -54,15 +54,9 @@ sub getUnitFiles
 	return unless $systemctl;
 	my ($type, $stateRgx) = @_;
 	my $result = {};
-	my $first = 1;
-	for (`$systemctl list-unit-files 2>/dev/null`)
+	for (`$systemctl --no-legend list-unit-files 2>/dev/null`)
 	{
 		chomp;
-		if ($first)
-		{
-			$first = 0;
-			next;
-		}
 		last unless s/^\s+|\s+$//gr;
 		my ($unit, $state) = /^(\S+)\s+(\S+)/;
 		my $info = {
@@ -81,16 +75,11 @@ sub getUnits
 	my ($type, $loadRgx) = @_;
 	my $result = {};
 	my $first = 1;
-	for (`$systemctl -a list-units 2>/dev/null`)
+	for (`$systemctl --no-legend -a list-units 2>/dev/null`)
 	{
 		chomp;
-		if ($first)
-		{
-			$first = 0;
-			next;
-		}
 		last unless s/^\s+|\s+$//gr;
-		my ($unit, $load, $active, $sub, $desc) = /^\.(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/;
+		my ($unit, $load, $active, $sub, $desc) = /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/;
 		my $info = {
 			unit => $unit,
 			load => $load,
@@ -126,10 +115,10 @@ sub _system_status
 
 sub _service_discovery
 {
-	my ($loadedRgx) = map(zbxDecode($_), @ARGV);
+	my ($loadRgx) = map(zbxDecode($_), @ARGV);
 	my @items;
-	$loadedRgx = '^loaded' unless defined $loadedRgx;
-	my $units = getUnits('service', $loadedRgx);
+	$loadRgx = '^loaded' unless defined $loadRgx;
+	my $units = getUnits('service', $loadRgx);
 	@items = map($units->{$_}, keys %$units) if $units;
 	return printDiscovery(@items);
 }
