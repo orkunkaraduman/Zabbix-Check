@@ -5,7 +5,7 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 SYNOPSIS
 
@@ -36,7 +36,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.03';
+	our $VERSION     = '1.04';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -126,7 +126,7 @@ __END__
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
 
-B<CPAN> L<https://metacpan.org/pod/Zabbix::Check>
+B<CPAN> Lhttps://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
