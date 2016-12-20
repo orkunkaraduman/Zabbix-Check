@@ -1,6 +1,10 @@
 1.04	2016-12-20
 		- Changed CPAN repositry info in PODs
 		- Added version info to use by Zabbix Agent
+		- Added conf/zabbix-agentd.conf
+		- Added conf/Template CPAN Zabbix-Check
+		- Improved Systemd
+		- Little fixes
 
 1.03	2016-12-19
 		- sub whereisBin exec test

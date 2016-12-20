@@ -4,6 +4,8 @@ MANIFEST
 Makefile.PL
 README
 README.md
+conf/Template CPAN Zabbix-Check.xml
+conf/zabbix_agentd.conf
 lib/Zabbix/Check.pm
 lib/Zabbix/Check/Disk.pm
 lib/Zabbix/Check/RabbitMQ.pm
