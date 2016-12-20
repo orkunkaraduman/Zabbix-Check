@@ -72,7 +72,7 @@ Zabbix check for Systemd services
 =head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-	UserParameter=cpan.zabbix.check.systemd.check,/usr/bin/perl -MZabbix::Check::Systemd -e_check
+	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
