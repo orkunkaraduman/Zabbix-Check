@@ -59,7 +59,7 @@ sub getVhosts
 	return unless $rabbitmqctl;
 	my $result = {};
 	my $first = 1;
-	for my $line (`$rabbitmqctl list_vhosts`)
+	for my $line (`$rabbitmqctl list_vhosts 2>/dev/null`)
 	{
 		chomp $line;
 		if ($first)
@@ -79,7 +79,7 @@ sub getQueues
 	my ($vhost) = @_;
 	my $result = {};
 	my $first = 1;
-	for my $line (`$rabbitmqctl list_queues -p \"\Q$vhost\E\" name messages_ready messages_unacknowledged messages`)
+	for my $line (`$rabbitmqctl list_queues -p \"\Q$vhost\E\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
 	{
 		chomp $line;
 		if ($first)
