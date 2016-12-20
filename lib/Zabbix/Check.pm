@@ -11,6 +11,10 @@ version 1.04
 
 Zabbix Agent system and service checks
 
+=head3 zabbix_agentd.conf
+
+UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
+
 =head2 Disk
 
 Zabbix check for disk
@@ -139,7 +143,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
