@@ -2,7 +2,7 @@ NAME
     Zabbix::Check - Zabbix Agent system and service checks
 
 VERSION
-    version 1.04
+    version 1.05
 
 SYNOPSIS
     Zabbix Agent system and service checks
@@ -94,6 +94,8 @@ DEPENDENCIES
     *   File::Slurp
 
     *   JSON
+
+    *   Lazy::Utils
 
 REPOSITORY
     GitHub <https://github.com/orkunkaraduman/Zabbix-Check>
