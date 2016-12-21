@@ -80,51 +80,6 @@ B<service_status $1>
 
 $1 I<Service name>
 
-=head1 INSTALLATION
-
-To install this module type the following
-
-	perl Makefile.PL
-	make
-	make test
-	make install
-
-from CPAN
-
-	cpan -i Zabbix::Check
-
-=head1 DEPENDENCIES
-
-This module requires these other modules and libraries:
-
-=over
-
-=item *
-
-Switch
-
-=item *
-
-FindBin
-
-=item *
-
-Cwd
-
-=item *
-
-File::Basename
-
-=item *
-
-File::Slurp
-
-=item *
-
-JSON
-
-=back
-
 =cut
 use strict;
 use warnings;
@@ -238,6 +193,51 @@ die "OS '$osname' is not supported" unless $osname eq 'linux';
 
 1;
 __END__
+=head1 INSTALLATION
+
+To install this module type the following
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+from CPAN
+
+	cpan -i Zabbix::Check
+
+=head1 DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+=over
+
+=item *
+
+Switch
+
+=item *
+
+FindBin
+
+=item *
+
+Cwd
+
+=item *
+
+File::Basename
+
+=item *
+
+File::Slurp
+
+=item *
+
+JSON
+
+=back
+
 =head1 REPOSITORY
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
