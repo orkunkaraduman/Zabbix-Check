@@ -236,6 +236,10 @@ File::Slurp
 
 JSON
 
+=item *
+
+Lazy::Utils
+
 =back
 
 =head1 REPOSITORY
