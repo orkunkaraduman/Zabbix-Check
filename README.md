@@ -4,7 +4,7 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
-version 1.04
+version 1.05
 
 # SYNOPSIS
 
@@ -102,6 +102,7 @@ This module requires these other modules and libraries:
 - File::Basename
 - File::Slurp
 - JSON
+- Lazy::Utils
 
 # REPOSITORY
 

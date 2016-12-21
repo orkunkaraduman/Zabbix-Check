@@ -5,7 +5,7 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 SYNOPSIS
 
@@ -80,51 +80,6 @@ B<service_status $1>
 
 $1 I<Service name>
 
-=head1 INSTALLATION
-
-To install this module type the following
-
-	perl Makefile.PL
-	make
-	make test
-	make install
-
-from CPAN
-
-	cpan -i Zabbix::Check
-
-=head1 DEPENDENCIES
-
-This module requires these other modules and libraries:
-
-=over
-
-=item *
-
-Switch
-
-=item *
-
-FindBin
-
-=item *
-
-Cwd
-
-=item *
-
-File::Basename
-
-=item *
-
-File::Slurp
-
-=item *
-
-JSON
-
-=back
-
 =cut
 use strict;
 use warnings;
@@ -132,14 +87,20 @@ no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 use Config;
+use Switch;
+use FindBin;
+use Cwd;
+use File::Basename;
+use File::Slurp;
 use JSON;
+use Lazy::Utils;
 
 
 BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.05';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -238,6 +199,55 @@ die "OS '$osname' is not supported" unless $osname eq 'linux';
 
 1;
 __END__
+=head1 INSTALLATION
+
+To install this module type the following
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+from CPAN
+
+	cpan -i Zabbix::Check
+
+=head1 DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+=over
+
+=item *
+
+Switch
+
+=item *
+
+FindBin
+
+=item *
+
+Cwd
+
+=item *
+
+File::Basename
+
+=item *
+
+File::Slurp
+
+=item *
+
+JSON
+
+=item *
+
+Lazy::Utils
+
+=back
+
 =head1 REPOSITORY
 
 B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>

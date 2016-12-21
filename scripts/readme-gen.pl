@@ -1,7 +1,7 @@
 #! /usr/bin/perl
 =head1 NAME
 
-gen_readme.pl - Generate README and MANIFEST
+readme-gen.pl - generates README and MANIFEST
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version not defined
 
 =head1 SYNOPSIS
 
-Generate README and MANIFEST
+generates README and MANIFEST
 
 =cut
 use strict;

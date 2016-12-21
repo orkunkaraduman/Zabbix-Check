@@ -5,7 +5,7 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 SYNOPSIS
 
@@ -33,6 +33,7 @@ use warnings;
 no warnings qw(qw utf8);
 use v5.14;
 use utf8;
+use Lazy::Utils;
 
 use Zabbix::Check;
 
@@ -41,7 +42,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.05';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -77,9 +78,10 @@ sub getQueues
 {
 	return unless $rabbitmqctl;
 	my ($vhost) = @_;
+	my $vhostS = shellmeta($vhost);
 	my $result = {};
 	my $first = 1;
-	for my $line (`$rabbitmqctl list_queues -p \"\Q$vhost\E\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
+	for my $line (`$rabbitmqctl list_queues -p \"$vhostS\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
 	{
 		chomp $line;
 		if ($first)

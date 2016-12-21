@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2016-12-20T20:31:52Z</date>
+    <date>2016-12-21T13:54:03Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -109,7 +109,7 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.check</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -195,7 +195,7 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.supervisor.check</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -324,7 +324,7 @@
                     <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.systemd.system_status</key>
-                    <delay>30</delay>
+                    <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
                     <status>0</status>
@@ -990,7 +990,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.queue_discovery</key>
-                    <delay>600</delay>
+                    <delay>3600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1024,7 +1024,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1067,7 +1067,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1110,7 +1110,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1157,7 +1157,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.vhost_discovery</key>
-                    <delay>600</delay>
+                    <delay>3600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1194,7 +1194,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.supervisor.worker_discovery</key>
-                    <delay>60</delay>
+                    <delay>600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1294,7 +1294,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.systemd.service_discovery</key>
-                    <delay>60</delay>
+                    <delay>600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1328,7 +1328,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_active[{#NAME}]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1365,56 +1365,13 @@
                             <logtimefmt/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Systemd service {#NAME} availability for 1d</name>
-                            <type>15</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.systemd.service_availability_1d[{#NAME}]</key>
-                            <delay>30</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 1d)/86400</params>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Systemd</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
-                        </item_prototype>
-                        <item_prototype>
                             <name>Systemd service {#NAME} availability for 1h</name>
                             <type>15</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_availability_1h[{#NAME}]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1451,13 +1408,56 @@
                             <logtimefmt/>
                         </item_prototype>
                         <item_prototype>
+                            <name>Systemd service {#NAME} availability for 24h</name>
+                            <type>15</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>cpan.zabbix.check.systemd.service_availability_24h[{#NAME}]</key>
+                            <delay>60</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units>%</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 24h)/86400</params>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>Systemd</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                        </item_prototype>
+                        <item_prototype>
                             <name>Systemd service {#NAME} status</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_status[{#NAME}]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1496,7 +1496,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1d[{#NAME}].last()}</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}</expression>
                             <name>Systemd service {#NAME} availability low</name>
                             <url/>
                             <status>0</status>
@@ -1563,7 +1563,7 @@
                                     <type>0</type>
                                     <item>
                                         <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.systemd.service_availability_1d[{#NAME}]</key>
+                                        <key>cpan.zabbix.check.systemd.service_availability_24h[{#NAME}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -1584,7 +1584,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.version.last()} &lt; 1.04</expression>
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.version.last()} &lt; 1.05</expression>
             <name>CPAN Zabbix-Check version not up to date</name>
             <url/>
             <status>0</status>

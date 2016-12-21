@@ -11,6 +11,6 @@ lib/Zabbix/Check/Disk.pm
 lib/Zabbix/Check/RabbitMQ.pm
 lib/Zabbix/Check/Supervisor.pm
 lib/Zabbix/Check/Systemd.pm
-scripts/gen_readme.pl
+scripts/readme-gen.pl
 scripts/test.pl
 t/Zabbix-Check.t

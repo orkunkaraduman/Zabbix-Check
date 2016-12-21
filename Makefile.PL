@@ -14,11 +14,12 @@ WriteMakefile(
 		'File::Basename' => 0,
 		'File::Slurp' => 0,
 		'JSON' => 0,
+		'Lazy::Utils' => '1.01',
 	},
 	EXE_FILES			=> [qw(
 	)],
 	AUTHOR				=> 'Orkun Karaduman <orkunkaraduman@gmail.com>',
-	ABSTRACT			=> 'Zabbix checks',
+	ABSTRACT			=> 'Zabbix Agent system and service checks',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {

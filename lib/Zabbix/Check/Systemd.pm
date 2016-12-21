@@ -5,7 +5,7 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 SYNOPSIS
 
@@ -28,6 +28,7 @@ use warnings;
 no warnings qw(qw utf8);
 use v5.14;
 use utf8;
+use Lazy::Utils;
 
 use Zabbix::Check;
 
@@ -36,7 +37,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.05';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -127,8 +128,9 @@ sub _service_status
 {
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
+	my $nameS = shellmeta($name);
 	my $result = "";
-	my $status = `$systemctl is-active \"\Q$name\E.service\" 2>/dev/null` if $systemctl;
+	my $status = `$systemctl is-active \"$nameS.service\" 2>/dev/null` if $systemctl;
 	if (defined $status)
 	{
 		chomp $status;
