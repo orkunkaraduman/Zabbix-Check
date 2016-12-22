@@ -128,12 +128,12 @@ SYNOPSIS
             UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
 
    epoch
-    gets system time epoch
+    gets system time epoch in seconds
 
    zone
     gets system time zone, eg: +0200
 
-   ntp_offset
+   ntp_offset $1 $2
     gets system time difference by NTP server
 
     $1: *server, by defaut pool.ntp.org*

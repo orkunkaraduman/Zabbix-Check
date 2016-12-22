@@ -28,6 +28,7 @@ use Zabbix::Check::Disk;
 use Zabbix::Check::Supervisor;
 use Zabbix::Check::RabbitMQ;
 use Zabbix::Check::Systemd;
+use Zabbix::Check::Time;
 
 
 exit 0;

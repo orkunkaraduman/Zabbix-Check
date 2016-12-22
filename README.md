@@ -153,13 +153,13 @@ Zabbix check for system time
 
 ### epoch
 
-gets system time epoch
+gets system time epoch in seconds
 
 ### zone
 
 gets system time zone, eg: +0200
 
-### ntp\_offset
+### ntp\_offset $1 $2
 
 gets system time difference by NTP server
 
