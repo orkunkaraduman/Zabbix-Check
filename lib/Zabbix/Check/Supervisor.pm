@@ -30,7 +30,7 @@ discovers Supervisor workers
 
 =head3 worker_status $1
 
-gets Supervisor worker status
+gets Supervisor worker status: RUNNING | STOPPED | ...
 
 $1: I<worker name>
 
@@ -40,6 +40,7 @@ use warnings;
 no warnings qw(qw utf8);
 use v5.14;
 use utf8;
+use Lazy::Utils;
 
 use Zabbix::Check;
 
@@ -106,9 +107,15 @@ sub _worker_status
 {
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
+	my $nameS = shellmeta($name);
 	my $result = "";
-	my $statuses = getStatuses();
-	$result = $statuses->{$name} if defined($statuses->{$name});
+	my $line = `$supervisorctl status \"$nameS\" 2>/dev/null` if $supervisorctl;
+	if ($line)
+	{
+		chomp $line;
+		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
+		$result = $status if $status;
+	}
 	print $result;
 	return $result;	
 }

@@ -45,6 +45,8 @@ SYNOPSIS
     $2: *type: read|write|total*
 
   Supervisor
+    Zabbix check for Supervisor service
+
             UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
             UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
             UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
@@ -60,7 +62,7 @@ SYNOPSIS
     discovers Supervisor workers
 
    worker_status $1
-    gets Supervisor worker status
+    gets Supervisor worker status: RUNNING | STOPPED | ...
 
     $1: *worker name*
 
@@ -74,7 +76,7 @@ SYNOPSIS
             UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
    installed
-    checks RabbitMQ is installed: 1 | 0
+    checks RabbitMQ is installed: 0 | 1
 
    running
     checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
@@ -114,7 +116,7 @@ SYNOPSIS
 
    service_status $1
     gets Systemd enabled service status: active | inactive | failed |
-    unknown
+    unknown | ...
 
     $1: *service name*
 

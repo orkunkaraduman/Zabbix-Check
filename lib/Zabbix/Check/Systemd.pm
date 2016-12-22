@@ -30,7 +30,7 @@ discovers Systemd enabled services
 
 =head3 service_status $1
 
-gets Systemd enabled service status: active | inactive | failed | unknown
+gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
 $1: I<service name>
 
@@ -116,11 +116,11 @@ sub _installed
 sub _system_status
 {
 	my $result = "";
-	my $status = `$systemctl is-system-running 2>/dev/null` if $systemctl;
-	if (defined $status)
+	my $line = `$systemctl is-system-running 2>/dev/null` if $systemctl;
+	if ($line)
 	{
-		chomp $status;
-		$result = $status;
+		chomp $line;
+		$result = $line;
 	}
 	print $result;
 	return $result;
@@ -142,11 +142,11 @@ sub _service_status
 	return unless $name;
 	my $nameS = shellmeta($name);
 	my $result = "";
-	my $status = `$systemctl is-active \"$nameS.service\" 2>/dev/null` if $systemctl;
-	if (defined $status)
+	my $line = `$systemctl is-active \"$nameS.service\" 2>/dev/null` if $systemctl;
+	if ($line)
 	{
-		chomp $status;
-		$result = $status;
+		chomp $line;
+		$result = $line;
 	}
 	print $result;
 	return $result;

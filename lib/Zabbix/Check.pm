@@ -56,6 +56,8 @@ $2: I<type: read|write|total>
 
 =head2 Supervisor
 
+Zabbix check for Supervisor service
+
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
 	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
@@ -75,7 +77,7 @@ discovers Supervisor workers
 
 =head3 worker_status $1
 
-gets Supervisor worker status
+gets Supervisor worker status: RUNNING | STOPPED | ...
 
 $1: I<worker name>
 
@@ -91,7 +93,7 @@ Zabbix check for RabbitMQ service
 
 =head3 installed
 
-checks RabbitMQ is installed: 1 | 0
+checks RabbitMQ is installed: 0 | 1
 
 =head3 running
 
@@ -138,7 +140,7 @@ discovers Systemd enabled services
 
 =head3 service_status $1
 
-gets Systemd enabled service status: active | inactive | failed | unknown
+gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
 $1: I<service name>
 
