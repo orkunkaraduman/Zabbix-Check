@@ -1,7 +1,7 @@
 #! /usr/bin/perl
 =head1 NAME
 
-readme-gen.pl - generates README and MANIFEST
+test.pl - for internal tests
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version not defined
 
 =head1 SYNOPSIS
 
-generates README and MANIFEST
+for internal tests
 
 =cut
 use strict;
@@ -20,16 +20,14 @@ use utf8;
 use open qw(:std :locale);
 use Config;
 use FindBin;
-use Cwd;
+use Data::Dumper;
 
-
-my $base = "${FindBin::Bin}/..";
-cwd($base);
-
-
-system('pod2markdown --html-encode-chars 1 lib/Zabbix/Check.pm > README.md');
-system('pod2text lib/Zabbix/Check.pm > README');
-system('git ls-files | grep -v "^\.gitignore" > MANIFEST');
+use lib "${FindBin::Bin}/../lib";
+use Zabbix::Check;
+use Zabbix::Check::Disk;
+use Zabbix::Check::Supervisor;
+use Zabbix::Check::RabbitMQ;
+use Zabbix::Check::Systemd;
 
 
 exit 0;
