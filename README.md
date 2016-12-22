@@ -4,7 +4,7 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 # VERSION
 
-version 1.06
+version 1.07
 
 # SYNOPSIS
 

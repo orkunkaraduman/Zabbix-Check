@@ -1,3 +1,6 @@
+1.07	2016-12-22
+		- Hotfix for Supervisor worker status
+
 1.06	2016-12-22
 		- Added distribution generator
 		- _check -> _running

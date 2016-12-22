@@ -5,7 +5,7 @@ Zabbix::Check::Supervisor - Zabbix check for Supervisor service
 
 =head1 VERSION
 
-version 1.06
+version 1.07
 
 =head1 SYNOPSIS
 
@@ -49,7 +49,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.07';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -113,7 +113,7 @@ sub _worker_status
 	if ($line)
 	{
 		chomp $line;
-		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
+		my ($name, $status) = /^(\S+)\s+(\S+)\s*/ =~ $line;
 		$result = $status if $status;
 	}
 	print $result;
