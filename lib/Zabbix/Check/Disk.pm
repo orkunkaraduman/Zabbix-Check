@@ -5,22 +5,44 @@ Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
-version 1.04
+version 1.06
 
 =head1 SYNOPSIS
 
 Zabbix check for disk
-
-=head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
 	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
 	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
 	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
 
-$1 I<Device name eg: sda, sdb1, dm-3, ...>
+=head3 discovery
 
-$2 I<Type: read|write|total>
+discovers disks
+
+=head3 bps
+
+gets disk I/O traffic in bytes per second
+
+$1: I<device name eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
+
+=head3 iops
+
+gets disk I/O transaction speed in transactions per second
+
+$1: I<device name eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
+
+=head3 ioutil
+
+gets disk I/O utilization in percentage
+
+$1: I<device name eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
 
 =cut
 use strict;
@@ -38,7 +60,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.06';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default

@@ -5,22 +5,34 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.05
+version 1.06
 
 =head1 SYNOPSIS
 
 Zabbix check for Systemd services
-
-=head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
 	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
-B<service_status $1>
+=head3 installed
 
-$1 I<Service name>
+checks Systemd is installed: 0 | 1
+
+=head3 system_status
+
+gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
+
+=head3 service_discovery
+
+discovers Systemd enabled services
+
+=head3 service_status $1
+
+gets Systemd service status: active | inactive | failed | unknown
+
+$1: I<service name>
 
 =cut
 use strict;
@@ -37,7 +49,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.05';
+	our $VERSION     = '1.06';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default

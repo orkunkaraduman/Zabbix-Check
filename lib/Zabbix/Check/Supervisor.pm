@@ -5,22 +5,34 @@ Zabbix::Check::Supervisor - Zabbix check for Supervisor service
 
 =head1 VERSION
 
-version 1.04
+version 1.06
 
 =head1 SYNOPSIS
 
 Zabbix check for Supervisor service
 
-=head3 zabbix_agentd.conf
-
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
-	UserParameter=cpan.zabbix.check.supervisor.check,/usr/bin/perl -MZabbix::Check::Supervisor -e_check
+	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
 	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
 
-B<worker_status $1>
+=head3 installed
 
-$1 I<Worker name>
+checks Supervisor is installed: 0 | 1
+
+=head3 running
+
+checks Supervisor is installed and running: 0 | 1 | 2 = not installed
+
+=head3 worker_discovery
+
+discovers Supervisor workers
+
+=head3 worker_status $1
+
+gets Supervisor worker status
+
+$1: I<worker name>
 
 =cut
 use strict;
@@ -36,11 +48,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.04';
+	our $VERSION     = '1.06';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_installed _check _worker_discovery _worker_status);
+	our @EXPORT      = qw(_installed _running _worker_discovery _worker_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -70,7 +82,7 @@ sub _installed
 	return $result;
 }
 
-sub _check
+sub _running
 {
 	my $result = 2;
 	if ($supervisorctl)

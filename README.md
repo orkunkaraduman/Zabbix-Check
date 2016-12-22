@@ -18,66 +18,126 @@ UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e\_versio
 
 Zabbix check for disk
 
-### zabbix\_agentd.conf
-
         UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
         UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
         UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
         UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
 
-$1 _Device name eg: sda, sdb1, dm-3, ..._
+### discovery
 
-$2 _Type: read|write|total_
+discovers disks
+
+### bps
+
+gets disk I/O traffic in bytes per second
+
+$1: _device name eg: sda, sdb1, dm-3, ..._
+
+$2: _type: read|write|total_
+
+### iops
+
+gets disk I/O transaction speed in transactions per second
+
+$1: _device name eg: sda, sdb1, dm-3, ..._
+
+$2: _type: read|write|total_
+
+### ioutil
+
+gets disk I/O utilization in percentage
+
+$1: _device name eg: sda, sdb1, dm-3, ..._
+
+$2: _type: read|write|total_
 
 ## Supervisor
 
-Zabbix check for Supervisor service
-
-### zabbix\_agentd.conf
-
         UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
-        UserParameter=cpan.zabbix.check.supervisor.check,/usr/bin/perl -MZabbix::Check::Supervisor -e_check
+        UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
         UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
         UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
 
-**worker\_status $1**
+### installed
 
-$1 _Worker name_
+checks Supervisor is installed: 0 | 1
+
+### running
+
+checks Supervisor is installed and running: 0 | 1 | 2 = not installed
+
+### worker\_discovery
+
+discovers Supervisor workers
+
+### worker\_status $1
+
+gets Supervisor worker status
+
+$1: _worker name_
 
 ## RabbitMQ
 
 Zabbix check for RabbitMQ service
 
-### zabbix\_agentd.conf
-
         UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
-        UserParameter=cpan.zabbix.check.rabbitmq.check,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_check
+        UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
         UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
         UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
         UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
-**queue\_status $1 $2 $3**
+### installed
 
-$1 _Vhost name_
+checks RabbitMQ is installed: 1 | 0
 
-$2 _Queue name_
+### running
 
-$3 _Type: ready|unacked|total_
+checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
+
+### vhost\_discovery
+
+discovers RabbitMQ vhosts
+
+### queue\_discovery
+
+discovers RabbitMQ queues
+
+### queue\_status $1 $2 $3
+
+gets RabbitMQ queue status
+
+$1: _vhost name_
+
+$2: _queue name_
+
+$3: _type: ready|unacked|total_
 
 ## Systemd
 
 Zabbix check for Systemd services
-
-### zabbix\_agentd.conf
 
         UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
         UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
         UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
         UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
-**service\_status $1**
+### installed
 
-$1 _Service name_
+checks Systemd is installed: 0 | 1
+
+### system\_status
+
+gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
+
+### service\_discovery
+
+discovers Systemd enabled services
+
+### service\_status $1
+
+gets Systemd service status: active | inactive | failed | unknown
+
+$1: _service name_
 
 # INSTALLATION
 
