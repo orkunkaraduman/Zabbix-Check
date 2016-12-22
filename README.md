@@ -10,9 +10,11 @@ version 1.06
 
 Zabbix Agent system and service checks
 
-### zabbix\_agentd.conf
+        UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
-UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e\_version
+### version
+
+gets Zabbix::Check version
 
 ## Disk
 
@@ -135,7 +137,7 @@ discovers Systemd enabled services
 
 ### service\_status $1
 
-gets Systemd service status: active | inactive | failed | unknown
+gets Systemd enabled service status: active | inactive | failed | unknown
 
 $1: _service name_
 

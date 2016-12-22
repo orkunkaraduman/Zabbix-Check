@@ -30,7 +30,7 @@ discovers Systemd enabled services
 
 =head3 service_status $1
 
-gets Systemd service status: active | inactive | failed | unknown
+gets Systemd enabled service status: active | inactive | failed | unknown
 
 $1: I<service name>
 
