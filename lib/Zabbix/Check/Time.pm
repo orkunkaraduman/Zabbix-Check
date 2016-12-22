@@ -17,13 +17,13 @@ Zabbix check for system time
 
 =head3 epoch
 
-gets system time epoch
+gets system time epoch in seconds
 
 =head3 zone
 
 gets system time zone, eg: +0200
 
-=head3 ntp_offset
+=head3 ntp_offset $1 $2
 
 gets system time difference by NTP server
 
