@@ -34,7 +34,7 @@ discovers disks
 
 gets disk I/O traffic in bytes per second
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 
@@ -42,7 +42,7 @@ $2: I<type: read|write|total>
 
 gets disk I/O transaction speed in transactions per second
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 
@@ -50,7 +50,7 @@ $2: I<type: read|write|total>
 
 gets disk I/O utilization in percentage
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 
@@ -144,6 +144,30 @@ gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
 $1: I<service name>
 
+=head2 Time
+
+Zabbix check for system time
+
+	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
+
+=head3 epoch
+
+gets system time epoch
+
+=head3 zone
+
+gets system time zone, eg: +0200
+
+=head3 ntp_offset
+
+gets system time difference by NTP server
+
+$1: I<server, by defaut pool.ntp.org>
+
+$2: I<port, by default 123>
+
 =cut
 use strict;
 use warnings;
@@ -157,6 +181,7 @@ use Cwd;
 use File::Basename;
 use File::Slurp;
 use JSON;
+use Net::NTP;
 use Lazy::Utils;
 
 
@@ -259,7 +284,7 @@ sub _version
 
 
 my $osname = $Config{osname};
-die "OS '$osname' is not supported" unless $osname eq 'linux';
+warn "OS '$osname' is not supported" unless $osname eq 'linux';
 
 1;
 __END__
@@ -305,6 +330,10 @@ File::Slurp
 =item *
 
 JSON
+
+=item *
+
+Net::NTP
 
 =item *
 

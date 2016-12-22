@@ -26,21 +26,21 @@ SYNOPSIS
    bps $1 $2
     gets disk I/O traffic in bytes per second
 
-    $1: *device name eg: sda, sdb1, dm-3, ...*
+    $1: *device name, eg: sda, sdb1, dm-3, ...*
 
     $2: *type: read|write|total*
 
    iops $1 $2
     gets disk I/O transaction speed in transactions per second
 
-    $1: *device name eg: sda, sdb1, dm-3, ...*
+    $1: *device name, eg: sda, sdb1, dm-3, ...*
 
     $2: *type: read|write|total*
 
    ioutil $1 $2
     gets disk I/O utilization in percentage
 
-    $1: *device name eg: sda, sdb1, dm-3, ...*
+    $1: *device name, eg: sda, sdb1, dm-3, ...*
 
     $2: *type: read|write|total*
 
@@ -120,6 +120,26 @@ SYNOPSIS
 
     $1: *service name*
 
+  Time
+    Zabbix check for system time
+
+            UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+            UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+            UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
+
+   epoch
+    gets system time epoch
+
+   zone
+    gets system time zone, eg: +0200
+
+   ntp_offset
+    gets system time difference by NTP server
+
+    $1: *server, by defaut pool.ntp.org*
+
+    $2: *port, by default 123*
+
 INSTALLATION
     To install this module type the following
 
@@ -146,6 +166,8 @@ DEPENDENCIES
     *   File::Slurp
 
     *   JSON
+
+    *   Net::NTP
 
     *   Lazy::Utils
 

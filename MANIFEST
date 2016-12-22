@@ -6,6 +6,7 @@ lib/Zabbix/Check/Disk.pm
 lib/Zabbix/Check/RabbitMQ.pm
 lib/Zabbix/Check/Supervisor.pm
 lib/Zabbix/Check/Systemd.pm
+lib/Zabbix/Check/Time.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files

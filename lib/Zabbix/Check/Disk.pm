@@ -24,7 +24,7 @@ discovers disks
 
 gets disk I/O traffic in bytes per second
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 
@@ -32,7 +32,7 @@ $2: I<type: read|write|total>
 
 gets disk I/O transaction speed in transactions per second
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 
@@ -40,7 +40,7 @@ $2: I<type: read|write|total>
 
 gets disk I/O utilization in percentage
 
-$1: I<device name eg: sda, sdb1, dm-3, ...>
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 $2: I<type: read|write|total>
 

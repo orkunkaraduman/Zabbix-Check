@@ -33,7 +33,7 @@ discovers disks
 
 gets disk I/O traffic in bytes per second
 
-$1: _device name eg: sda, sdb1, dm-3, ..._
+$1: _device name, eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
@@ -41,7 +41,7 @@ $2: _type: read|write|total_
 
 gets disk I/O transaction speed in transactions per second
 
-$1: _device name eg: sda, sdb1, dm-3, ..._
+$1: _device name, eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
@@ -49,7 +49,7 @@ $2: _type: read|write|total_
 
 gets disk I/O utilization in percentage
 
-$1: _device name eg: sda, sdb1, dm-3, ..._
+$1: _device name, eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
@@ -143,6 +143,30 @@ gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
 $1: _service name_
 
+## Time
+
+Zabbix check for system time
+
+        UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+        UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+        UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
+
+### epoch
+
+gets system time epoch
+
+### zone
+
+gets system time zone, eg: +0200
+
+### ntp\_offset
+
+gets system time difference by NTP server
+
+$1: _server, by defaut pool.ntp.org_
+
+$2: _port, by default 123_
+
 # INSTALLATION
 
 To install this module type the following
@@ -166,6 +190,7 @@ This module requires these other modules and libraries:
 - File::Basename
 - File::Slurp
 - JSON
+- Net::NTP
 - Lazy::Utils
 
 # REPOSITORY
