@@ -14,7 +14,8 @@ WriteMakefile(
 		'File::Basename' => 0,
 		'File::Slurp' => 0,
 		'JSON' => 0,
-		'Lazy::Utils' => '1.01',
+		'Net::NTP' => 0,
+		'Lazy::Utils' => '1.02',
 	},
 	EXE_FILES			=> [qw(
 	)],

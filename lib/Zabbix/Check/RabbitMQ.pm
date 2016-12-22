@@ -5,27 +5,43 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.05
+version 1.06
 
 =head1 SYNOPSIS
 
 Zabbix check for RabbitMQ service
 
-=head3 zabbix_agentd.conf
-
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
-	UserParameter=cpan.zabbix.check.rabbitmq.check,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_check
+	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
 	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
-B<queue_status $1 $2 $3>
+=head3 installed
 
-$1 I<Vhost name>
+checks RabbitMQ is installed: 0 | 1
 
-$2 I<Queue name>
+=head3 running
 
-$3 I<Type: ready|unacked|total>
+checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
+
+=head3 vhost_discovery
+
+discovers RabbitMQ vhosts
+
+=head3 queue_discovery
+
+discovers RabbitMQ queues
+
+=head3 queue_status $1 $2 $3
+
+gets RabbitMQ queue status
+
+$1: I<vhost name>
+
+$2: I<queue name>
+
+$3: I<type: ready|unacked|total>
 
 =cut
 use strict;
@@ -42,11 +58,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.05';
+	our $VERSION     = '1.06';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(_installed _check _vhost_discovery _queue_discovery _queue_status);
+	our @EXPORT      = qw(_installed _running _vhost_discovery _queue_discovery _queue_status);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -102,7 +118,7 @@ sub _installed
 	return $result;
 }
 
-sub _check
+sub _running
 {
 	my $result = 2;
 	if ($rabbitmqctl)

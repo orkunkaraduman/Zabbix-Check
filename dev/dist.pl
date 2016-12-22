@@ -1,7 +1,7 @@
 #! /usr/bin/perl
 =head1 NAME
 
-test.pl - for internal tests
+dist.pl - distribution generator
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version not defined
 
 =head1 SYNOPSIS
 
-for internal tests
+distribution generator
 
 =cut
 use strict;
@@ -20,12 +20,19 @@ use utf8;
 use open qw(:std :locale);
 use Config;
 use FindBin;
-use Data::Dumper;
+use Cwd;
 
-use lib "${FindBin::Bin}/../lib";
-use Zabbix::Check;
-use Zabbix::Check::Disk;
 
+my $module = "Zabbix::Check";
+my $modulePath = "lib/" . $module =~ s/\:\:/\//gr . ".pm";
+my $base = "${FindBin::Bin}/..";
+cwd($base);
+
+system("perl Makefile.PL");
+system("pod2markdown --html-encode-chars 1 $modulePath > README.md");
+system("pod2text $modulePath > README");
+system("rm MANIFEST; make manifest");
+system("make dist");
 
 exit 0;
 __END__

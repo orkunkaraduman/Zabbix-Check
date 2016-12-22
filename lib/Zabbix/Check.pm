@@ -5,80 +5,168 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 =head1 VERSION
 
-version 1.05
+version 1.06
 
 =head1 SYNOPSIS
 
 Zabbix Agent system and service checks
 
-=head3 zabbix_agentd.conf
+	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
-UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
+=head3 version
+
+gets Zabbix::Check version
 
 =head2 Disk
 
 Zabbix check for disk
-
-=head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
 	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
 	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
 	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
 
-$1 I<Device name eg: sda, sdb1, dm-3, ...>
+=head3 discovery
 
-$2 I<Type: read|write|total>
+discovers disks
+
+=head3 bps $1 $2
+
+gets disk I/O traffic in bytes per second
+
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
+
+=head3 iops $1 $2
+
+gets disk I/O transaction speed in transactions per second
+
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
+
+=head3 ioutil $1 $2
+
+gets disk I/O utilization in percentage
+
+$1: I<device name, eg: sda, sdb1, dm-3, ...>
+
+$2: I<type: read|write|total>
 
 =head2 Supervisor
 
 Zabbix check for Supervisor service
 
-=head3 zabbix_agentd.conf
-
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
-	UserParameter=cpan.zabbix.check.supervisor.check,/usr/bin/perl -MZabbix::Check::Supervisor -e_check
+	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
 	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
 
-B<worker_status $1>
+=head3 installed
 
-$1 I<Worker name>
+checks Supervisor is installed: 0 | 1
+
+=head3 running
+
+checks Supervisor is installed and running: 0 | 1 | 2 = not installed
+
+=head3 worker_discovery
+
+discovers Supervisor workers
+
+=head3 worker_status $1
+
+gets Supervisor worker status: RUNNING | STOPPED | ...
+
+$1: I<worker name>
 
 =head2 RabbitMQ
 
 Zabbix check for RabbitMQ service
 
-=head3 zabbix_agentd.conf
-
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
-	UserParameter=cpan.zabbix.check.rabbitmq.check,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_check
+	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
 	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
-B<queue_status $1 $2 $3>
+=head3 installed
 
-$1 I<Vhost name>
+checks RabbitMQ is installed: 0 | 1
 
-$2 I<Queue name>
+=head3 running
 
-$3 I<Type: ready|unacked|total>
+checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
+
+=head3 vhost_discovery
+
+discovers RabbitMQ vhosts
+
+=head3 queue_discovery
+
+discovers RabbitMQ queues
+
+=head3 queue_status $1 $2 $3
+
+gets RabbitMQ queue status
+
+$1: I<vhost name>
+
+$2: I<queue name>
+
+$3: I<type: ready|unacked|total>
 
 =head2 Systemd
 
 Zabbix check for Systemd services
-
-=head3 zabbix_agentd.conf
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
 	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
 
-B<service_status $1>
+=head3 installed
 
-$1 I<Service name>
+checks Systemd is installed: 0 | 1
+
+=head3 system_status
+
+gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
+
+=head3 service_discovery
+
+discovers Systemd enabled services
+
+=head3 service_status $1
+
+gets Systemd enabled service status: active | inactive | failed | unknown | ...
+
+$1: I<service name>
+
+=head2 Time
+
+Zabbix check for system time
+
+	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
+
+=head3 epoch
+
+gets system time epoch in seconds
+
+=head3 zone
+
+gets system time zone, eg: +0200
+
+=head3 ntp_offset $1 $2
+
+gets system time difference by NTP server
+
+$1: I<server, by defaut pool.ntp.org>
+
+$2: I<port, by default 123>
 
 =cut
 use strict;
@@ -93,6 +181,7 @@ use Cwd;
 use File::Basename;
 use File::Slurp;
 use JSON;
+use Net::NTP;
 use Lazy::Utils;
 
 
@@ -100,7 +189,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.05';
+	our $VERSION     = '1.06';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -195,7 +284,7 @@ sub _version
 
 
 my $osname = $Config{osname};
-die "OS '$osname' is not supported" unless $osname eq 'linux';
+warn "OS '$osname' is not supported" unless $osname eq 'linux';
 
 1;
 __END__
@@ -241,6 +330,10 @@ File::Slurp
 =item *
 
 JSON
+
+=item *
+
+Net::NTP
 
 =item *
 

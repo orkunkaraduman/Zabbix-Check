@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 
 BEGIN
@@ -11,4 +11,5 @@ BEGIN
 	use_ok('Zabbix::Check::Supervisor');
 	use_ok('Zabbix::Check::RabbitMQ');
 	use_ok('Zabbix::Check::Systemd');
+	use_ok('Zabbix::Check::Time');
 }
