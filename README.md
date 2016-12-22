@@ -29,7 +29,7 @@ Zabbix check for disk
 
 discovers disks
 
-### bps
+### bps $1 $2
 
 gets disk I/O traffic in bytes per second
 
@@ -37,7 +37,7 @@ $1: _device name eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
-### iops
+### iops $1 $2
 
 gets disk I/O transaction speed in transactions per second
 
@@ -45,7 +45,7 @@ $1: _device name eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
-### ioutil
+### ioutil $1 $2
 
 gets disk I/O utilization in percentage
 

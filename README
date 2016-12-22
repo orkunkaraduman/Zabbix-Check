@@ -23,21 +23,21 @@ SYNOPSIS
    discovery
     discovers disks
 
-   bps
+   bps $1 $2
     gets disk I/O traffic in bytes per second
 
     $1: *device name eg: sda, sdb1, dm-3, ...*
 
     $2: *type: read|write|total*
 
-   iops
+   iops $1 $2
     gets disk I/O transaction speed in transactions per second
 
     $1: *device name eg: sda, sdb1, dm-3, ...*
 
     $2: *type: read|write|total*
 
-   ioutil
+   ioutil $1 $2
     gets disk I/O utilization in percentage
 
     $1: *device name eg: sda, sdb1, dm-3, ...*
