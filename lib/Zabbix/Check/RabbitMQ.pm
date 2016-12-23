@@ -29,13 +29,13 @@ checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
 discovers RabbitMQ vhosts
 
-$1: I<expiry in seconds, by default 0>
+$1: I<cache expiry in seconds, by default 0>
 
 =head3 queue_discovery $1
 
 discovers RabbitMQ queues
 
-$1: I<expiry in seconds, by default 0>
+$1: I<cache expiry in seconds, by default 0>
 
 =head3 queue_status $1 $2 $3
 

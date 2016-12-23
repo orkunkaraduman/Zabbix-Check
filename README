@@ -84,12 +84,12 @@ SYNOPSIS
    vhost_discovery $1
     discovers RabbitMQ vhosts
 
-    $1: *expiry in seconds, by default 0*
+    $1: *cache expiry in seconds, by default 0*
 
    queue_discovery $1
     discovers RabbitMQ queues
 
-    $1: *expiry in seconds, by default 0*
+    $1: *cache expiry in seconds, by default 0*
 
    queue_status $1 $2 $3
     gets RabbitMQ queue status using queue discovery cache
