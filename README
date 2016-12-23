@@ -71,8 +71,8 @@ SYNOPSIS
 
             UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
             UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-            UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
-            UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
+            UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
+            UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
             UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
    installed
@@ -81,11 +81,15 @@ SYNOPSIS
    running
     checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-   vhost_discovery
+   vhost_discovery $1
     discovers RabbitMQ vhosts
 
-   queue_discovery
+    $1: *expiry in seconds, by default 600*
+
+   queue_discovery $1
     discovers RabbitMQ queues
+
+    $1: *expiry in seconds, by default 600*
 
    queue_status $1 $2 $3
     gets RabbitMQ queue status

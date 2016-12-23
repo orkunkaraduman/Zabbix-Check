@@ -87,8 +87,8 @@ Zabbix check for RabbitMQ service
 
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
 =head3 installed
@@ -99,13 +99,17 @@ checks RabbitMQ is installed: 0 | 1
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-=head3 vhost_discovery
+=head3 vhost_discovery $1
 
 discovers RabbitMQ vhosts
 
-=head3 queue_discovery
+$1: I<expiry in seconds, by default 600>
+
+=head3 queue_discovery $1
 
 discovers RabbitMQ queues
+
+$1: I<expiry in seconds, by default 600>
 
 =head3 queue_status $1 $2 $3
 
@@ -279,14 +283,28 @@ sub cache
 	my ($name, $expiry, $subref) = @_;
 	my $result;
 	my $now = time();
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache.".zbxEncode($name).".";
+	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache,".$name =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
 		{
-			if ($now-$epoch < $expiry)
+			if ($expiry < 0 or $now-$epoch < $expiry)
 			{
-				$result = read_file($tmpPath, { err_mode => "quiet" }) if not defined($result);
+				if (not defined($result))
+				{
+					my $tmp;
+					$tmp = read_file($tmpPath, { err_mode => "quiet" });
+					if ($tmp)
+					{
+						if ($tmp =~ /^SCALAR\n(.*)/)
+						{
+							$result = $1;
+						} else
+						{
+							eval { $result = from_json($tmp) };
+						}
+					}
+				}
 				next;
 			}
 		}
@@ -295,7 +313,18 @@ sub cache
 	if (not defined($result) and defined($subref))
 	{
 		$result = $subref->();
-		write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $result) if defined($result);
+		if (defined($result))
+		{
+			my $tmp;
+			unless (ref($result))
+			{
+				$tmp = "SCALAR\n$result";
+			} else
+			{
+				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
+			}
+			write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp) if $tmp;
+		}
 	}
 	return $result;
 }
