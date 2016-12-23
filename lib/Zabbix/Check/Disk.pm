@@ -176,7 +176,9 @@ sub analyzeStats
 	unless ($stats)
 	{
 		$stats = stats();
-		write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, to_json($stats, {pretty => 1}));
+		my $tmp;
+		eval { $tmp = to_json($stats, {pretty => 1}) };
+		write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp) if $tmp;
 	}
 	return unless $oldStats;
 	my $result = {};
