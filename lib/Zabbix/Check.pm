@@ -199,7 +199,7 @@ BEGIN
 }
 
 
-our @zbxSpecials = (qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @), "\n");
+our @zbxSpecials = qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @);
 
 
 sub zbxEncode
@@ -210,7 +210,7 @@ sub zbxEncode
 	for (my $i = 0; $i < length $str; $i++)
 	{
 		my $chr = substr $str, $i, 1;
-		if (grep ($_ eq $chr, (@zbxSpecials, '%')))
+		if (not $chr =~ /[ -~]/g or grep ($_ eq $chr, (@zbxSpecials, '%', ',')))
 		{
 			$result .= uc sprintf("%%%x", ord($chr));
 		} else
