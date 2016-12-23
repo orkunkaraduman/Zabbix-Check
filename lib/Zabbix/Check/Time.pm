@@ -78,8 +78,13 @@ sub _ntp_offset
 	$server = "pool.ntp.org" unless $server;
 	my $result = "";
 	my %ntp;
-	eval { %ntp = get_ntp_response($server, $port) };
-	$result = sprintf("%.3f", $ntp{Offset}) if defined $ntp{Offset};
+	for (1..5)
+	{
+		eval { %ntp = get_ntp_response($server, $port) };
+		$result = sprintf("%.3f", $ntp{Offset}) if defined $ntp{Offset};
+		last unless $result eq "";
+		sleep(1);
+	}
 	print $result;
 	return $result;
 }
