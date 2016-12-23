@@ -151,18 +151,22 @@ sub analyzeStats
 	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".analyzeStats.";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
-		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
+		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
 		{
-			my $tmp = read_file($tmpPath, { err_mode => "quiet" });
 			if ($now-$epoch < 1*60)
 			{
-				eval { $stats = from_json($tmp) } if not $stats and $tmp;
+				if (not $stats)
+				{
+					my $tmp = read_file($tmpPath, { err_mode => "quiet" });
+					eval { $stats = from_json($tmp) } if $tmp;
+				}
 				next;
 			}
-			if (not $oldStats and $tmp)
+			if (not $oldStats)
 			{
-				eval { $oldStats = from_json($tmp) };
-				next unless $@;
+				my $tmp = read_file($tmpPath, { err_mode => "quiet" });
+				eval { $oldStats = from_json($tmp) } if $tmp;
+				next unless not $tmp or $@;
 			}
 			unlink($tmpPath) if $now-$epoch > 2*60;
 			next;
