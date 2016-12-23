@@ -102,17 +102,17 @@ checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
 discovers RabbitMQ vhosts
 
-$1: _expiry in seconds, by default 600_
+$1: _expiry in seconds, by default 0_
 
 ### queue\_discovery $1
 
 discovers RabbitMQ queues
 
-$1: _expiry in seconds, by default 600_
+$1: _expiry in seconds, by default 0_
 
 ### queue\_status $1 $2 $3
 
-gets RabbitMQ queue status
+gets RabbitMQ queue status using queue discovery cache
 
 $1: _vhost name_
 

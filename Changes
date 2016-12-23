@@ -6,6 +6,7 @@
 		- err_mode => "quiet" for File::Slurp funcs
 		- read_file optimization in Disk.pm analyzeStats
 		- cache function
+		- RabbitMQ cache
 
 1.08	2016-12-22
 		- Hotfix for Supervisor worker status

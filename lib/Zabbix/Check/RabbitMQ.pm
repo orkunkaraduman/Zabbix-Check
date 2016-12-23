@@ -29,17 +29,17 @@ checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
 discovers RabbitMQ vhosts
 
-$1: I<expiry in seconds, by default 600>
+$1: I<expiry in seconds, by default 0>
 
 =head3 queue_discovery $1
 
 discovers RabbitMQ queues
 
-$1: I<expiry in seconds, by default 600>
+$1: I<expiry in seconds, by default 0>
 
 =head3 queue_status $1 $2 $3
 
-gets RabbitMQ queue status
+gets RabbitMQ queue status using queue discovery cache
 
 $1: I<vhost name>
 
@@ -150,7 +150,7 @@ sub _running
 sub _vhost_discovery
 {
 	my ($expiry) = map(zbxDecode($_), @ARGV);
-	$expiry = 10*60 unless defined($expiry);
+	$expiry = 0 unless defined($expiry);
 	my @items;
 	my $vhosts = getVhosts($expiry);
 	$vhosts = {} unless $vhosts;
@@ -164,7 +164,7 @@ sub _vhost_discovery
 sub _queue_discovery
 {
 	my ($expiry) = map(zbxDecode($_), @ARGV);
-	$expiry = 10*60 unless defined($expiry);
+	$expiry = 0 unless defined($expiry);
 	my @items;
 	my $vhosts = getVhosts($expiry);
 	$vhosts = {} unless $vhosts;
