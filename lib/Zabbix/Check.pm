@@ -193,7 +193,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin _version);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin cache _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -272,6 +272,32 @@ sub whereisBin
 {
 	my ($name) = @_;
 	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
+}
+
+sub cache
+{
+	my ($name, $expiry, $subref) = @_;
+	my $result;
+	my $now = time();
+	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache.".zbxEncode($name).".";
+	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
+	{
+		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
+		{
+			if ($now-$epoch < $expiry)
+			{
+				$result = read_file($tmpPath, { err_mode => "quiet" }) if not defined($result);
+				next;
+			}
+		}
+		unlink($tmpPath);
+	}
+	if (not defined($result) and defined($subref))
+	{
+		$result = $subref->();
+		write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $result) if defined($result);
+	}
+	return $result;
 }
 
 sub _version
