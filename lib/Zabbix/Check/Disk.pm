@@ -230,7 +230,7 @@ sub _bps
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = strftime("%.2f", $status->{"bps_$type"}) if $status;
+	$result = sprintf("%.2f", $status->{"bps_$type"}) if $status;
 	print $result;
 	return $result;
 }
@@ -242,7 +242,7 @@ sub _iops
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = strftime("%.2f", $status->{"iops_$type"}) if $status;
+	$result = sprintf("%.2f", $status->{"iops_$type"}) if $status;
 	print $result;
 	return $result;
 }
@@ -254,7 +254,7 @@ sub _ioutil
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = strftime("%.2f", $status->{"ioutil_$type"}) if $status;
+	$result = sprintf("%.2f", $status->{"ioutil_$type"}) if $status;
 	print $result;
 	return $result;
 }

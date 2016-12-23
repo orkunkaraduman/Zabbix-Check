@@ -79,7 +79,7 @@ sub _ntp_offset
 	my $result = "";
 	my %ntp;
 	eval { %ntp = get_ntp_response($server, $port) };
-	$result = strftime("%.3f", $ntp{Offset}) if defined $ntp{Offset};
+	$result = sprintf("%.3f", $ntp{Offset}) if defined $ntp{Offset};
 	print $result;
 	return $result;
 }
