@@ -5,7 +5,7 @@ Zabbix::Check::Systemd - Zabbix check for system time
 
 =head1 VERSION
 
-version 1.06
+version 1.09
 
 =head1 SYNOPSIS
 
@@ -48,7 +48,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.09';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -79,7 +79,7 @@ sub _ntp_offset
 	my $result = "";
 	my %ntp;
 	eval { %ntp = get_ntp_response($server, $port) };
-	$result = $ntp{Offset} if defined $ntp{Offset};
+	$result = strftime("%.3f", $ntp{Offset}) if defined $ntp{Offset};
 	print $result;
 	return $result;
 }
