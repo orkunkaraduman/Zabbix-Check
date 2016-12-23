@@ -5,7 +5,7 @@ Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
-version 1.06
+version 1.09
 
 =head1 SYNOPSIS
 
@@ -60,7 +60,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.09';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -230,7 +230,7 @@ sub _bps
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = $status->{"bps_$type"} if $status;
+	$result = strftime("%.2f", $status->{"bps_$type"}) if $status;
 	print $result;
 	return $result;
 }
@@ -242,7 +242,7 @@ sub _iops
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = $status->{"iops_$type"} if $status;
+	$result = strftime("%.2f", $status->{"iops_$type"}) if $status;
 	print $result;
 	return $result;
 }
@@ -254,7 +254,7 @@ sub _ioutil
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = $status->{"ioutil_$type"} if $status;
+	$result = strftime("%.2f", $status->{"ioutil_$type"}) if $status;
 	print $result;
 	return $result;
 }

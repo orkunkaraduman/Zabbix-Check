@@ -1,6 +1,7 @@
 1.09	2016-12-23
 		- zbxEncode comma and nonascii fix
 		- Fix in Time.pm for _ntp_offset returning scientific notation
+		- Fix in Disk.pm for returning scientific notation
 
 1.08	2016-12-22
 		- Hotfix for Supervisor worker status
