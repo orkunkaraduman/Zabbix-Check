@@ -76,7 +76,7 @@ sub disks
 	for my $blockpath (glob("/sys/dev/block/*"))
 	{
 		next unless -f "$blockpath/uevent";
-		my $uevent = read_file("$blockpath/uevent");
+		my $uevent = read_file("$blockpath/uevent", { err_mode => "quiet" });
 		my ($major) = $uevent =~ /^\QMAJOR=\E(.*)/m;
 		my ($minor) = $uevent =~ /^\QMINOR=\E(.*)/m;
 		my ($devname) = $uevent =~ /^\QDEVNAME=\E(.*)/m;
@@ -89,20 +89,20 @@ sub disks
 			devpath => $devpath,
 			major => $major,
 			minor => $minor,
-			size => (-f "$blockpath/size" and $_ = read_file("$blockpath/size"))? int(s/^\s+|\s+$//gr)*512: undef,
-			removable => (-f "$blockpath/removable" and $_ = read_file("$blockpath/removable"))? s/^\s+|\s+$//gr: undef,
-			partition => (-f "$blockpath/partition" and $_ = read_file("$blockpath/partition"))? s/^\s+|\s+$//gr: undef,
+			size => (-f "$blockpath/size" and $_ = read_file("$blockpath/size", { err_mode => "quiet" }))? int(s/^\s+|\s+$//gr)*512: undef,
+			removable => (-f "$blockpath/removable" and $_ = read_file("$blockpath/removable", { err_mode => "quiet" }))? s/^\s+|\s+$//gr: undef,
+			partition => (-f "$blockpath/partition" and $_ = read_file("$blockpath/partition", { err_mode => "quiet" }))? s/^\s+|\s+$//gr: undef,
 			dmname => undef,
 			dmpath => undef,
 		};
-		if (-f "$blockpath/dm/name" and my $dmname = read_file("$blockpath/dm/name"))
+		if (-f "$blockpath/dm/name" and my $dmname = read_file("$blockpath/dm/name", { err_mode => "quiet" }))
 		{
 			chomp $dmname;
 			$disk->{dmname} = $dmname;
 			$disk->{dmpath} = "/dev/mapper/$dmname";
 		}
 		my $dmpath = $disk->{dmpath}? $disk->{dmpath}: "";
-		for my $mount (grep(/^(\Q$disk->{devpath}\E|\Q$dmpath\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts"): ()))
+		for my $mount (grep(/^(\Q$disk->{devpath}\E|\Q$dmpath\E)\s+/, (-f "/proc/mounts")? read_file("/proc/mounts", { err_mode => "quiet" }): ()))
 		{
 			chomp $mount;
 			my ($devpath, $mountpoint, $fstype) = $mount =~ /^(\S+)\s+(\S+)\s+(\S+)\s+/;
@@ -121,7 +121,7 @@ sub stats
 	{
 		my $disk = $disks->{$devname};
 		next unless -f "$disk->{blockpath}/stat";
-		my $statLine = read_file("$disk->{blockpath}/stat");
+		my $statLine = read_file("$disk->{blockpath}/stat", { err_mode => "quiet" });
 		next unless $statLine;
 		chomp $statLine;
 		my $stat = { 'epoch' => time() };
@@ -153,7 +153,7 @@ sub analyzeStats
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/) 
 		{
-			my $tmp = read_file($tmpPath);
+			my $tmp = read_file($tmpPath, { err_mode => "quiet" });
 			if ($now-$epoch < 1*60)
 			{
 				eval { $stats = from_json($tmp) } if not $stats and $tmp;
@@ -172,7 +172,7 @@ sub analyzeStats
 	unless ($stats)
 	{
 		$stats = stats();
-		write_file("$tmpPrefix$now.$$", to_json($stats, {pretty => 1}));
+		write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, to_json($stats, {pretty => 1}));
 	}
 	return unless $oldStats;
 	my $result = {};
