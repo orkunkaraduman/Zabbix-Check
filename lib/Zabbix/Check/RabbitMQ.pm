@@ -5,7 +5,7 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.06
+version 1.09
 
 =head1 SYNOPSIS
 
@@ -13,8 +13,8 @@ Zabbix check for RabbitMQ service
 
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
 =head3 installed
@@ -25,17 +25,21 @@ checks RabbitMQ is installed: 0 | 1
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-=head3 vhost_discovery
+=head3 vhost_discovery $1
 
 discovers RabbitMQ vhosts
 
-=head3 queue_discovery
+$1: I<cache expiry in seconds, by default 0>
+
+=head3 queue_discovery $1
 
 discovers RabbitMQ queues
 
+$1: I<cache expiry in seconds, by default 0>
+
 =head3 queue_status $1 $2 $3
 
-gets RabbitMQ queue status
+gets RabbitMQ queue status using queue discovery cache
 
 $1: I<vhost name>
 
@@ -58,7 +62,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.06';
+	our $VERSION     = '1.09';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -74,40 +78,53 @@ our ($rabbitmqctl) = whereisBin('rabbitmqctl');
 sub getVhosts
 {
 	return unless $rabbitmqctl;
-	my $result = {};
-	my $first = 1;
-	for my $line (`$rabbitmqctl list_vhosts 2>/dev/null`)
+	my ($expiry) = @_;
+	$expiry = -1 unless defined($expiry);
+	my $result = cache((caller(0))[3], $expiry, sub
 	{
-		chomp $line;
-		if ($first)
+		my $result = {};
+		my $first = 1;
+		for my $line (`$rabbitmqctl list_vhosts 2>/dev/null`)
 		{
-			$first = 0;
-			next;
+			chomp $line;
+			if ($first)
+			{
+				$first = 0;
+				next;
+			}
+			my ($name) = $line =~ /^(.*)/;
+			$result->{$name} = { 'name' => $name };
 		}
-		my ($name) = $line =~ /^(.*)/;
-		$result->{$name} = { 'name' => $name };
-	}
+		return $result;
+	});
+	$result = {} unless $result;
 	return $result;
 }
 
 sub getQueues
 {
 	return unless $rabbitmqctl;
-	my ($vhost) = @_;
+	my ($vhost, $expiry) = @_;
 	my $vhostS = shellmeta($vhost);
-	my $result = {};
-	my $first = 1;
-	for my $line (`$rabbitmqctl list_queues -p \"$vhostS\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
+	$expiry = -1 unless defined($expiry);
+	my $result = cache((caller(0))[3].",$vhost", $expiry, sub
 	{
-		chomp $line;
-		if ($first)
+		my $result = {};
+		my $first = 1;
+		for my $line (`$rabbitmqctl list_queues -p \"$vhostS\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
 		{
-			$first = 0;
-			next;
+			chomp $line;
+			if ($first)
+			{
+				$first = 0;
+				next;
+			}
+			my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
+			$result->{$name} = {'ready' => $ready, 'unacked' => $unacked, 'total' => $total};
 		}
-		my ($name, $ready, $unacked, $total) = $line =~ m/^([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t*/;
-		$result->{$name} = {'ready' => $ready, 'unacked' => $unacked, 'total' => $total};
-	}
+		return $result;
+	});
+	$result = {} unless $result;
 	return $result;
 }
 
@@ -132,8 +149,10 @@ sub _running
 
 sub _vhost_discovery
 {
+	my ($expiry) = map(zbxDecode($_), @ARGV);
+	$expiry = 0 unless defined($expiry);
 	my @items;
-	my $vhosts = getVhosts();
+	my $vhosts = getVhosts($expiry);
 	$vhosts = {} unless $vhosts;
 	for my $vhost (keys %$vhosts)
 	{ 
@@ -144,12 +163,14 @@ sub _vhost_discovery
 
 sub _queue_discovery
 {
+	my ($expiry) = map(zbxDecode($_), @ARGV);
+	$expiry = 0 unless defined($expiry);
 	my @items;
-	my $vhosts = getVhosts();
+	my $vhosts = getVhosts($expiry);
 	$vhosts = {} unless $vhosts;
 	for my $vhost (keys %$vhosts)
 	{ 
-		my $queues = getQueues($vhost);
+		my $queues = getQueues($vhost, $expiry);
 		$queues = {} unless $queues;
 		for my $queue (keys %$queues)
 		{

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>2.0</version>
-    <date>2016-12-22T13:05:27Z</date>
+    <date>2016-12-23T18:57:26Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -392,7 +392,7 @@
                     <status>0</status>
                     <value_type>0</value_type>
                     <allowed_hosts/>
-                    <units/>
+                    <units>s</units>
                     <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
@@ -1059,7 +1059,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.queue_discovery</key>
-                    <delay>3600</delay>
+                    <delay>600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1093,7 +1093,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
-                            <delay>600</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1136,7 +1136,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
-                            <delay>600</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1179,7 +1179,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
-                            <delay>600</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1226,7 +1226,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.vhost_discovery</key>
-                    <delay>3600</delay>
+                    <delay>600</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1336,7 +1336,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.supervisor.worker_status[{#NAME}].iregexp(&quot;^RUNNING&quot;)} = 0</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.supervisor.worker_status[{#NAME}].iregexp(^RUNNING)} = 0</expression>
                             <name>Supervisor worker {#NAME} not running</name>
                             <url/>
                             <status>0</status>
@@ -1345,7 +1345,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.supervisor.worker_status[{#NAME}].iregexp(&quot;^RUNNING&quot;, 5m)} = 0</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.supervisor.worker_status[{#NAME}].iregexp(^RUNNING, 5m)} = 0</expression>
                             <name>Supervisor worker {#NAME} not running for 5m</name>
                             <url/>
                             <status>0</status>
@@ -1414,7 +1414,7 @@
                             <snmpv3_privpassphrase/>
                             <formula>1</formula>
                             <delay_flex/>
-                            <params>iregexp(&quot;cpan.zabbix.check.systemd.service_status[{#NAME}]&quot;, &quot;^active&quot;)</params>
+                            <params>iregexp(&quot;cpan.zabbix.check.systemd.service_status[{#NAME}]&quot;, ^active)</params>
                             <ipmi_sensor/>
                             <data_type>0</data_type>
                             <authtype>0</authtype>
@@ -1565,16 +1565,16 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}-10</expression>
                             <name>Systemd service {#NAME} availability low</name>
                             <url/>
                             <status>0</status>
-                            <priority>3</priority>
+                            <priority>2</priority>
                             <description/>
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_status[{#NAME}].iregexp(&quot;^failed&quot;)} &lt;&gt; 0</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_status[{#NAME}].iregexp(^failed)} &lt;&gt; 0</expression>
                             <name>Systemd service {#NAME} failed</name>
                             <url/>
                             <status>0</status>
@@ -1661,7 +1661,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.version.last()} &lt; 1.06</expression>
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.version.last()} &lt; 1.09</expression>
             <name>CPAN Zabbix-Check version not up to date</name>
             <url/>
             <status>0</status>
@@ -1691,7 +1691,9 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.system_status.iregexp(&quot;^running&quot;)} = 0</expression>
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.installed.last()} &lt;&gt; 0&#13;
+and&#13;
+{CPAN Zabbix-Check:cpan.zabbix.check.systemd.system_status.iregexp(^running)} = 0</expression>
             <name>Systemd system not fully operational</name>
             <url/>
             <status>0</status>

@@ -5,7 +5,7 @@ Zabbix::Check - Zabbix Agent system and service checks
 
 =head1 VERSION
 
-version 1.08
+version 1.09
 
 =head1 SYNOPSIS
 
@@ -87,8 +87,8 @@ Zabbix check for RabbitMQ service
 
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
 
 =head3 installed
@@ -99,17 +99,21 @@ checks RabbitMQ is installed: 0 | 1
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-=head3 vhost_discovery
+=head3 vhost_discovery $1
 
 discovers RabbitMQ vhosts
 
-=head3 queue_discovery
+$1: I<cache expiry in seconds, by default 0>
+
+=head3 queue_discovery $1
 
 discovers RabbitMQ queues
 
+$1: I<cache expiry in seconds, by default 0>
+
 =head3 queue_status $1 $2 $3
 
-gets RabbitMQ queue status
+gets RabbitMQ queue status using queue discovery cache
 
 $1: I<vhost name>
 
@@ -189,17 +193,17 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.08';
+	our $VERSION     = '1.09';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin _version);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin cache _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
-our @zbxSpecials = (qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @), "\n");
+our @zbxSpecials = qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @);
 
 
 sub zbxEncode
@@ -210,7 +214,7 @@ sub zbxEncode
 	for (my $i = 0; $i < length $str; $i++)
 	{
 		my $chr = substr $str, $i, 1;
-		if (grep ($_ eq $chr, (@zbxSpecials, '%')))
+		if (not $chr =~ /[ -~]/g or grep ($_ eq $chr, (@zbxSpecials, '%', ',')))
 		{
 			$result .= uc sprintf("%%%x", ord($chr));
 		} else
@@ -272,6 +276,57 @@ sub whereisBin
 {
 	my ($name) = @_;
 	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
+}
+
+sub cache
+{
+	my ($name, $expiry, $subref) = @_;
+	my $result;
+	my $now = time();
+	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache,".$name =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
+	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
+	{
+		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
+		{
+			if ($expiry < 0 or $now-$epoch < $expiry)
+			{
+				if (not defined($result))
+				{
+					my $tmp;
+					$tmp = read_file($tmpPath, { err_mode => "quiet" });
+					if ($tmp)
+					{
+						if ($tmp =~ /^SCALAR\n(.*)/)
+						{
+							$result = $1;
+						} else
+						{
+							eval { $result = from_json($tmp) };
+						}
+					}
+				}
+				next;
+			}
+		}
+		unlink($tmpPath);
+	}
+	if (not defined($result) and defined($subref))
+	{
+		$result = $subref->();
+		if (defined($result))
+		{
+			my $tmp;
+			unless (ref($result))
+			{
+				$tmp = "SCALAR\n$result";
+			} else
+			{
+				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
+			}
+			write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp) if $tmp;
+		}
+	}
+	return $result;
 }
 
 sub _version
