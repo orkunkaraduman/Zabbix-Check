@@ -1,3 +1,6 @@
+1.10	2016-12-25
+		- 
+
 1.09	2016-12-23
 		- zbxEncode comma and nonascii fix
 		- Fix in Time.pm for _ntp_offset returning scientific notation
