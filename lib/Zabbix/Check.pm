@@ -283,6 +283,7 @@ sub cache
 	my ($name, $expiry, $subref) = @_;
 	my $result;
 	my $now = time();
+	my @cleanup;
 	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache,".$name =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
@@ -308,7 +309,7 @@ sub cache
 				next;
 			}
 		}
-		unlink($tmpPath);
+		unshift @cleanup, $tmpPath;
 	}
 	if (not defined($result) and defined($subref))
 	{
@@ -323,7 +324,21 @@ sub cache
 			{
 				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
 			}
-			write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp) if $tmp;
+			if ($tmp and write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp))
+			{
+				shift @cleanup;
+				for (@cleanup)
+				{
+					unlink($_);
+				}
+			}
+		}
+	} else
+	{
+		shift @cleanup;
+		for (@cleanup)
+		{
+			unlink($_);
 		}
 	}
 	return $result;

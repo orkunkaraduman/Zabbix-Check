@@ -168,8 +168,7 @@ sub analyzeStats
 				eval { $oldStats = from_json($tmp) } if $tmp;
 				next unless not $tmp or $@;
 			}
-			unlink($tmpPath) if $now-$epoch > 2*60;
-			next;
+			next unless $now-$epoch > 2*60;
 		}
 		unlink($tmpPath);
 	}
