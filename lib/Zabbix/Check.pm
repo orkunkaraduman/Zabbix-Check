@@ -197,7 +197,7 @@ BEGIN
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin cache _version);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -269,78 +269,6 @@ sub printDiscovery
 	};
 	my $result = to_json($discovery, {pretty => 1});
 	print $result;
-	return $result;
-}
-
-sub whereisBin
-{
-	my ($name) = @_;
-	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
-}
-
-sub cache
-{
-	my ($name, $expiry, $subref) = @_;
-	my $result;
-	my $now = time();
-	my @cleanup;
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache,".$name =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
-	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
-	{
-		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
-		{
-			if ($expiry < 0 or $now-$epoch < $expiry)
-			{
-				if (not defined($result))
-				{
-					my $tmp;
-					$tmp = read_file($tmpPath, { err_mode => "quiet" });
-					if ($tmp)
-					{
-						if ($tmp =~ /^SCALAR\n(.*)/)
-						{
-							$result = $1;
-						} else
-						{
-							eval { $result = from_json($tmp) };
-						}
-					}
-				}
-				next;
-			}
-		}
-		unshift @cleanup, $tmpPath;
-	}
-	if (not defined($result) and defined($subref))
-	{
-		$result = $subref->();
-		if (defined($result))
-		{
-			my $tmp;
-			unless (ref($result))
-			{
-				$tmp = "SCALAR\n$result";
-			} else
-			{
-				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
-			}
-			if ($tmp and write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp))
-			{
-				shift @cleanup;
-				for (@cleanup)
-				{
-					unlink($_);
-				}
-			}
-		}
-	} else
-	{
-		shift @cleanup;
-		for (@cleanup)
-		{
-			unlink($_);
-		}
-	}
 	return $result;
 }
 

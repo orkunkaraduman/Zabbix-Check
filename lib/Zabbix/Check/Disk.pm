@@ -148,7 +148,7 @@ sub analyzeStats
 	my $now = time();
 	my $stats;
 	my $oldStats;
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".analyzeStats.";
+	my $tmpPrefix = "/tmp/".(caller(0))[3] =~ s/\Q::\E/-/gr.",stats,";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
