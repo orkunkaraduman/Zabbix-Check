@@ -97,7 +97,6 @@ sub getVhosts
 		}
 		return $result;
 	});
-	$result = {} unless $result;
 	return $result;
 }
 
@@ -124,7 +123,6 @@ sub getQueues
 		}
 		return $result;
 	});
-	$result = {} unless $result;
 	return $result;
 }
 

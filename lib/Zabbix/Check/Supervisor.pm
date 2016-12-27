@@ -66,13 +66,17 @@ our ($supervisord) = whereisBin('supervisord');
 sub getStatuses
 {
 	return unless $supervisorctl;
-	my $result = {};
-	for (`$supervisorctl status 2>/dev/null`)
+	my $result = fileCache("all", 15, sub
 	{
-		chomp;
-		my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
-		$result->{$name} = $status;
-	}
+		my $result = {};
+		for (`$supervisorctl status 2>/dev/null`)
+		{
+			chomp;
+			my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
+			$result->{$name} = $status;
+		}
+		return $result;
+	});
 	return $result;
 }
 
