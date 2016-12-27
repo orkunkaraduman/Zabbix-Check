@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.0</version>
-    <date>2016-12-27T12:56:22Z</date>
+    <date>2016-12-27T13:56:59Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -342,7 +342,7 @@
                     <snmp_community/>
                     <multiplier>0</multiplier>
                     <snmp_oid/>
-                    <key>cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}]</key>
+                    <key>cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}]</key>
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
@@ -507,7 +507,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.bps[{#DEVNAME},read]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -547,7 +547,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.bps[{#DEVNAME},total]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -587,7 +587,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.bps[{#DEVNAME},write]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -627,7 +627,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.iops[{#DEVNAME},read]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -667,7 +667,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.iops[{#DEVNAME},total]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -707,7 +707,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.iops[{#DEVNAME},write]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -747,7 +747,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},read]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -787,7 +787,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},total]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -827,7 +827,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},write]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1105,7 +1105,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1149,7 +1149,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1193,7 +1193,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1668,15 +1668,15 @@
             </discovery_rules>
             <macros>
                 <macro>
-                    <macro>{$TIME_NTP_OFFSET}</macro>
+                    <macro>{$ZC_TIME_NTP_OFFSET}</macro>
                     <value>15</value>
                 </macro>
                 <macro>
-                    <macro>{$TIME_NTP_SERVER}</macro>
+                    <macro>{$ZC_TIME_NTP_SERVER}</macro>
                     <value>pool.ntp.org</value>
                 </macro>
                 <macro>
-                    <macro>{$TIME_ZONE}</macro>
+                    <macro>{$ZC_TIME_ZONE}</macro>
                     <value>+0000</value>
                 </macro>
             </macros>
@@ -1728,10 +1728,10 @@ and&#13;
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}].last()} &gt; {$TIME_NTP_OFFSET}&#13;
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}].last()} &gt; {$ZC_TIME_NTP_OFFSET}&#13;
 or&#13;
-{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}].last()} &lt; -{$TIME_NTP_OFFSET}</expression>
-            <name>Time NTP offset too high (&gt;{$TIME_NTP_OFFSET}s)</name>
+{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}].last()} &lt; -{$ZC_TIME_NTP_OFFSET}</expression>
+            <name>Time NTP offset too high (&gt;{$ZC_TIME_NTP_OFFSET}s)</name>
             <url/>
             <status>0</status>
             <priority>3</priority>
@@ -1740,7 +1740,7 @@ or&#13;
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.zone.iregexp(^\{$TIME_ZONE}$)} = 0</expression>
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.zone.iregexp(^\{$ZC_TIME_ZONE}$)} = 0</expression>
             <name>Time zone wrong</name>
             <url/>
             <status>0</status>
@@ -1778,7 +1778,7 @@ or&#13;
                     <type>0</type>
                     <item>
                         <host>CPAN Zabbix-Check</host>
-                        <key>cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}]</key>
+                        <key>cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}]</key>
                     </item>
                 </graph_item>
             </graph_items>
