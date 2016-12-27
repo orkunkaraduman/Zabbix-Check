@@ -107,15 +107,9 @@ sub _worker_status
 {
 	my ($name) = map(zbxDecode($_), @ARGV);
 	return unless $name;
-	my $nameS = shellmeta($name);
 	my $result = "";
-	my $line = `$supervisorctl status \"$nameS\" 2>/dev/null` if $supervisorctl;
-	if ($line)
-	{
-		chomp $line;
-		my ($name, $status) = $line =~/^(\S+)\s+(\S+)\s*/;
-		$result = $status if $status;
-	}
+	my $statuses = getStatuses();
+	$result = $statuses->{$name} if $statuses->{$name};
 	print $result;
 	return $result;	
 }
