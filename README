@@ -18,7 +18,7 @@ SYNOPSIS
             UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
             UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
             UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
-            UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1 $2
+            UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
 
    discovery
     discovers disks
@@ -41,8 +41,6 @@ SYNOPSIS
     gets disk I/O utilization in percentage
 
     $1: *device name, eg: sda, sdb1, dm-3, ...*
-
-    $2: *type: read|write|total*
 
   Supervisor
     Zabbix check for Supervisor service
