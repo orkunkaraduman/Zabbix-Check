@@ -124,7 +124,7 @@ Zabbix check for Systemd services
 
         UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
         UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-        UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+        UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
         UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
 
 ### installed
@@ -138,6 +138,8 @@ gets Systemd system status: initializing | starting | running | degraded | maint
 ### service\_discovery
 
 discovers Systemd enabled services
+
+$1: _regex of service name, by default undefined_
 
 ### service\_status $1
 

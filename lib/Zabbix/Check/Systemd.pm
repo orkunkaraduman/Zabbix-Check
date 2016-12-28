@@ -13,7 +13,7 @@ Zabbix check for Systemd services
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
 	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+	UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
 
 =head3 installed
@@ -27,6 +27,8 @@ gets Systemd system status: initializing | starting | running | degraded | maint
 =head3 service_discovery
 
 discovers Systemd enabled services
+
+$1: I<regex of service name, by default undefined>
 
 =head3 service_status $1
 
@@ -65,7 +67,7 @@ our ($systemctl) = whereisBin('systemctl');
 sub getUnitFiles
 {
 	return unless $systemctl;
-	my ($type, $stateRgx) = @_;
+	my ($type) = @_;
 	my $result = {};
 	for (`$systemctl --no-legend list-unit-files 2>/dev/null`)
 	{
@@ -77,7 +79,7 @@ sub getUnitFiles
 			state => $state,
 		};
 		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
-		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $stateRgx or $state =~ /$stateRgx/);
+		$result->{$unit} = $info if not $type or $type eq $info->{type};
 	}
 	return $result;
 }
@@ -85,7 +87,7 @@ sub getUnitFiles
 sub getUnits
 {
 	return unless $systemctl;
-	my ($type, $loadRgx) = @_;
+	my ($type) = @_;
 	my $result = {};
 	my $first = 1;
 	for (`$systemctl --no-legend -a list-units 2>/dev/null`)
@@ -101,7 +103,7 @@ sub getUnits
 			desc => $desc,
 		};
 		($info->{name}, $info->{type}) = $unit =~ /^([^\.]*)\.(.*)/;
-		$result->{$unit} = $info if (not $type or $type eq $info->{type}) and (not $loadRgx or $load =~ /$loadRgx/);
+		$result->{$unit} = $info if not $type or $type eq $info->{type};
 	}
 	return $result;
 }
@@ -128,11 +130,10 @@ sub _system_status
 
 sub _service_discovery
 {
-	my ($loadRgx) = map(zbxDecode($_), @ARGV);
+	my ($nameRgx) = map(zbxDecode($_), @ARGV);
 	my @items;
-	$loadRgx = '^loaded' unless defined $loadRgx;
-	my $units = getUnits('service', $loadRgx);
-	@items = map($units->{$_}, keys %$units) if $units;
+	my $units = getUnits('service');
+	@items = map($units->{$_}, grep({ not defined($nameRgx) or $units->{$_}->{name} =~ /$nameRgx/ } keys %$units)) if $units;
 	return printDiscovery(@items);
 }
 

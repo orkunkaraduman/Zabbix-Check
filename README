@@ -103,7 +103,7 @@ SYNOPSIS
 
             UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
             UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-            UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
+            UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
             UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
 
    installed
@@ -115,6 +115,8 @@ SYNOPSIS
 
    service_discovery
     discovers Systemd enabled services
+
+    $1: *regex of service name, by default undefined*
 
    service_status $1
     gets Systemd enabled service status: active | inactive | failed |
