@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.0</version>
-    <date>2016-12-27T13:56:59Z</date>
+    <date>2016-12-28T06:19:40Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -18,6 +18,9 @@
                 </group>
             </groups>
             <applications>
+                <application>
+                    <name>Disk</name>
+                </application>
                 <application>
                     <name>General</name>
                 </application>
@@ -535,7 +538,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -575,7 +582,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -615,7 +626,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -655,7 +670,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -695,7 +714,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -735,47 +758,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
-                            <application_prototypes/>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Disk {#DEVNAME} I/O Util read</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},read]</key>
-                            <delay>60</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -786,7 +773,7 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},total]</key>
+                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME}]</key>
                             <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
@@ -815,47 +802,11 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
-                            <application_prototypes/>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Disk {#DEVNAME} I/O Util write</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},write]</key>
-                            <delay>60</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
                             <application_prototypes/>
@@ -863,7 +814,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].last()} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].last()} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%)</name>
                             <url/>
                             <status>0</status>
@@ -873,7 +824,7 @@
                             <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].min(1m)} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].min(1m)} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%) for 1m</name>
                             <url/>
                             <status>0</status>
@@ -883,7 +834,7 @@
                             <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].min(15m)} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].min(15m)} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%) for 15m</name>
                             <url/>
                             <status>0</status>
@@ -914,8 +865,8 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
+                                    <drawtype>2</drawtype>
+                                    <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -927,7 +878,7 @@
                                 <graph_item>
                                     <sortorder>1</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>0000C8</color>
+                                    <color>00C800</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -939,7 +890,7 @@
                                 <graph_item>
                                     <sortorder>2</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>C80000</color>
+                                    <color>0000C8</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -970,8 +921,8 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
+                                    <drawtype>2</drawtype>
+                                    <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -983,7 +934,7 @@
                                 <graph_item>
                                     <sortorder>1</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>0000C8</color>
+                                    <color>00C800</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -995,7 +946,7 @@
                                 <graph_item>
                                     <sortorder>2</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>C80000</color>
+                                    <color>0000C8</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -1026,38 +977,14 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
-                                    <item>
-                                        <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},total]</key>
-                                    </item>
-                                </graph_item>
-                                <graph_item>
-                                    <sortorder>1</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>0000C8</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
-                                    <item>
-                                        <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},read]</key>
-                                    </item>
-                                </graph_item>
-                                <graph_item>
-                                    <sortorder>2</sortorder>
-                                    <drawtype>0</drawtype>
+                                    <drawtype>2</drawtype>
                                     <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
                                     <item>
                                         <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},write]</key>
+                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -1678,6 +1605,10 @@
                 <macro>
                     <macro>{$ZC_TIME_ZONE}</macro>
                     <value>+0000</value>
+                </macro>
+                <macro>
+                    <macro>{$ZC_VERSION}</macro>
+                    <value>1.10</value>
                 </macro>
             </macros>
             <templates/>
