@@ -1,15 +1,15 @@
 package Zabbix::Check;
 =head1 NAME
 
-Zabbix::Check - Zabbix Agent system and service checks
+Zabbix::Check - System and service checks for Zabbix
 
 =head1 VERSION
 
-version 1.09
+version 1.10
 
 =head1 SYNOPSIS
 
-Zabbix Agent system and service checks
+System and service checks for Zabbix
 
 	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
@@ -22,9 +22,9 @@ gets Zabbix::Check version
 Zabbix check for disk
 
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
-	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
-	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
-	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
+	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
 
 =head3 discovery
 
@@ -52,8 +52,6 @@ gets disk I/O utilization in percentage
 
 $1: I<device name, eg: sda, sdb1, dm-3, ...>
 
-$2: I<type: read|write|total>
-
 =head2 Supervisor
 
 Zabbix check for Supervisor service
@@ -61,7 +59,7 @@ Zabbix check for Supervisor service
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
 	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
-	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status $1
+	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status -- $1
 
 =head3 installed
 
@@ -87,9 +85,9 @@ Zabbix check for RabbitMQ service
 
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
 
 =head3 installed
 
@@ -127,8 +125,8 @@ Zabbix check for Systemd services
 
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
 	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-	UserParameter=cpan.zabbix.check.systemd.service_discovery,/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery
-	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status $1
+	UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
+	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
 
 =head3 installed
 
@@ -142,6 +140,8 @@ gets Systemd system status: initializing | starting | running | degraded | maint
 
 discovers Systemd enabled services
 
+$1: I<regex of service name, by default undefined>
+
 =head3 service_status $1
 
 gets Systemd enabled service status: active | inactive | failed | unknown | ...
@@ -154,7 +154,7 @@ Zabbix check for system time
 
 	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
 	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
-	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset $1 $2
+	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
 
 =head3 epoch
 
@@ -193,11 +193,11 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.09';
+	our $VERSION     = '1.10';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery whereisBin cache _version);
+	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery _version);
 	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
@@ -269,63 +269,6 @@ sub printDiscovery
 	};
 	my $result = to_json($discovery, {pretty => 1});
 	print $result;
-	return $result;
-}
-
-sub whereisBin
-{
-	my ($name) = @_;
-	return grep(-x $_, map("$_/$name", split(":", "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")));
-}
-
-sub cache
-{
-	my ($name, $expiry, $subref) = @_;
-	my $result;
-	my $now = time();
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".cache,".$name =~ s/(\W)/uc(sprintf("%%%x", ord($1)))/ger.".";
-	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
-	{
-		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
-		{
-			if ($expiry < 0 or $now-$epoch < $expiry)
-			{
-				if (not defined($result))
-				{
-					my $tmp;
-					$tmp = read_file($tmpPath, { err_mode => "quiet" });
-					if ($tmp)
-					{
-						if ($tmp =~ /^SCALAR\n(.*)/)
-						{
-							$result = $1;
-						} else
-						{
-							eval { $result = from_json($tmp) };
-						}
-					}
-				}
-				next;
-			}
-		}
-		unlink($tmpPath);
-	}
-	if (not defined($result) and defined($subref))
-	{
-		$result = $subref->();
-		if (defined($result))
-		{
-			my $tmp;
-			unless (ref($result))
-			{
-				$tmp = "SCALAR\n$result";
-			} else
-			{
-				eval { $tmp = to_json($result, {pretty => 1}) } if ref($result) eq "ARRAY" or ref($result) eq "HASH";
-			}
-			write_file("$tmpPrefix$now.$$", { err_mode => "quiet" }, $tmp) if $tmp;
-		}
-	}
 	return $result;
 }
 

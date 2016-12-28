@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2016-12-23T18:57:26Z</date>
+    <version>3.0</version>
+    <date>2016-12-28T11:03:46Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -19,6 +19,9 @@
             </groups>
             <applications>
                 <application>
+                    <name>Disk</name>
+                </application>
+                <application>
                     <name>General</name>
                 </application>
                 <application>
@@ -35,49 +38,6 @@
                 </application>
             </applications>
             <items>
-                <item>
-                    <name>CPAN Zabbix-Check version</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
-                    <key>cpan.zabbix.check.version</key>
-                    <delay>60</delay>
-                    <history>7</history>
-                    <trends>365</trends>
-                    <status>0</status>
-                    <value_type>0</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>General</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                    <logtimefmt/>
-                </item>
                 <item>
                     <name>RabbitMQ installed</name>
                     <type>0</type>
@@ -302,7 +262,7 @@
                     <key>cpan.zabbix.check.systemd.system_status</key>
                     <delay>60</delay>
                     <history>7</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>0</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -385,7 +345,7 @@
                     <snmp_community/>
                     <multiplier>0</multiplier>
                     <snmp_oid/>
-                    <key>cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}]</key>
+                    <key>cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}]</key>
                     <delay>60</delay>
                     <history>7</history>
                     <trends>365</trends>
@@ -431,7 +391,7 @@
                     <key>cpan.zabbix.check.time.zone</key>
                     <delay>60</delay>
                     <history>7</history>
-                    <trends>365</trends>
+                    <trends>0</trends>
                     <status>0</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
@@ -460,6 +420,49 @@
                     <applications>
                         <application>
                             <name>Time</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+                <item>
+                    <name>CPAN Zabbix-Check version</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>cpan.zabbix.check.version</key>
+                    <delay>60</delay>
+                    <history>7</history>
+                    <trends>365</trends>
+                    <status>0</status>
+                    <value_type>0</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>General</name>
                         </application>
                     </applications>
                     <valuemap/>
@@ -501,52 +504,13 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Disk {#DEVNAME} bps</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.bps[{#DEVNAME},total]</key>
-                            <delay>30</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>bps</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
-                        </item_prototype>
-                        <item_prototype>
                             <name>Disk {#DEVNAME} bps read</name>
                             <type>0</type>
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.bps[{#DEVNAME},read]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -574,9 +538,58 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Disk {#DEVNAME} bps</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>cpan.zabbix.check.disk.bps[{#DEVNAME},total]</key>
+                            <delay>60</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units>bps</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Disk {#DEVNAME} bps write</name>
@@ -585,7 +598,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.bps[{#DEVNAME},write]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -613,48 +626,14 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Disk {#DEVNAME} I/O tps</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.iops[{#DEVNAME},total]</key>
-                            <delay>30</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>tps</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Disk {#DEVNAME} I/O tps read</name>
@@ -663,7 +642,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.iops[{#DEVNAME},read]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -691,9 +670,58 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Disk {#DEVNAME} I/O tps</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>cpan.zabbix.check.disk.iops[{#DEVNAME},total]</key>
+                            <delay>60</delay>
+                            <history>7</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units>tps</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Disk {#DEVNAME} I/O tps write</name>
@@ -702,7 +730,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.disk.iops[{#DEVNAME},write]</key>
-                            <delay>30</delay>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -730,9 +758,14 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Disk {#DEVNAME} I/O Util</name>
@@ -740,8 +773,8 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},total]</key>
-                            <delay>30</delay>
+                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME}]</key>
+                            <delay>60</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -769,116 +802,46 @@
                             <port/>
                             <description/>
                             <inventory_link>0</inventory_link>
-                            <applications/>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
                             <valuemap/>
                             <logtimefmt/>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Disk {#DEVNAME} I/O Util read</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},read]</key>
-                            <delay>30</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>Disk {#DEVNAME} I/O Util write</name>
-                            <type>0</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
-                            <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},write]</key>
-                            <delay>30</delay>
-                            <history>7</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
-                            <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications/>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].last()} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].last()} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%)</name>
                             <url/>
                             <status>0</status>
                             <priority>1</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].min(1m)} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].min(1m)} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%) for 1m</name>
                             <url/>
                             <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME},total].min(15m)} &gt; 90</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.disk.ioutil[{#DEVNAME}].min(15m)} &gt; 90</expression>
                             <name>Disk {#DEVNAME} I/O Util too high(&gt;90%) for 15m</name>
                             <url/>
                             <status>0</status>
                             <priority>3</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                     </trigger_prototypes>
                     <graph_prototypes>
@@ -902,8 +865,8 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
+                                    <drawtype>2</drawtype>
+                                    <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -915,7 +878,7 @@
                                 <graph_item>
                                     <sortorder>1</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>0000C8</color>
+                                    <color>00C800</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -927,7 +890,7 @@
                                 <graph_item>
                                     <sortorder>2</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>C80000</color>
+                                    <color>0000C8</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -958,8 +921,8 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
+                                    <drawtype>2</drawtype>
+                                    <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -971,7 +934,7 @@
                                 <graph_item>
                                     <sortorder>1</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>0000C8</color>
+                                    <color>00C800</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -983,7 +946,7 @@
                                 <graph_item>
                                     <sortorder>2</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>C80000</color>
+                                    <color>0000C8</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -1014,38 +977,14 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>00C800</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
-                                    <item>
-                                        <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},total]</key>
-                                    </item>
-                                </graph_item>
-                                <graph_item>
-                                    <sortorder>1</sortorder>
-                                    <drawtype>0</drawtype>
-                                    <color>0000C8</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
-                                    <item>
-                                        <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},read]</key>
-                                    </item>
-                                </graph_item>
-                                <graph_item>
-                                    <sortorder>2</sortorder>
-                                    <drawtype>0</drawtype>
+                                    <drawtype>2</drawtype>
                                     <color>C80000</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
                                     <item>
                                         <host>CPAN Zabbix-Check</host>
-                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME},write]</key>
+                                        <key>cpan.zabbix.check.disk.ioutil[{#DEVNAME}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -1093,7 +1032,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1128,6 +1067,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>RabbitMQ queue {#VHOST} {#QUEUE} total</name>
@@ -1136,7 +1076,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1171,6 +1111,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>RabbitMQ queue {#VHOST} {#QUEUE} unacked</name>
@@ -1179,7 +1120,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
-                            <delay>60</delay>
+                            <delay>600</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1214,6 +1155,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes/>
@@ -1299,7 +1241,7 @@
                             <key>cpan.zabbix.check.supervisor.worker_status[{#NAME}]</key>
                             <delay>60</delay>
                             <history>7</history>
-                            <trends>365</trends>
+                            <trends>0</trends>
                             <status>0</status>
                             <value_type>4</value_type>
                             <allowed_hosts/>
@@ -1332,6 +1274,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes>
@@ -1343,6 +1286,7 @@
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
                             <expression>{CPAN Zabbix-Check:cpan.zabbix.check.supervisor.worker_status[{#NAME}].iregexp(^RUNNING, 5m)} = 0</expression>
@@ -1352,6 +1296,7 @@
                             <priority>3</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                     </trigger_prototypes>
                     <graph_prototypes/>
@@ -1432,6 +1377,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Systemd service {#NAME} availability for 1h</name>
@@ -1457,7 +1403,7 @@
                             <snmpv3_privpassphrase/>
                             <formula>1</formula>
                             <delay_flex/>
-                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 3600)/60</params>
+                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 3600)/count(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 3600)</params>
                             <ipmi_sensor/>
                             <data_type>0</data_type>
                             <authtype>0</authtype>
@@ -1475,6 +1421,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Systemd service {#NAME} availability for 24h</name>
@@ -1500,7 +1447,7 @@
                             <snmpv3_privpassphrase/>
                             <formula>1</formula>
                             <delay_flex/>
-                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 86400)/1440</params>
+                            <params>100*sum(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 86400)/count(&quot;cpan.zabbix.check.systemd.service_active[{#NAME}]&quot;, 86400)</params>
                             <ipmi_sensor/>
                             <data_type>0</data_type>
                             <authtype>0</authtype>
@@ -1518,6 +1465,7 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                         <item_prototype>
                             <name>Systemd service {#NAME} status</name>
@@ -1528,7 +1476,7 @@
                             <key>cpan.zabbix.check.systemd.service_status[{#NAME}]</key>
                             <delay>60</delay>
                             <history>7</history>
-                            <trends>365</trends>
+                            <trends>0</trends>
                             <status>0</status>
                             <value_type>4</value_type>
                             <allowed_hosts/>
@@ -1561,17 +1509,19 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <application_prototypes/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}-10</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()} &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}</expression>
                             <name>Systemd service {#NAME} availability low</name>
                             <url/>
                             <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
                             <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_status[{#NAME}].iregexp(^failed)} &lt;&gt; 0</expression>
@@ -1581,6 +1531,7 @@
                             <priority>3</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                         <trigger_prototype>
                             <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_status[{#NAME}].diff()} &lt;&gt; 0</expression>
@@ -1590,6 +1541,7 @@
                             <priority>1</priority>
                             <description/>
                             <type>0</type>
+                            <dependencies/>
                         </trigger_prototype>
                     </trigger_prototypes>
                     <graph_prototypes>
@@ -1613,7 +1565,7 @@
                             <graph_items>
                                 <graph_item>
                                     <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
+                                    <drawtype>2</drawtype>
                                     <color>00C800</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
@@ -1626,7 +1578,7 @@
                                 <graph_item>
                                     <sortorder>1</sortorder>
                                     <drawtype>0</drawtype>
-                                    <color>C80000</color>
+                                    <color>0000C8</color>
                                     <yaxisside>0</yaxisside>
                                     <calc_fnc>2</calc_fnc>
                                     <type>0</type>
@@ -1643,16 +1595,20 @@
             </discovery_rules>
             <macros>
                 <macro>
-                    <macro>{$TIME_NTP_OFFSET}</macro>
+                    <macro>{$ZC_TIME_NTP_OFFSET}</macro>
                     <value>15</value>
                 </macro>
                 <macro>
-                    <macro>{$TIME_NTP_SERVER}</macro>
+                    <macro>{$ZC_TIME_NTP_SERVER}</macro>
                     <value>pool.ntp.org</value>
                 </macro>
                 <macro>
-                    <macro>{$TIME_ZONE}</macro>
+                    <macro>{$ZC_TIME_ZONE}</macro>
                     <value>+0000</value>
+                </macro>
+                <macro>
+                    <macro>{$ZC_VERSION}</macro>
+                    <value>1.10</value>
                 </macro>
             </macros>
             <templates/>
@@ -1703,10 +1659,10 @@ and&#13;
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}].last()} &gt; {$TIME_NTP_OFFSET}&#13;
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}].last()} &gt; {$ZC_TIME_NTP_OFFSET}&#13;
 or&#13;
-{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}].last()} &lt; -{$TIME_NTP_OFFSET}</expression>
-            <name>Time NTP offset too high (&gt;{$TIME_NTP_OFFSET}s)</name>
+{CPAN Zabbix-Check:cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}].last()} &lt; -{$ZC_TIME_NTP_OFFSET}</expression>
+            <name>Time NTP offset too high (&gt;{$ZC_TIME_NTP_OFFSET}s)</name>
             <url/>
             <status>0</status>
             <priority>3</priority>
@@ -1715,7 +1671,7 @@ or&#13;
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.zone.iregexp(^\{$TIME_ZONE}$)} = 0</expression>
+            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.time.zone.iregexp(^\{$ZC_TIME_ZONE}$)} = 0</expression>
             <name>Time zone wrong</name>
             <url/>
             <status>0</status>
@@ -1753,7 +1709,7 @@ or&#13;
                     <type>0</type>
                     <item>
                         <host>CPAN Zabbix-Check</host>
-                        <key>cpan.zabbix.check.time.ntp_offset[{$TIME_NTP_SERVER}]</key>
+                        <key>cpan.zabbix.check.time.ntp_offset[{$ZC_TIME_NTP_SERVER}]</key>
                     </item>
                 </graph_item>
             </graph_items>

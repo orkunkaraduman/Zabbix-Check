@@ -5,16 +5,16 @@ Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
-version 1.09
+version 1.10
 
 =head1 SYNOPSIS
 
 Zabbix check for disk
 
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
-	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps $1 $2
-	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops $1 $2
-	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil $1 $2
+	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
 
 =head3 discovery
 
@@ -42,8 +42,6 @@ gets disk I/O utilization in percentage
 
 $1: I<device name, eg: sda, sdb1, dm-3, ...>
 
-$2: I<type: read|write|total>
-
 =cut
 use strict;
 use warnings;
@@ -60,7 +58,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.09';
+	our $VERSION     = '1.10';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -126,17 +124,17 @@ sub stats
 		chomp $statLine;
 		my $stat = { 'epoch' => time() };
 		(
-			$stat->{readsCompleted},
-			$stat->{readsMerged},
-			$stat->{sectorsRead},
-			$stat->{timeSpentReading},
-			$stat->{writesCompleted},
-			$stat->{writesMerged},
-			$stat->{sectorsWritten},
-			$stat->{timeSpentWriting},
-			$stat->{IOsCurrently},
-			$stat->{timeSpentIOs},
-			$stat->{weightedTimeSpentIOs},
+			$stat->{readIOs},
+			$stat->{readsMerges},
+			$stat->{readSectors},
+			$stat->{readWaits},
+			$stat->{writeIOs},
+			$stat->{writesMerges},
+			$stat->{writeSectors},
+			$stat->{writeWaits},
+			$stat->{inFlight},
+			$stat->{IOTicks},
+			$stat->{totalWaits},
 		) = $statLine =~ /^\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/;
 		$result->{$devname} = $stat;
 	}
@@ -148,7 +146,7 @@ sub analyzeStats
 	my $now = time();
 	my $stats;
 	my $oldStats;
-	my $tmpPrefix = "/tmp/".__PACKAGE__ =~ s/\Q::\E/-/gr.".analyzeStats.";
+	my $tmpPrefix = "/tmp/".(caller(0))[3] =~ s/\Q::\E/-/gr.",stats,";
 	for my $tmpPath (sort {$b cmp $a} glob("$tmpPrefix*"))
 	{
 		if (my ($epoch, $pid) = $tmpPath =~ /^\Q$tmpPrefix\E(\d*)\.(\d*)/)
@@ -168,8 +166,7 @@ sub analyzeStats
 				eval { $oldStats = from_json($tmp) } if $tmp;
 				next unless not $tmp or $@;
 			}
-			unlink($tmpPath) if $now-$epoch > 2*60;
-			next;
+			next unless $now-$epoch > 2*60;
 		}
 		unlink($tmpPath);
 	}
@@ -191,26 +188,25 @@ sub analyzeStats
 		next unless $diff;
 		$result->{$devname} = {};
 
-		my $rw;
+		my $sector;
 		my $io;
 
-		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead};
-		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted};
-		$result->{$devname}->{bps_read} = 512*$rw/$diff;
+		$sector = $stat->{readSectors} - $oldStat->{readSectors};
+		$io = $stat->{readIOs} - $oldStat->{readIOs};
+		$result->{$devname}->{bps_read} = 512*$sector/$diff;
 		$result->{$devname}->{iops_read} = $io/$diff;
-		$result->{$devname}->{ioutil_read} = $rw? 100*$io/$rw: 0;
 
-		$rw = $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$io = $stat->{writesCompleted} - $oldStat->{writesCompleted};
-		$result->{$devname}->{bps_write} = 512*$rw/$diff;
+		$sector = $stat->{writeSectors} - $oldStat->{writeSectors};
+		$io = $stat->{writeIOs} - $oldStat->{writeIOs};
+		$result->{$devname}->{bps_write} = 512*$sector/$diff;
 		$result->{$devname}->{iops_write} = $io/$diff;
-		$result->{$devname}->{ioutil_write} = $rw? 100*$io/$rw: 0;
 
-		$rw = $stat->{sectorsRead} - $oldStat->{sectorsRead} + $stat->{sectorsWritten} - $oldStat->{sectorsWritten};
-		$io = $stat->{readsCompleted} - $oldStat->{readsCompleted} + $stat->{writesCompleted} - $oldStat->{writesCompleted};
-		$result->{$devname}->{bps_total} = 512*$rw/$diff;
+		$sector = $stat->{readSectors} - $oldStat->{readSectors} + $stat->{writeSectors} - $oldStat->{writeSectors};
+		$io = $stat->{readIOs} - $oldStat->{readIOs} + $stat->{writeIOs} - $oldStat->{writeIOs};
+		$result->{$devname}->{bps_total} = 512*$sector/$diff;
 		$result->{$devname}->{iops_total} = $io/$diff;
-		$result->{$devname}->{ioutil_total} = $rw? 100*$io/$rw: 0;
+
+		$result->{$devname}->{ioutil} = 100*($stat->{IOTicks} - $oldStat->{IOTicks})/(1000*$diff);
 	}
 	return $result;
 }
@@ -255,12 +251,12 @@ sub _iops
 
 sub _ioutil
 {
-	my ($devname, $type) = map(zbxDecode($_), @ARGV);
-	return unless $devname and $type and $type =~ /^read|write|total$/;
+	my ($devname) = map(zbxDecode($_), @ARGV);
+	return unless $devname;
 	my $result = 0;
 	my $analyzed = analyzeStats();
 	my $status = $analyzed->{$devname} if $analyzed;
-	$result = sprintf("%.2f", $status->{"ioutil_$type"}) if $status;
+	$result = sprintf("%.2f", $status->{"ioutil"}) if $status;
 	print $result;
 	return $result;
 }

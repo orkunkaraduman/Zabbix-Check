@@ -15,12 +15,12 @@ WriteMakefile(
 		'File::Slurp' => 0,
 		'JSON' => 0,
 		'Net::NTP' => 0,
-		'Lazy::Utils' => '1.02',
+		'Lazy::Utils' => '1.04',
 	},
 	EXE_FILES			=> [qw(
 	)],
 	AUTHOR				=> 'Orkun Karaduman <orkunkaraduman@gmail.com>',
-	ABSTRACT			=> 'Zabbix Agent system and service checks',
+	ABSTRACT			=> 'System and service checks for Zabbix',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {

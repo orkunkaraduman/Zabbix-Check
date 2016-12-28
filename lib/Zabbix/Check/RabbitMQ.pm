@@ -5,7 +5,7 @@ Zabbix::Check::RabbitMQ - Zabbix check for RabbitMQ service
 
 =head1 VERSION
 
-version 1.09
+version 1.10
 
 =head1 SYNOPSIS
 
@@ -13,9 +13,9 @@ Zabbix check for RabbitMQ service
 
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery $1
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery $1
-	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status $1 $2 $3
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
 
 =head3 installed
 
@@ -62,7 +62,7 @@ BEGIN
 {
 	require Exporter;
 	# set the version for version checking
-	our $VERSION     = '1.09';
+	our $VERSION     = '1.10';
 	# Inherit from Exporter to export functions and variables
 	our @ISA         = qw(Exporter);
 	# Functions and variables which are exported by default
@@ -80,7 +80,7 @@ sub getVhosts
 	return unless $rabbitmqctl;
 	my ($expiry) = @_;
 	$expiry = -1 unless defined($expiry);
-	my $result = cache((caller(0))[3], $expiry, sub
+	my $result = fileCache("all", $expiry, sub
 	{
 		my $result = {};
 		my $first = 1;
@@ -97,7 +97,6 @@ sub getVhosts
 		}
 		return $result;
 	});
-	$result = {} unless $result;
 	return $result;
 }
 
@@ -107,7 +106,7 @@ sub getQueues
 	my ($vhost, $expiry) = @_;
 	my $vhostS = shellmeta($vhost);
 	$expiry = -1 unless defined($expiry);
-	my $result = cache((caller(0))[3].",$vhost", $expiry, sub
+	my $result = fileCache($vhost, $expiry, sub
 	{
 		my $result = {};
 		my $first = 1;
@@ -124,7 +123,6 @@ sub getQueues
 		}
 		return $result;
 	});
-	$result = {} unless $result;
 	return $result;
 }
 
