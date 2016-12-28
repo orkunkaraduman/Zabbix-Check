@@ -1,7 +1,7 @@
 package Zabbix::Check;
 =head1 NAME
 
-Zabbix::Check - Zabbix Agent system and service checks
+Zabbix::Check - System and service checks for Zabbix
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.10
 
 =head1 SYNOPSIS
 
-System and service checks for Zabbix Agent
+System and service checks for Zabbix
 
 	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
