@@ -66,7 +66,7 @@ our ($supervisord) = whereisBin('supervisord');
 sub getStatuses
 {
 	return unless $supervisorctl;
-	my $result = fileCache("all", 15, sub
+	my $result = fileCache("all", 30, sub
 	{
 		my $result = {};
 		for (`$supervisorctl status 2>/dev/null`)

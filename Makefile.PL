@@ -20,7 +20,7 @@ WriteMakefile(
 	EXE_FILES			=> [qw(
 	)],
 	AUTHOR				=> 'Orkun Karaduman <orkunkaraduman@gmail.com>',
-	ABSTRACT			=> 'Zabbix Agent system and service checks',
+	ABSTRACT			=> 'System and service checks for Zabbix Agent',
 	LICENSE				=> 'gpl_3',
 	META_MERGE			=> {
 		'meta-spec' => {

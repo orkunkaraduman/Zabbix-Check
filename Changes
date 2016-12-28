@@ -1,5 +1,9 @@
-1.10	2016-12-25
-		- 
+1.10	2016-12-28
+		- Usage of Lazy::Utils::fileCache instead of cache function
+		- Perl arguement fix ( -- ) in configuration, readme, pod
+		- Supervisor worker status fix for "no such ..." result for undefined workers
+		- Added file cache in Supervisor getStatuses
+		- Fix and changes for disk ioutil
 
 1.09	2016-12-23
 		- zbxEncode comma and nonascii fix

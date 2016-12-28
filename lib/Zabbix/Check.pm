@@ -9,7 +9,7 @@ version 1.10
 
 =head1 SYNOPSIS
 
-Zabbix Agent system and service checks
+System and service checks for Zabbix Agent
 
 	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
