@@ -5,7 +5,7 @@ Zabbix::Check - System and service checks for Zabbix
 
 =head1 VERSION
 
-version 1.10
+version 1.11
 
 =head1 SYNOPSIS
 
@@ -192,13 +192,9 @@ use Lazy::Utils;
 BEGIN
 {
 	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.10';
-	# Inherit from Exporter to export functions and variables
+	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
 	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery _version);
-	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
