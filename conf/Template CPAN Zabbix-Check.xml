@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.0</version>
-    <date>2017-01-13T23:45:15Z</date>
+    <date>2017-05-20T07:37:54Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -1054,7 +1054,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.queue_discovery</key>
-                    <delay>600</delay>
+                    <delay>300</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1088,7 +1088,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
-                            <delay>600</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1132,7 +1132,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
-                            <delay>600</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1176,7 +1176,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
-                            <delay>600</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1215,7 +1215,64 @@
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes/>
-                    <graph_prototypes/>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>RabbitMQ queue {#VHOST} {#QUEUE}</name>
+                            <width>900</width>
+                            <height>200</height>
+                            <yaxismin>0.0000</yaxismin>
+                            <yaxismax>100.0000</yaxismax>
+                            <show_work_period>1</show_work_period>
+                            <show_triggers>1</show_triggers>
+                            <type>0</type>
+                            <show_legend>1</show_legend>
+                            <show_3d>0</show_3d>
+                            <percent_left>0.0000</percent_left>
+                            <percent_right>0.0000</percent_right>
+                            <ymin_type_1>1</ymin_type_1>
+                            <ymax_type_1>0</ymax_type_1>
+                            <ymin_item_1>0</ymin_item_1>
+                            <ymax_item_1>0</ymax_item_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>0</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>F63100</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>CPAN Zabbix-Check</host>
+                                        <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},total]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>1A7C11</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>CPAN Zabbix-Check</host>
+                                        <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},ready]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <drawtype>0</drawtype>
+                                    <color>2774A4</color>
+                                    <yaxisside>0</yaxisside>
+                                    <calc_fnc>2</calc_fnc>
+                                    <type>0</type>
+                                    <item>
+                                        <host>CPAN Zabbix-Check</host>
+                                        <key>cpan.zabbix.check.rabbitmq.queue_status[{#VHOST},{#QUEUE},unacked]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
                     <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
@@ -1224,7 +1281,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.rabbitmq.vhost_discovery</key>
-                    <delay>600</delay>
+                    <delay>300</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1261,7 +1318,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.supervisor.worker_discovery</key>
-                    <delay>600</delay>
+                    <delay>300</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1369,7 +1426,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>cpan.zabbix.check.systemd.service_discovery</key>
-                    <delay>600</delay>
+                    <delay>300</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -1403,7 +1460,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_active[{#NAME}]</key>
-                            <delay>60</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1447,7 +1504,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_availability_1h[{#NAME}]</key>
-                            <delay>60</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1491,7 +1548,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_availability_24h[{#NAME}]</key>
-                            <delay>60</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>365</trends>
                             <status>0</status>
@@ -1535,7 +1592,7 @@
                             <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>cpan.zabbix.check.systemd.service_status[{#NAME}]</key>
-                            <delay>60</delay>
+                            <delay>300</delay>
                             <history>7</history>
                             <trends>0</trends>
                             <status>0</status>
@@ -1575,7 +1632,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()}+2 &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}</expression>
+                            <expression>{CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_1h[{#NAME}].last()}+20 &lt; {CPAN Zabbix-Check:cpan.zabbix.check.systemd.service_availability_24h[{#NAME}].last()}</expression>
                             <name>Systemd service {#NAME} availability low</name>
                             <url/>
                             <status>0</status>
@@ -1669,7 +1726,7 @@
                 </macro>
                 <macro>
                     <macro>{$ZC_VERSION}</macro>
-                    <value>1.10</value>
+                    <value>1.11</value>
                 </macro>
             </macros>
             <templates/>
