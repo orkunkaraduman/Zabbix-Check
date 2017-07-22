@@ -4,32 +4,49 @@ Zabbix::Check - System and service checks for Zabbix
 
 # VERSION
 
-version 1.10
+version 1.11
 
 # SYNOPSIS
 
 System and service checks for Zabbix
 
+        UserParameter=cpan.zabbix.check.installed,/usr/bin/env bash -c "/usr/bin/perl -MZabbix::Check 2>/dev/null; if [ \$? -eq 0 ]; then echo 1; else echo 0; fi"
         UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
-
-### version
-
-gets Zabbix::Check version
-
-## Disk
-
-Zabbix check for disk
-
+        # Disk
         UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
         UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
         UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
         UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
+        # Supervisor
+        UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
+        UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
+        UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
+        UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status -- $1
+        # RabbitMQ
+        UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
+        UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
+        UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
+        UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
+        UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
+        # Systemd
+        UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
+        UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
+        UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
+        UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
+        # Time
+        UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+        UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+        UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
 
-### discovery
+# DISK
+
+Zabbix check for disk
+
+## discovery
 
 discovers disks
 
-### bps $1 $2
+## bps $1 $2
 
 gets disk I/O traffic in bytes per second
 
@@ -37,7 +54,7 @@ $1: _device name, eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
-### iops $1 $2
+## iops $1 $2
 
 gets disk I/O transaction speed in transactions per second
 
@@ -45,70 +62,59 @@ $1: _device name, eg: sda, sdb1, dm-3, ..._
 
 $2: _type: read|write|total_
 
-### ioutil $1 $2
+## ioutil $1
 
 gets disk I/O utilization in percentage
 
 $1: _device name, eg: sda, sdb1, dm-3, ..._
 
-## Supervisor
+# SUPERVISOR
 
 Zabbix check for Supervisor service
 
-        UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
-        UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
-        UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
-        UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status -- $1
-
-### installed
+## \_installed
 
 checks Supervisor is installed: 0 | 1
 
-### running
+## \_running
 
 checks Supervisor is installed and running: 0 | 1 | 2 = not installed
 
-### worker\_discovery
+## \_worker\_discovery
 
 discovers Supervisor workers
 
-### worker\_status $1
+## \_worker\_status $1
 
 gets Supervisor worker status: RUNNING | STOPPED | ...
 
 $1: _worker name_
 
-## RabbitMQ
+# RABBITMQ
 
 Zabbix check for RabbitMQ service
 
-        UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
-        UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
-        UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
-        UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
-        UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
-
-### installed
+## \_installed
 
 checks RabbitMQ is installed: 0 | 1
 
-### running
+## \_running
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-### vhost\_discovery $1
+## \_vhost\_discovery $1
 
 discovers RabbitMQ vhosts
 
 $1: _cache expiry in seconds, by default 0_
 
-### queue\_discovery $1
+## \_queue\_discovery $1
 
 discovers RabbitMQ queues
 
 $1: _cache expiry in seconds, by default 0_
 
-### queue\_status $1 $2 $3
+## \_queue\_status $1 $2 $3
 
 gets RabbitMQ queue status using queue discovery cache
 
@@ -118,52 +124,43 @@ $2: _queue name_
 
 $3: _type: ready|unacked|total_
 
-## Systemd
+# SYSTEMD
 
 Zabbix check for Systemd services
 
-        UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-        UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-        UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
-        UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
-
-### installed
+## \_installed
 
 checks Systemd is installed: 0 | 1
 
-### system\_status
+## \_system\_status
 
 gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
 
-### service\_discovery
+## \_service\_discovery
 
 discovers Systemd enabled services
 
 $1: _regex of service name, by default undefined_
 
-### service\_status $1
+## \_service\_status $1
 
 gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
 $1: _service name_
 
-## Time
+# TIME
 
 Zabbix check for system time
 
-        UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
-        UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
-        UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
-
-### epoch
+## \_epoch
 
 gets system time epoch in seconds
 
-### zone
+## \_zone
 
 gets system time zone, eg: +0200
 
-### ntp\_offset $1 $2
+## \_ntp\_offset $1 $2
 
 gets system time difference by NTP server
 
@@ -188,11 +185,7 @@ from CPAN
 
 This module requires these other modules and libraries:
 
-- Switch
-- FindBin
 - Cwd
-- File::Basename
-- File::Slurp
 - JSON
 - Net::NTP
 - Lazy::Utils
@@ -205,11 +198,11 @@ This module requires these other modules and libraries:
 
 # AUTHOR
 
-Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
+Orkun Karaduman (ORKUN) &lt;orkun@cpan.org&gt;
 
 # COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
+Copyright (C) 2017  Orkun Karaduman &lt;orkunkaraduman@gmail.com&gt;
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

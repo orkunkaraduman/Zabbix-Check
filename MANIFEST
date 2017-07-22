@@ -1,6 +1,7 @@
 Changes
 'conf/Template CPAN Zabbix-Check.xml'
 conf/zabbix_agentd.conf
+COPYRIGHT
 lib/Zabbix/Check.pm
 lib/Zabbix/Check/Disk.pm
 lib/Zabbix/Check/RabbitMQ.pm
@@ -13,4 +14,4 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 README
 README.md
-t/Zabbix-Check.t
+t/00-load.t

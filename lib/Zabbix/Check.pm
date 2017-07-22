@@ -176,7 +176,6 @@ use v5.10.1;
 use JSON;
 use Net::NTP;
 use Lazy::Utils;
-use Data::Dumper;
 
 
 BEGIN
