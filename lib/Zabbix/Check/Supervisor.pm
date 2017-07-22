@@ -14,7 +14,7 @@ Zabbix check for Supervisor service
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -82,7 +82,7 @@ sub _worker_discovery
 sub _worker_status
 {
 	my ($name) = map(zbx_decode($_), @ARGV);
-	return unless $name;
+	return "" unless $name;
 	my $result = "";
 	my $statuses = get_statuses();
 	$result = $statuses->{$name} if $statuses->{$name};
@@ -101,7 +101,7 @@ B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

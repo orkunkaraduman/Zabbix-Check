@@ -14,7 +14,7 @@ Zabbix check for system time
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use POSIX;
 use Net::NTP;
 use Lazy::Utils;
@@ -74,7 +74,7 @@ B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

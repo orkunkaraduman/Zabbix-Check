@@ -14,7 +14,7 @@ Zabbix check for Systemd services
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -40,8 +40,8 @@ sub get_unit_files
 	my $result = {};
 	for (`$systemctl --no-legend list-unit-files 2>/dev/null`)
 	{
-		chomp;
-		last unless s/^\s+|\s+$//gr;
+		$_ = trim($_);
+		last unless $_;
 		my ($unit, $state) = /^(\S+)\s+(\S+)/;
 		my $info = {
 			unit => $unit,
@@ -61,8 +61,8 @@ sub get_units
 	my $first = 1;
 	for (`$systemctl --no-legend -a list-units 2>/dev/null`)
 	{
-		chomp;
-		last unless s/^\s+|\s+$//gr;
+		$_ = trim($_);
+		last unless $_;
 		my ($unit, $load, $active, $sub, $desc) = /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/;
 		my $info = {
 			unit => $unit,
@@ -99,20 +99,20 @@ sub _system_status
 
 sub _service_discovery
 {
-	my ($nameRgx) = map(zbx_decode($_), @ARGV);
+	my ($name_rgx) = map(zbx_decode($_), @ARGV);
 	my @items;
 	my $units = get_units('service');
-	@items = map($units->{$_}, grep({ not defined($nameRgx) or $units->{$_}->{name} =~ /$nameRgx/ } keys %$units)) if $units;
+	@items = map($units->{$_}, grep({ not defined($name_rgx) or $units->{$_}->{name} =~ /$name_rgx/ } keys %$units)) if $units;
 	return print_discovery(@items);
 }
 
 sub _service_status
 {
 	my ($name) = map(zbx_decode($_), @ARGV);
-	return unless $name;
-	my $nameS = shellmeta($name);
+	return "" unless $name;
+	my $name_s = shellmeta($name);
 	my $result = "";
-	my $line = `$systemctl is-active \"$nameS.service\" 2>/dev/null` if $systemctl;
+	my $line = `$systemctl is-active \"$name_s.service\" 2>/dev/null` if $systemctl;
 	if ($line)
 	{
 		chomp $line;
@@ -133,7 +133,7 @@ B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

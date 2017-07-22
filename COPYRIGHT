@@ -1,48 +1,3 @@
-#!/usr/bin/env perl
-=head1 NAME
-
-test.pl - for internal tests
-
-=head1 VERSION
-
-version not defined
-
-=head1 SYNOPSIS
-
-for internal tests
-
-=cut
-use strict;
-use warnings;
-use v5.14;
-use utf8;
-use open qw(:std :locale);
-use open IO => ':bytes';
-use FindBin;
-use Data::Dumper;
-
-use lib "${FindBin::Bin}/../lib";
-use Zabbix::Check;
-require Zabbix::Check::Disk;
-require Zabbix::Check::Supervisor;
-require Zabbix::Check::RabbitMQ;
-require Zabbix::Check::Systemd;
-require Zabbix::Check::Time;
-
-
-#Zabbix::Check::Disk::_discovery();
-
-Zabbix::Check::Disk::_bps();
-
-
-exit 0;
-__END__
-=head1 AUTHOR
-
-Orkun Karaduman (ORKUN) <orkun@cpan.org>
-
-=head1 COPYRIGHT AND LICENSE
-
 Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -57,5 +12,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-=cut

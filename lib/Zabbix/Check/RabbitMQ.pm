@@ -14,7 +14,7 @@ Zabbix check for RabbitMQ service
 =cut
 use strict;
 use warnings;
-use v5.14;
+use v5.10.1;
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -62,13 +62,13 @@ sub get_queues
 {
 	return unless $rabbitmqctl;
 	my ($vhost, $expiry) = @_;
-	my $vhostS = shellmeta($vhost);
+	my $vhost_s = shellmeta($vhost);
 	$expiry = -1 unless defined($expiry);
 	my $result = file_cache($vhost, $expiry, sub
 	{
 		my $result = {};
 		my $first = 1;
-		for my $line (`$rabbitmqctl list_queues -p \"$vhostS\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
+		for my $line (`$rabbitmqctl list_queues -p \"$vhost_s\" name messages_ready messages_unacknowledged messages 2>/dev/null`)
 		{
 			chomp $line;
 			if ($first)
@@ -139,7 +139,7 @@ sub _queue_discovery
 sub _queue_status
 {
 	my ($vhost, $queue, $type) = map(zbx_decode($_), @ARGV);
-	return unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
+	return "" unless $vhost and $queue and $type and $type =~ /^ready|unacked|total$/;
 	my $result = "";
 	my $queues = get_queues($vhost);
 	$result = $queues->{$queue}->{$type} if defined($queues->{$queue}->{$type});
@@ -158,7 +158,7 @@ B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

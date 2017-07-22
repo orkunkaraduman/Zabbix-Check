@@ -11,31 +11,30 @@ version 1.11
 
 System and service checks for Zabbix
 
-	UserParameter=cpan.zabbix.check.installed,/bin/bash -c "/usr/bin/perl -MZabbix::Check 2>/dev/null; if [ \$? -eq 0 ]; then echo 1; else echo 0; fi"
-
+	UserParameter=cpan.zabbix.check.installed,/usr/bin/env bash -c "/usr/bin/perl -MZabbix::Check 2>/dev/null; if [ \$? -eq 0 ]; then echo 1; else echo 0; fi"
 	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
-
+	# Disk
 	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
 	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
 	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
 	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
-
+	# Supervisor
 	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
 	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
 	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
 	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status -- $1
-
+	# RabbitMQ
 	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
 	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
 	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
 	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
-
+	# Systemd
 	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
 	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
 	UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
 	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
-
+	# Time
 	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
 	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
 	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
@@ -74,19 +73,19 @@ $1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 Zabbix check for Supervisor service
 
-=head2 installed
+=head2 _installed
 
 checks Supervisor is installed: 0 | 1
 
-=head2 running
+=head2 _running
 
 checks Supervisor is installed and running: 0 | 1 | 2 = not installed
 
-=head2 worker_discovery
+=head2 _worker_discovery
 
 discovers Supervisor workers
 
-=head2 worker_status $1
+=head2 _worker_status $1
 
 gets Supervisor worker status: RUNNING | STOPPED | ...
 
@@ -96,27 +95,27 @@ $1: I<worker name>
 
 Zabbix check for RabbitMQ service
 
-=head2 installed
+=head2 _installed
 
 checks RabbitMQ is installed: 0 | 1
 
-=head2 running
+=head2 _running
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-=head2 vhost_discovery $1
+=head2 _vhost_discovery $1
 
 discovers RabbitMQ vhosts
 
 $1: I<cache expiry in seconds, by default 0>
 
-=head2 queue_discovery $1
+=head2 _queue_discovery $1
 
 discovers RabbitMQ queues
 
 $1: I<cache expiry in seconds, by default 0>
 
-=head2 queue_status $1 $2 $3
+=head2 _queue_status $1 $2 $3
 
 gets RabbitMQ queue status using queue discovery cache
 
@@ -130,21 +129,21 @@ $3: I<type: ready|unacked|total>
 
 Zabbix check for Systemd services
 
-=head2 installed
+=head2 _installed
 
 checks Systemd is installed: 0 | 1
 
-=head2 system_status
+=head2 _system_status
 
 gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
 
-=head2 service_discovery
+=head2 _service_discovery
 
 discovers Systemd enabled services
 
 $1: I<regex of service name, by default undefined>
 
-=head2 service_status $1
+=head2 _service_status $1
 
 gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
@@ -154,15 +153,15 @@ $1: I<service name>
 
 Zabbix check for system time
 
-=head2 epoch
+=head2 _epoch
 
 gets system time epoch in seconds
 
-=head2 zone
+=head2 _zone
 
 gets system time zone, eg: +0200
 
-=head2 ntp_offset $1 $2
+=head2 _ntp_offset $1 $2
 
 gets system time difference by NTP server
 
@@ -173,11 +172,11 @@ $2: I<port, by default 123>
 =cut
 use strict;
 use warnings;
-use v5.14;
-use Cwd;
+use v5.10.1;
 use JSON;
 use Net::NTP;
 use Lazy::Utils;
+use Data::Dumper;
 
 
 BEGIN
@@ -190,14 +189,14 @@ BEGIN
 }
 
 
-our @zbx_specials = qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @);
+our @zbx_specials = split(" ", q%\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | \# @%);
 
 
 sub zbx_encode
 {
 	my $result = "";
 	my ($str) = @_;
-	return $result unless $str;
+	return $result unless defined($str);
 	for (my $i = 0; $i < length $str; $i++)
 	{
 		my $chr = substr $str, $i, 1;
@@ -216,7 +215,7 @@ sub zbx_decode
 {
 	my $result = "";
 	my ($str) = @_;
-	return $result unless $str;
+	return $result unless defined($str);
 	my ($i, $len) = (0, length $str);
 	while ($i < $len)
 	{
@@ -315,7 +314,7 @@ B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
 
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

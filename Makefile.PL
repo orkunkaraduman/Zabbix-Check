@@ -6,9 +6,8 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
 	NAME				=> 'Zabbix::Check',
 	VERSION_FROM		=> 'lib/Zabbix/Check.pm',
-	MIN_PERL_VERSION	=> '5.014',
-	PREREQ_PM			=> { 
-		'Cwd'			=> '3.62',
+	MIN_PERL_VERSION	=> '5.010001',
+	PREREQ_PM			=> {
 		'JSON'			=> '2.90',
 		'Net::NTP'		=> '1.5',
 		'Lazy::Utils'	=> '1.21',
