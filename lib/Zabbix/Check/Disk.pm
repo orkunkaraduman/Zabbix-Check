@@ -109,7 +109,9 @@ sub analyze_stats
 	my $now = time();
 	my $stats;
 	my $old_stats;
-	my $tmp_prefix = "/tmp/".(caller(0))[3] =~ s/\Q::\E/-/gr.".";
+	my $tmp_prefix = (caller(0))[3];
+	$tmp_prefix =~ s/\Q::\E/-/g;
+	$tmp_prefix = "/tmp/".$tmp_prefix.".";
 	for my $tmp_path (sort {$b cmp $a} glob("$tmp_prefix*"))
 	{
 		if (my ($epoch, $pid) = $tmp_path =~ /^\Q$tmp_prefix\E(\d*)\.(\d*)/)
