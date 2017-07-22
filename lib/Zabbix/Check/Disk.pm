@@ -5,51 +5,19 @@ Zabbix::Check::Disk - Zabbix check for disk
 
 =head1 VERSION
 
-version 1.10
+version 1.11
 
 =head1 SYNOPSIS
 
 Zabbix check for disk
 
-	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
-	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
-	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
-	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
-
-=head3 discovery
-
-discovers disks
-
-=head3 bps $1 $2
-
-gets disk I/O traffic in bytes per second
-
-$1: I<device name, eg: sda, sdb1, dm-3, ...>
-
-$2: I<type: read|write|total>
-
-=head3 iops $1 $2
-
-gets disk I/O transaction speed in transactions per second
-
-$1: I<device name, eg: sda, sdb1, dm-3, ...>
-
-$2: I<type: read|write|total>
-
-=head3 ioutil $1 $2
-
-gets disk I/O utilization in percentage
-
-$1: I<device name, eg: sda, sdb1, dm-3, ...>
-
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use File::Slurp;
 use JSON;
+use Lazy::Utils;
 
 use Zabbix::Check;
 
@@ -57,13 +25,9 @@ use Zabbix::Check;
 BEGIN
 {
 	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.10';
-	# Inherit from Exporter to export functions and variables
+	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
 	our @EXPORT      = qw(_discovery _bps _iops _ioutil);
-	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
@@ -276,7 +240,7 @@ Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

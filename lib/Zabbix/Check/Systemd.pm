@@ -5,43 +5,16 @@ Zabbix::Check::Systemd - Zabbix check for Systemd services
 
 =head1 VERSION
 
-version 1.10
+version 1.11
 
 =head1 SYNOPSIS
 
 Zabbix check for Systemd services
 
-	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
-	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
-	UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
-	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
-
-=head3 installed
-
-checks Systemd is installed: 0 | 1
-
-=head3 system_status
-
-gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
-
-=head3 service_discovery
-
-discovers Systemd enabled services
-
-$1: I<regex of service name, by default undefined>
-
-=head3 service_status $1
-
-gets Systemd enabled service status: active | inactive | failed | unknown | ...
-
-$1: I<service name>
-
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
-use utf8;
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -50,21 +23,17 @@ use Zabbix::Check;
 BEGIN
 {
 	require Exporter;
-	# set the version for version checking
-	our $VERSION     = '1.10';
-	# Inherit from Exporter to export functions and variables
+	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	# Functions and variables which are exported by default
 	our @EXPORT      = qw(_installed _system_status _service_discovery _service_status);
-	# Functions and variables which can be optionally exported
 	our @EXPORT_OK   = qw();
 }
 
 
-our ($systemctl) = whereisBin('systemctl');
+our ($systemctl) = whereis('systemctl');
 
 
-sub getUnitFiles
+sub get_unit_files
 {
 	return unless $systemctl;
 	my ($type) = @_;
@@ -84,7 +53,7 @@ sub getUnitFiles
 	return $result;
 }
 
-sub getUnits
+sub get_units
 {
 	return unless $systemctl;
 	my ($type) = @_;
@@ -130,16 +99,16 @@ sub _system_status
 
 sub _service_discovery
 {
-	my ($nameRgx) = map(zbxDecode($_), @ARGV);
+	my ($nameRgx) = map(zbx_decode($_), @ARGV);
 	my @items;
-	my $units = getUnits('service');
+	my $units = get_units('service');
 	@items = map($units->{$_}, grep({ not defined($nameRgx) or $units->{$_}->{name} =~ /$nameRgx/ } keys %$units)) if $units;
-	return printDiscovery(@items);
+	return print_discovery(@items);
 }
 
 sub _service_status
 {
-	my ($name) = map(zbxDecode($_), @ARGV);
+	my ($name) = map(zbx_decode($_), @ARGV);
 	return unless $name;
 	my $nameS = shellmeta($name);
 	my $result = "";
@@ -168,7 +137,7 @@ Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
