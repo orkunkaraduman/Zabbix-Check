@@ -11,11 +11,35 @@ version 1.11
 
 System and service checks for Zabbix
 
+	UserParameter=cpan.zabbix.check.installed,/bin/bash -c "/usr/bin/perl -MZabbix::Check 2>/dev/null; if [ \$? -eq 0 ]; then echo 1; else echo 0; fi"
+
 	UserParameter=cpan.zabbix.check.version,/usr/bin/perl -MZabbix::Check -e_version
 
-=head3 version
+	UserParameter=cpan.zabbix.check.disk.discovery,/usr/bin/perl -MZabbix::Check::Disk -e_discovery
+	UserParameter=cpan.zabbix.check.disk.bps[*],/usr/bin/perl -MZabbix::Check::Disk -e_bps -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.iops[*],/usr/bin/perl -MZabbix::Check::Disk -e_iops -- $1 $2
+	UserParameter=cpan.zabbix.check.disk.ioutil[*],/usr/bin/perl -MZabbix::Check::Disk -e_ioutil -- $1
 
-gets Zabbix::Check version
+	UserParameter=cpan.zabbix.check.supervisor.installed,/usr/bin/perl -MZabbix::Check::Supervisor -e_installed
+	UserParameter=cpan.zabbix.check.supervisor.running,/usr/bin/perl -MZabbix::Check::Supervisor -e_running
+	UserParameter=cpan.zabbix.check.supervisor.worker_discovery,/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_discovery
+	UserParameter=cpan.zabbix.check.supervisor.worker_status[*],/usr/bin/perl -MZabbix::Check::Supervisor -e_worker_status -- $1
+
+	UserParameter=cpan.zabbix.check.rabbitmq.installed,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_installed
+	UserParameter=cpan.zabbix.check.rabbitmq.running,/usr/bin/perl -MZabbix::Check::RabbitMQ -e_running
+	UserParameter=cpan.zabbix.check.rabbitmq.vhost_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_vhost_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_discovery[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_discovery -- $1
+	UserParameter=cpan.zabbix.check.rabbitmq.queue_status[*],/usr/bin/perl -MZabbix::Check::RabbitMQ -e_queue_status -- $1 $2 $3
+
+	UserParameter=cpan.zabbix.check.systemd.installed,/usr/bin/perl -MZabbix::Check::Systemd -e_installed
+	UserParameter=cpan.zabbix.check.systemd.system_status,/usr/bin/perl -MZabbix::Check::Systemd -e_system_status
+	UserParameter=cpan.zabbix.check.systemd.service_discovery[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_discovery -- $1
+	UserParameter=cpan.zabbix.check.systemd.service_status[*],/usr/bin/perl -MZabbix::Check::Systemd -e_service_status -- $1
+
+	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
+	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
+	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
+
 
 =head2 Disk
 
@@ -194,7 +218,7 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(zbxEncode zbxDecode printDiscovery _version);
+	our @EXPORT      = qw(zbx_encode zbx_decode print_discovery _version);
 	our @EXPORT_OK   = qw();
 }
 
@@ -202,7 +226,7 @@ BEGIN
 our @zbxSpecials = qw(\ ' " ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @);
 
 
-sub zbxEncode
+sub zbx_encode
 {
 	my $result = "";
 	my ($str) = @_;
@@ -221,7 +245,7 @@ sub zbxEncode
 	return $result;
 }
 
-sub zbxDecode
+sub zbx_decode
 {
 	my $result = "";
 	my ($str) = @_;
@@ -244,19 +268,19 @@ sub zbxDecode
 	return $result;
 }
 
-sub printDiscovery
+sub print_discovery
 {
 	my @items = @_;
 	my $discovery = {
 		data => [
 			map({
-				my $item = $_; 
+				my $item = $_;
 				my %newitem = map({
 					my $key = $_;
 					my $val = $item->{$key};
-					my $newkey = zbxEncode($key);
+					my $newkey = zbx_encode($key);
 					$newkey = uc("{#$newkey}");
-					my $newval = zbxEncode($val);
+					my $newval = zbx_encode($val);
 					$newkey => $newval;
 				} keys(%$item));
 				\%newitem;
@@ -279,6 +303,7 @@ sub _version
 
 my $osname = $Config{osname};
 warn "OS '$osname' is not supported" unless $osname eq 'linux';
+
 
 1;
 __END__
@@ -303,23 +328,7 @@ This module requires these other modules and libraries:
 
 =item *
 
-Switch
-
-=item *
-
-FindBin
-
-=item *
-
 Cwd
-
-=item *
-
-File::Basename
-
-=item *
-
-File::Slurp
 
 =item *
 
@@ -347,7 +356,7 @@ Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/env perl
 =head1 NAME
 
 dist.pl - distribution generator
@@ -14,41 +14,36 @@ distribution generator
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
-use open qw(:std :locale);
-use Config;
+use open qw(:utf8 :std);
+use open IO => ':bytes';
 use FindBin;
 use Cwd;
+use Pod::Markdown;
+use Pod::Text;
 
 
-my $module = "Zabbix::Check";
-my $modulePath = "lib/" . $module =~ s/\:\:/\//gr . ".pm";
-my $base = "${FindBin::Bin}/..";
-cwd($base);
+my $main_pkg = "Zabbix::Check";
+my $pod_path = "lib/" . $main_pkg =~ s/\:\:/\//gr . ".pm";
+#my $pod_path = "doc/README.pod";
 
+cwd("${FindBin::Bin}/..");
 system("perl Makefile.PL");
-system("pod2markdown --html-encode-chars 1 $modulePath > README.md");
-system("pod2text $modulePath > README");
+system("pod2markdown --html-encode-chars 1 $pod_path > README.md");
+system("pod2text $pod_path > README");
 system("rm MANIFEST; make manifest");
 system("make dist");
 
 exit 0;
 __END__
-=head1 REPOSITORY
-
-B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
-
-B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
-
 =head1 AUTHOR
 
-Orkun Karaduman <orkunkaraduman@gmail.com>
+Orkun Karaduman (ORKUN) <orkun@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

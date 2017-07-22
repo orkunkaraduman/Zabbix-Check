@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/env perl
 =head1 NAME
 
 test.pl - for internal tests
@@ -14,11 +14,10 @@ for internal tests
 =cut
 use strict;
 use warnings;
-no warnings qw(qw utf8);
 use v5.14;
 use utf8;
 use open qw(:std :locale);
-use Config;
+use open IO => ':bytes';
 use FindBin;
 use Data::Dumper;
 
@@ -33,19 +32,13 @@ use Zabbix::Check::Time;
 
 exit 0;
 __END__
-=head1 REPOSITORY
-
-B<GitHub> L<https://github.com/orkunkaraduman/Zabbix-Check>
-
-B<CPAN> L<https://metacpan.org/release/Zabbix-Check>
-
 =head1 AUTHOR
 
 Orkun Karaduman <orkunkaraduman@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2016  Orkun Karaduman <orkunkaraduman@gmail.com>
+Copyright (C) 2017  Orkun Karaduman <orkunkaraduman@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
