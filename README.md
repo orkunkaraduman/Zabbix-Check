@@ -72,19 +72,19 @@ $1: _device name, eg: sda, sdb1, dm-3, ..._
 
 Zabbix check for Supervisor service
 
-## \_installed
+## installed
 
 checks Supervisor is installed: 0 | 1
 
-## \_running
+## running
 
 checks Supervisor is installed and running: 0 | 1 | 2 = not installed
 
-## \_worker\_discovery
+## worker\_discovery
 
 discovers Supervisor workers
 
-## \_worker\_status $1
+## worker\_status $1
 
 gets Supervisor worker status: RUNNING | STOPPED | ...
 
@@ -94,27 +94,27 @@ $1: _worker name_
 
 Zabbix check for RabbitMQ service
 
-## \_installed
+## installed
 
 checks RabbitMQ is installed: 0 | 1
 
-## \_running
+## running
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-## \_vhost\_discovery $1
+## vhost\_discovery $1
 
 discovers RabbitMQ vhosts
 
 $1: _cache expiry in seconds, by default 0_
 
-## \_queue\_discovery $1
+## queue\_discovery $1
 
 discovers RabbitMQ queues
 
 $1: _cache expiry in seconds, by default 0_
 
-## \_queue\_status $1 $2 $3
+## queue\_status $1 $2 $3
 
 gets RabbitMQ queue status using queue discovery cache
 
@@ -128,21 +128,21 @@ $3: _type: ready|unacked|total_
 
 Zabbix check for Systemd services
 
-## \_installed
+## installed
 
 checks Systemd is installed: 0 | 1
 
-## \_system\_status
+## system\_status
 
 gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
 
-## \_service\_discovery
+## service\_discovery
 
 discovers Systemd enabled services
 
 $1: _regex of service name, by default undefined_
 
-## \_service\_status $1
+## service\_status $1
 
 gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
@@ -152,15 +152,15 @@ $1: _service name_
 
 Zabbix check for system time
 
-## \_epoch
+## epoch
 
 gets system time epoch in seconds
 
-## \_zone
+## zone
 
 gets system time zone, eg: +0200
 
-## \_ntp\_offset $1 $2
+## ntp\_offset $1 $2
 
 gets system time difference by NTP server
 
@@ -185,7 +185,6 @@ from CPAN
 
 This module requires these other modules and libraries:
 
-- Cwd
 - JSON
 - Net::NTP
 - Lazy::Utils

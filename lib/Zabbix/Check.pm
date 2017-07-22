@@ -73,19 +73,19 @@ $1: I<device name, eg: sda, sdb1, dm-3, ...>
 
 Zabbix check for Supervisor service
 
-=head2 _installed
+=head2 installed
 
 checks Supervisor is installed: 0 | 1
 
-=head2 _running
+=head2 running
 
 checks Supervisor is installed and running: 0 | 1 | 2 = not installed
 
-=head2 _worker_discovery
+=head2 worker_discovery
 
 discovers Supervisor workers
 
-=head2 _worker_status $1
+=head2 worker_status $1
 
 gets Supervisor worker status: RUNNING | STOPPED | ...
 
@@ -95,27 +95,27 @@ $1: I<worker name>
 
 Zabbix check for RabbitMQ service
 
-=head2 _installed
+=head2 installed
 
 checks RabbitMQ is installed: 0 | 1
 
-=head2 _running
+=head2 running
 
 checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-=head2 _vhost_discovery $1
+=head2 vhost_discovery $1
 
 discovers RabbitMQ vhosts
 
 $1: I<cache expiry in seconds, by default 0>
 
-=head2 _queue_discovery $1
+=head2 queue_discovery $1
 
 discovers RabbitMQ queues
 
 $1: I<cache expiry in seconds, by default 0>
 
-=head2 _queue_status $1 $2 $3
+=head2 queue_status $1 $2 $3
 
 gets RabbitMQ queue status using queue discovery cache
 
@@ -129,21 +129,21 @@ $3: I<type: ready|unacked|total>
 
 Zabbix check for Systemd services
 
-=head2 _installed
+=head2 installed
 
 checks Systemd is installed: 0 | 1
 
-=head2 _system_status
+=head2 system_status
 
 gets Systemd system status: initializing | starting | running | degraded | maintenance | stopping | offline | unknown
 
-=head2 _service_discovery
+=head2 service_discovery
 
 discovers Systemd enabled services
 
 $1: I<regex of service name, by default undefined>
 
-=head2 _service_status $1
+=head2 service_status $1
 
 gets Systemd enabled service status: active | inactive | failed | unknown | ...
 
@@ -153,15 +153,15 @@ $1: I<service name>
 
 Zabbix check for system time
 
-=head2 _epoch
+=head2 epoch
 
 gets system time epoch in seconds
 
-=head2 _zone
+=head2 zone
 
 gets system time zone, eg: +0200
 
-=head2 _ntp_offset $1 $2
+=head2 ntp_offset $1 $2
 
 gets system time difference by NTP server
 
@@ -286,10 +286,6 @@ from CPAN
 This module requires these other modules and libraries:
 
 =over
-
-=item *
-
-Cwd
 
 =item *
 

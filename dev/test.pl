@@ -32,7 +32,7 @@ require Zabbix::Check::Time;
 
 #Zabbix::Check::Disk::_discovery();
 
-Zabbix::Check::Disk::_bps();
+Zabbix::Check::Time::_ntp_offset();
 
 
 exit 0;

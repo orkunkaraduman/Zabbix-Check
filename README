@@ -63,16 +63,16 @@ DISK
 SUPERVISOR
     Zabbix check for Supervisor service
 
-  _installed
+  installed
     checks Supervisor is installed: 0 | 1
 
-  _running
+  running
     checks Supervisor is installed and running: 0 | 1 | 2 = not installed
 
-  _worker_discovery
+  worker_discovery
     discovers Supervisor workers
 
-  _worker_status $1
+  worker_status $1
     gets Supervisor worker status: RUNNING | STOPPED | ...
 
     $1: *worker name*
@@ -80,23 +80,23 @@ SUPERVISOR
 RABBITMQ
     Zabbix check for RabbitMQ service
 
-  _installed
+  installed
     checks RabbitMQ is installed: 0 | 1
 
-  _running
+  running
     checks RabbitMQ is installed and running: 0 | 1 | 2 = not installed
 
-  _vhost_discovery $1
+  vhost_discovery $1
     discovers RabbitMQ vhosts
 
     $1: *cache expiry in seconds, by default 0*
 
-  _queue_discovery $1
+  queue_discovery $1
     discovers RabbitMQ queues
 
     $1: *cache expiry in seconds, by default 0*
 
-  _queue_status $1 $2 $3
+  queue_status $1 $2 $3
     gets RabbitMQ queue status using queue discovery cache
 
     $1: *vhost name*
@@ -108,19 +108,19 @@ RABBITMQ
 SYSTEMD
     Zabbix check for Systemd services
 
-  _installed
+  installed
     checks Systemd is installed: 0 | 1
 
-  _system_status
+  system_status
     gets Systemd system status: initializing | starting | running | degraded
     | maintenance | stopping | offline | unknown
 
-  _service_discovery
+  service_discovery
     discovers Systemd enabled services
 
     $1: *regex of service name, by default undefined*
 
-  _service_status $1
+  service_status $1
     gets Systemd enabled service status: active | inactive | failed |
     unknown | ...
 
@@ -129,13 +129,13 @@ SYSTEMD
 TIME
     Zabbix check for system time
 
-  _epoch
+  epoch
     gets system time epoch in seconds
 
-  _zone
+  zone
     gets system time zone, eg: +0200
 
-  _ntp_offset $1 $2
+  ntp_offset $1 $2
     gets system time difference by NTP server
 
     $1: *server, by defaut pool.ntp.org*
@@ -156,8 +156,6 @@ INSTALLATION
 
 DEPENDENCIES
     This module requires these other modules and libraries:
-
-    *   Cwd
 
     *   JSON
 
