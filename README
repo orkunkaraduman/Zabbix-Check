@@ -160,14 +160,14 @@ REDIS
     checks Redis is installed and instance is running: 0 | 1 | 2 = not
     installed
 
-    $1: *bind, by defaut 127.0.0.1*
+    $1: *bind, by defaut 127.0.0.1:6379*
 
   info $1 $2
     gets info
 
     $1: *key*
 
-    $2: *bind, by defaut 127.0.0.1*
+    $2: *bind, by defaut 127.0.0.1:6379*
 
 INSTALLATION
     To install this module type the following

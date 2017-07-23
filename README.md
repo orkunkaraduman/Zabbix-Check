@@ -189,7 +189,7 @@ discovers Redis instances
 
 checks Redis is installed and instance is running: 0 | 1 | 2 = not installed
 
-$1: _bind, by defaut 127.0.0.1_
+$1: _bind, by defaut 127.0.0.1:6379_
 
 ## info $1 $2
 
@@ -197,7 +197,7 @@ gets info
 
 $1: _key_
 
-$2: _bind, by defaut 127.0.0.1_
+$2: _bind, by defaut 127.0.0.1:6379_
 
 # INSTALLATION
 
