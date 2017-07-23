@@ -1,6 +1,7 @@
 1.11	2017-07-23
 		- Fixed bugs
 		- Added Redis module
+		- Compatibility with Perl v5.10.1
 
 1.10	2016-12-28
 		- Usage of Lazy::Utils::fileCache instead of cache function
