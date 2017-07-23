@@ -184,6 +184,7 @@ sub _discovery
 	for my $devname (keys %$disks)
 	{
 		my $disk = $disks->{$devname};
+		next if $devname =~/^loop\d*$/i or $devname =~ /^ram\d*$/i;
 		next if not $removable and $disk->{removable};
 		push @items, $disk;
 	}
