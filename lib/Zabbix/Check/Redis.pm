@@ -1,7 +1,7 @@
-package Zabbix::Check::Supervisor;
+package Zabbix::Check::Redis;
 =head1 NAME
 
-Zabbix::Check::Supervisor - Zabbix check for Supervisor service
+Zabbix::Check::Redis - Zabbix check for Redis service
 
 =head1 VERSION
 
@@ -9,7 +9,7 @@ version 1.11
 
 =head1 SYNOPSIS
 
-Zabbix check for Supervisor service
+Zabbix check for Redis service
 
 =cut
 use strict;
@@ -25,27 +25,36 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(_installed _running _worker_discovery _worker_status);
+	our @EXPORT      = qw(_installed _running _info);
 	our @EXPORT_OK   = qw();
 }
 
 
-our ($supervisorctl) = whereis('supervisorctl');
-our ($supervisord) = whereis('supervisord');
-our ($python) = whereis('python');
+our ($redis_server) = whereis('redis-server');
+our ($redis_cli) = whereis('redis-cli');
 
 
-sub get_statuses
+sub get_info
 {
-	return unless $supervisorctl;
+	return unless $redis_cli;
 	my $result = file_cache("all", 30, sub
 	{
-		my $result = {};
-		for (`$supervisorctl status 2>/dev/null`)
+		my $result = { 'epoch' => time() };
+		my $topic; 
+		for (`$redis_cli info 2>/dev/null`)
 		{
 			chomp;
-			my ($name, $status) = /^(\S+)\s+(\S+)\s*/;
-			$result->{$name} = $status;
+			if (/^#(.*)/)
+			{
+				$topic = trim($1);
+				$result->{$topic} = {} unless defined($result->{$topic});
+				next;
+			}
+			my ($key, $val) = split(":", $_, 2);
+			next unless defined($topic) and defined($key) and defined($val);
+			$key = trim($key);
+			$val = trim($val);
+			$result->{$topic}->{$key} = $val;
 		}
 		return $result;
 	});
@@ -54,7 +63,7 @@ sub get_statuses
 
 sub _installed
 {
-	my $result = $supervisorctl? 1: 0;
+	my $result = $redis_server? 1: 0;
 	print $result;
 	return $result;
 }
@@ -64,28 +73,20 @@ sub _running
 	my $result = 2;
 	if ($supervisorctl)
 	{
-		system "pgrep -f '$python $supervisord' >/dev/null 2>&1";
+		system "pgrep -f '$redis_server' >/dev/null 2>&1";
 		$result = ($? == 0)? 1: 0;
 	}
 	print $result;
 	return $result;
 }
 
-sub _worker_discovery
+sub _info
 {
-	my @items;
-	my $statuses = get_statuses();
-	@items = map({ name => $_}, keys %$statuses) if $statuses;
-	return print_discovery(@items);
-}
-
-sub _worker_status
-{
-	my ($name) = map(zbx_decode($_), @ARGV);
-	return "" unless $name;
+	my ($topic, $key) = map(zbx_decode($_), @ARGV);
+	return "" unless $topic and $key;
 	my $result = "";
-	my $statuses = get_statuses();
-	$result = $statuses->{$name} if defined($statuses->{$name});
+	my $info = get_info();
+	$result = $info->{$topic}->{$key} if defined($info->{$topic}->{$key});
 	print $result;
 	return $result;
 }
