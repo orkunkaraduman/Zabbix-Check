@@ -37,6 +37,11 @@ System and service checks for Zabbix
         UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
         UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
         UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
+        # Redis
+        UserParameter=cpan.zabbix.check.redis.installed,/usr/bin/perl -MZabbix::Check::Redis -e_installed
+        UserParameter=cpan.zabbix.check.redis.discovery,/usr/bin/perl -MZabbix::Check::Redis -e_discovery
+        UserParameter=cpan.zabbix.check.redis.running[*],/usr/bin/perl -MZabbix::Check::Redis -e_running -- $1
+        UserParameter=cpan.zabbix.check.redis.info[*],/usr/bin/perl -MZabbix::Check::Redis -e_info -- $1 $2
 
 # DISK
 
@@ -167,6 +172,32 @@ gets system time difference by NTP server
 $1: _server, by defaut pool.ntp.org_
 
 $2: _port, by default 123_
+
+# REDIS
+
+Zabbix check for Redis service
+
+## installed
+
+checks Redis is installed: 0 | 1
+
+## discovery
+
+discovers Redis instances
+
+## running $1
+
+checks Redis is installed and instance is running: 0 | 1 | 2 = not installed
+
+$1: _bind, by defaut 127.0.0.1_
+
+## info $1 $2
+
+gets info
+
+$1: _key_
+
+$2: _bind, by defaut 127.0.0.1_
 
 # INSTALLATION
 

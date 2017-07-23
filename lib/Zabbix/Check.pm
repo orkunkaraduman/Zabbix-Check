@@ -38,6 +38,11 @@ System and service checks for Zabbix
 	UserParameter=cpan.zabbix.check.time.epoch,/usr/bin/perl -MZabbix::Check::Time -e_epoch
 	UserParameter=cpan.zabbix.check.time.zone,/usr/bin/perl -MZabbix::Check::Time -e_zone
 	UserParameter=cpan.zabbix.check.time.ntp_offset[*],/usr/bin/perl -MZabbix::Check::Time -e_ntp_offset -- $1 $2
+	# Redis
+	UserParameter=cpan.zabbix.check.redis.installed,/usr/bin/perl -MZabbix::Check::Redis -e_installed
+	UserParameter=cpan.zabbix.check.redis.discovery,/usr/bin/perl -MZabbix::Check::Redis -e_discovery
+	UserParameter=cpan.zabbix.check.redis.running[*],/usr/bin/perl -MZabbix::Check::Redis -e_running -- $1
+	UserParameter=cpan.zabbix.check.redis.info[*],/usr/bin/perl -MZabbix::Check::Redis -e_info -- $1 $2
 
 =head1 DISK
 
@@ -168,6 +173,32 @@ gets system time difference by NTP server
 $1: I<server, by defaut pool.ntp.org>
 
 $2: I<port, by default 123>
+
+=head1 REDIS
+
+Zabbix check for Redis service
+
+=head2 installed
+
+checks Redis is installed: 0 | 1
+
+=head2 discovery
+
+discovers Redis instances
+
+=head2 running $1
+
+checks Redis is installed and instance is running: 0 | 1 | 2 = not installed
+
+$1: I<bind, by defaut 127.0.0.1>
+
+=head2 info $1 $2
+
+gets info
+
+$1: I<key>
+
+$2: I<bind, by defaut 127.0.0.1>
 
 =cut
 use strict;
