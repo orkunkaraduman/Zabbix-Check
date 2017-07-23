@@ -85,7 +85,7 @@ sub _worker_status
 	return "" unless $name;
 	my $result = "";
 	my $statuses = get_statuses();
-	$result = $statuses->{$name} if $statuses->{$name};
+	$result = $statuses->{$name} if $statuses and $statuses->{$name};
 	print $result;
 	return $result;
 }

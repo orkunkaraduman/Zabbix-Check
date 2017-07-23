@@ -37,7 +37,6 @@ sub get_vhosts
 {
 	return unless $rabbitmqctl;
 	my ($expiry) = @_;
-	$expiry = -1 unless defined($expiry);
 	my $result = file_cache("all", $expiry, sub
 	{
 		my $result = {};
@@ -63,7 +62,6 @@ sub get_queues
 	return unless $rabbitmqctl;
 	my ($vhost, $expiry) = @_;
 	my $vhost_s = shellmeta($vhost);
-	$expiry = -1 unless defined($expiry);
 	my $result = file_cache($vhost, $expiry, sub
 	{
 		my $result = {};
