@@ -25,7 +25,7 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.11';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(_installed _running _info);
+	our @EXPORT      = qw(_installed _discovery _running _info);
 	our @EXPORT_OK   = qw();
 }
 
@@ -34,27 +34,45 @@ our ($redis_server) = whereis('redis-server');
 our ($redis_cli) = whereis('redis-cli');
 
 
+sub bind_to_redis_cli_args
+{
+	my ($bind) = @_;
+	return "" unless defined($bind);
+	if ($bind =~ /^([^:]*):(\d*)$/)
+	{
+		my ($host, $port);
+		$host = "127.0.0.1";
+		$host = shellmeta($1, 1) if $1 ne "";
+		$port = "6379";
+		$port = shellmeta($2, 1) if $2 ne "";
+		return "-h $host -p $port";
+	}
+	$bind = shellmeta($bind, 1);
+	return "-s $bind";
+}
+
 sub get_info
 {
 	return unless $redis_cli;
+	my ($bind) = @_;
+	my $redis_cli_args = bind_to_redis_cli_args($bind);
 	my $result = file_cache("all", 30, sub
 	{
 		my $result = { 'epoch' => time() };
 		my $topic; 
-		for (`$redis_cli info 2>/dev/null`)
+		for (`$redis_cli $redis_cli_args info 2>/dev/null`)
 		{
 			chomp;
 			if (/^#(.*)/)
 			{
 				$topic = trim($1);
-				$result->{$topic} = {} unless defined($result->{$topic});
 				next;
 			}
 			my ($key, $val) = split(":", $_, 2);
 			next unless defined($topic) and defined($key) and defined($val);
-			$key = trim($key);
+			$key = "$topic:".trim($key);
 			$val = trim($val);
-			$result->{$topic}->{$key} = $val;
+			$result->{$key} = $val;
 		}
 		return $result;
 	});
@@ -68,12 +86,30 @@ sub _installed
 	return $result;
 }
 
+sub _discovery
+{
+	my @items;
+	for (`ps -C redis-server -o pid,cmd 2>/dev/null`)
+	{
+		chomp;
+		if (/^(\d*)\s+\Q$redis_server\E\ (\S+)/)
+		{
+			push @items, { bind => $2 };
+		}
+	}
+	return print_discovery(@items);
+}
+
 sub _running
 {
+	my ($bind) = @_;
 	my $result = 2;
-	if ($supervisorctl)
+	if ($redis_server)
 	{
-		system "pgrep -f '$redis_server' >/dev/null 2>&1";
+		my $cmd = $redis_server;
+		$cmd .= " $bind" if defined($bind);
+		$cmd = shellmeta($cmd);
+		system "pgrep -f \"$cmd\" >/dev/null 2>&1";
 		$result = ($? == 0)? 1: 0;
 	}
 	print $result;
@@ -82,11 +118,11 @@ sub _running
 
 sub _info
 {
-	my ($topic, $key) = map(zbx_decode($_), @ARGV);
-	return "" unless $topic and $key;
+	my ($key, $bind) = map(zbx_decode($_), @ARGV);
+	return "" unless $key;
 	my $result = "";
-	my $info = get_info();
-	$result = $info->{$topic}->{$key} if defined($info->{$topic}->{$key});
+	my $info = get_info($bind);
+	$result = $info->{$key} if defined($info->{$key});
 	print $result;
 	return $result;
 }

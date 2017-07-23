@@ -5,6 +5,7 @@ COPYRIGHT
 lib/Zabbix/Check.pm
 lib/Zabbix/Check/Disk.pm
 lib/Zabbix/Check/RabbitMQ.pm
+lib/Zabbix/Check/Redis.pm
 lib/Zabbix/Check/Supervisor.pm
 lib/Zabbix/Check/Systemd.pm
 lib/Zabbix/Check/Time.pm

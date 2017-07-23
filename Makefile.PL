@@ -10,7 +10,7 @@ WriteMakefile(
 	PREREQ_PM			=> {
 		'JSON'			=> '2.90',
 		'Net::NTP'		=> '1.5',
-		'Lazy::Utils'	=> '1.21',
+		'Lazy::Utils'	=> '1.22',
 	},
 	EXE_FILES			=> [qw(
 	)],

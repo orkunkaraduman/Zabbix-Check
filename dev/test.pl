@@ -30,7 +30,7 @@ require Zabbix::Check::Systemd;
 require Zabbix::Check::Time;
 
 
-Zabbix::Check::Disk::_discovery();
+#Zabbix::Check::Disk::_discovery();
 
 
 exit 0;
