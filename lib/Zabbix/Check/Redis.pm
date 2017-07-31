@@ -15,7 +15,7 @@ Zabbix check for Redis service
 use strict;
 use warnings;
 use v5.10.1;
-use Time::HiRes qw(utime);
+use Time::HiRes;
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -130,18 +130,17 @@ sub _info
 
 sub _resptime
 {
-	my ($key, $bind) = map(zbx_decode($_), @ARGV);
-	unless (defined($key))
-	{
-		$key = (caller(0))[3];
-		$key ~= s/\Q::\E/-/g;
-	}
-	my $redis_cli_args = bind_to_redis_cli_args($bind);
+	my ($bind) = map(zbx_decode($_), @ARGV);
+	my $key = (caller(0))[3];
+	$key =~ s/\Q::\E/-/g;
 	$key = shellmeta($key, 1);
-	$utime = utime();
-	`$redis_cli $redis_cli_args INCR $key 2>/dev/null`;
+	my $redis_cli_args = bind_to_redis_cli_args($bind);
+	my $time = Time::HiRes::time();
 	`$redis_cli $redis_cli_args GET $key 2>/dev/null`;
-	return (utime()-$utime)/1000;
+	my $result = Time::HiRes::time()-$time;
+	`$redis_cli $redis_cli_args INCR $key 2>/dev/null`;
+	print $result;
+	return $result;
 }
 
 
