@@ -42,6 +42,7 @@ System and service checks for Zabbix
         UserParameter=cpan.zabbix.check.redis.discovery,/usr/bin/env perl -MZabbix::Check::Redis -e_discovery
         UserParameter=cpan.zabbix.check.redis.running[*],/usr/bin/env perl -MZabbix::Check::Redis -e_running -- $1
         UserParameter=cpan.zabbix.check.redis.info[*],/usr/bin/env perl -MZabbix::Check::Redis -e_info -- $1 $2
+        UserParameter=cpan.zabbix.check.redis.resptime[*],/usr/bin/env perl -MZabbix::Check::Redis -e_resptime -- $1
 
 # DISK
 
@@ -198,6 +199,12 @@ gets info
 $1: _key_
 
 $2: _bind, by defaut 127.0.0.1:6379_
+
+## resptime $1
+
+gets single GET command response time from Redis
+
+$1: _bind, by defaut 127.0.0.1:6379_
 
 # INSTALLATION
 
