@@ -59,7 +59,7 @@ sub get_info
 	my $result = file_cache("all", 30, sub
 	{
 		my $result = { 'epoch' => time() };
-		my $topic; 
+		my $topic;
 		for (`$redis_cli $redis_cli_args info 2>/dev/null`)
 		{
 			chomp;
@@ -92,7 +92,7 @@ sub _discovery
 	for (`ps -C redis-server -o pid,cmd 2>/dev/null`)
 	{
 		chomp;
-		if (/^(\d*)\s+\Q$redis_server\E\ (\S+)/)
+		if (/^\s*(\d*)\s+\Q$redis_server\E\ (\S+)/)
 		{
 			push @items, { bind => $2 };
 		}
