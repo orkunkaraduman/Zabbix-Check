@@ -43,6 +43,7 @@ System and service checks for Zabbix
 	UserParameter=cpan.zabbix.check.redis.discovery,/usr/bin/env perl -MZabbix::Check::Redis -e_discovery
 	UserParameter=cpan.zabbix.check.redis.running[*],/usr/bin/env perl -MZabbix::Check::Redis -e_running -- $1
 	UserParameter=cpan.zabbix.check.redis.info[*],/usr/bin/env perl -MZabbix::Check::Redis -e_info -- $1 $2
+	UserParameter=cpan.zabbix.check.redis.resptime[*],/usr/bin/env perl -MZabbix::Check::Redis -e_resptime -- $1
 
 =head1 DISK
 
