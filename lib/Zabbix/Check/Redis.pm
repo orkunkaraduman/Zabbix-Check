@@ -5,7 +5,7 @@ Zabbix::Check::Redis - Zabbix check for Redis service
 
 =head1 VERSION
 
-version 1.11
+version 1.12
 
 =head1 SYNOPSIS
 
@@ -23,7 +23,7 @@ use Zabbix::Check;
 BEGIN
 {
 	require Exporter;
-	our $VERSION     = '1.11';
+	our $VERSION     = '1.12';
 	our @ISA         = qw(Exporter);
 	our @EXPORT      = qw(_installed _discovery _running _info);
 	our @EXPORT_OK   = qw();
