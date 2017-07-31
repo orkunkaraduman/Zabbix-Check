@@ -201,6 +201,12 @@ $1: I<key>
 
 $2: I<bind, by defaut 127.0.0.1:6379>
 
+=head2 resptime $1
+
+gets single GET command response time from Redis
+
+$1: I<bind, by defaut 127.0.0.1:6379>
+
 =cut
 use strict;
 use warnings;
