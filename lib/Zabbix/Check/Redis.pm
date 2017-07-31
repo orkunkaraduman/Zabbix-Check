@@ -15,6 +15,7 @@ Zabbix check for Redis service
 use strict;
 use warnings;
 use v5.10.1;
+use Time::HiRes qw(utime);
 use Lazy::Utils;
 
 use Zabbix::Check;
@@ -25,7 +26,7 @@ BEGIN
 	require Exporter;
 	our $VERSION     = '1.12';
 	our @ISA         = qw(Exporter);
-	our @EXPORT      = qw(_installed _discovery _running _info);
+	our @EXPORT      = qw(_installed _discovery _running _info _resptime);
 	our @EXPORT_OK   = qw();
 }
 
@@ -125,6 +126,22 @@ sub _info
 	$result = $info->{$key} if defined($info->{$key});
 	print $result;
 	return $result;
+}
+
+sub _resptime
+{
+	my ($key, $bind) = map(zbx_decode($_), @ARGV);
+	unless (defined($key))
+	{
+		$key = (caller(0))[3];
+		$key ~= s/\Q::\E/-/g;
+	}
+	my $redis_cli_args = bind_to_redis_cli_args($bind);
+	$key = shellmeta($key, 1);
+	$utime = utime();
+	`$redis_cli $redis_cli_args INCR $key 2>/dev/null`;
+	`$redis_cli $redis_cli_args GET $key 2>/dev/null`;
+	return (utime()-$utime)/1000;
 }
 
 
